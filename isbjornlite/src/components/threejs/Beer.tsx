@@ -1,11 +1,28 @@
-import React, { useRef } from 'react'
-import { useGLTF } from '@react-three/drei'
+import React from 'react';
+import { useGLTF } from '@react-three/drei';
+import { useBox, useCompoundBody } from '@react-three/cannon';
 
 export function BeerModel({ ...props }) {
-  const { nodes, materials } = useGLTF('/3d/beer.glb')
+  const { nodes, materials } = useGLTF('/3d/beer.glb');
+  
+  // Create a physics-enabled compound body with mass
+  const [ref] = useCompoundBody(() => ({
+    mass: 1, // Set the mass of the object
+    shapes: [
+      { type: 'Cylinder', position: [0, 3.55, 0], args: [1.4, 1.4, 7.1, 64] } // Adjust args to match your model
+    ],
+    position: [0, 80, 0], // Initial position
+  }));
+
   return (
     <group {...props} dispose={null}>
-      <group position={[0, -5, 0]}>
+      <group ref={ref}>
+        {/* Visualize the physics shapes
+        <mesh position={[0, 3.55, 0]}>
+          <cylinderGeometry args={[1.4, 1.4, 7.1, 16]} />
+          <meshBasicMaterial color="red" wireframe />
+        </mesh> */}
+
         <mesh
           castShadow
           receiveShadow
@@ -32,7 +49,7 @@ export function BeerModel({ ...props }) {
         />
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/3d/beer.glb')
+useGLTF.preload('/3d/beer.glb');
