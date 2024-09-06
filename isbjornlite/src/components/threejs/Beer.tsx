@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGLTF } from '@react-three/drei';
-import { useBox, useCompoundBody } from '@react-three/cannon';
+import { useCompoundBody } from '@react-three/cannon';
 
 export function BeerModel({ ...props }) {
   const { nodes, materials } = useGLTF('/3d/beer.glb');
