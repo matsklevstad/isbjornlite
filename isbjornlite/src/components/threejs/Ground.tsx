@@ -33,7 +33,6 @@ export default function Ground() {
                 opacity={0.375}
                 alphaMap={gridMap}
                 transparent
-                color="#fff"
                 />
             </mesh>
 
@@ -44,7 +43,7 @@ export default function Ground() {
                     mixBlur={3} // Adjust these values as needed
                     blur={[500, 500]}
                     mixStrength={0.1}
-                    color="#fff"
+                    color="#e4ebf0"
                     mirror={1}
                     hasBlur={true}
                     minDepthThreshold={0.9}
@@ -74,7 +73,7 @@ export default function Ground() {
                     mixBlur={3} // Adjust these values as needed
                     blur={[500, 500]}
                     mixStrength={0.1}
-                    color="#fff"
+                    color="#e4ebf0"
                     mirror={1}
                     hasBlur={true}
                     minDepthThreshold={0.9}

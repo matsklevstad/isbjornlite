@@ -11,8 +11,8 @@ export default function Scene() {
             <OrbitControls />
             {BeerSpawner(1200)}
             <Box />
-            <directionalLight position={[20, 20, 50]} intensity={2.5} castShadow/>
-            <directionalLight position={[-20, 20, 50]} intensity={2.5} castShadow/>
+            <directionalLight position={[20, 20, 50]} intensity={2.5} castShadow color="#e4ebf0"/>
+            <directionalLight position={[-20, 20, 50]} intensity={2.5} castShadow color="#e4ebf0"/>
             <ambientLight intensity={5}/>
             <Ground />
         </Suspense>
