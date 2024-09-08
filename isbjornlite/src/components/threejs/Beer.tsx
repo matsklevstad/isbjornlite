@@ -1,28 +1,22 @@
 import React from 'react';
 import { useGLTF } from '@react-three/drei';
-import { useCompoundBody } from '@react-three/cannon';
+import { BeerBounding } from './boundingBoxes/BeerBounding';
 
-export function BeerModel({ ...props }) {
-  const { nodes, materials } = useGLTF('/3d/beer.glb');
-  
-  // Create a physics-enabled compound body with mass
-  const [ref] = useCompoundBody(() => ({
-    mass: 1, // Set the mass of the object
-    shapes: [
-      { type: 'Cylinder', position: [0, 3.55, 0], args: [1.4, 1.4, 7.1, 64] } // Adjust args to match your model
-    ],
-    position: [0, 80, 0], // Initial position
-  }));
+type BeerBoundingProps = {
+  position: [number, number, number];
+  rotation: [number, number, number];
+};
+
+export function BeerModel({ ...props }: BeerBoundingProps) {
+    const { nodes, materials } = useGLTF('/3d/beer.glb')
+    const [ref, api] = BeerBounding({...props});
+
+  const modelHeight = 6.25 + 0.35 + 0.4;
+  const modelCenter = modelHeight / 2;
 
   return (
-    <group {...props} dispose={null}>
-      <group ref={ref}>
-        {/* Visualize the physics shapes
-        <mesh position={[0, 3.55, 0]}>
-          <cylinderGeometry args={[1.4, 1.4, 7.1, 16]} />
-          <meshBasicMaterial color="red" wireframe />
-        </mesh> */}
-
+    <group {...props} dispose={null} ref={ref}>
+      <group position={[0, -modelCenter, 0]}>
         <mesh
           castShadow
           receiveShadow
@@ -49,7 +43,9 @@ export function BeerModel({ ...props }) {
         />
       </group>
     </group>
-  );
+  )
 }
 
-useGLTF.preload('/3d/beer.glb');
+useGLTF.preload('/3d/beer.glb')
+
+
