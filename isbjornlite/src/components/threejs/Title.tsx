@@ -16,7 +16,8 @@ export default function Title() {
 
     const [ref] = useBox(() => ({
         position: [0, -8.5, 8.8],
-        args: [14, 5, 15],
+        // args: [14, 5, 15],
+        args: [0, 0, 0],
         rotation: [Math.PI / 8, 0, 0],
         type: 'Static',
     }));
