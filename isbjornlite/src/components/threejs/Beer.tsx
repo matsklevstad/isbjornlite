@@ -9,7 +9,7 @@ type BeerBoundingProps = {
 
 export function BeerModel({ ...props }: BeerBoundingProps) {
     const { nodes, materials } = useGLTF('/3d/beer.glb')
-    const [ref, api] = BeerBounding({...props});
+    const [ref] = BeerBounding({...props});
 
   const modelHeight = 6.25 + 0.35 + 0.4;
   const modelCenter = modelHeight / 2;

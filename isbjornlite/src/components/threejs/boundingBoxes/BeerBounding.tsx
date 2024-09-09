@@ -1,5 +1,4 @@
 import { useCompoundBody } from "@react-three/cannon";
-import { useEffect, useState } from "react";
 
 interface BeerBoundingProps {
     position: [number, number, number];
@@ -7,7 +6,6 @@ interface BeerBoundingProps {
 }
 
 export function BeerBounding({ ...props }: BeerBoundingProps) {
-    const [isOutOfView, setIsOutOfView] = useState(false);
 
     const [ref, api] = useCompoundBody(() => ({
         mass: 1, // Set the mass of the object
@@ -18,18 +16,6 @@ export function BeerBounding({ ...props }: BeerBoundingProps) {
         ],
         ...props
       }));
-
-      // Continuously log the position
-      useEffect(() => {
-        const unsubscribe = api.position.subscribe((position) => {
-            if (position[1] < -5) {
-                setIsOutOfView(true);
-            }
-        });
-
-        // Cleanup subscription on component unmount
-        return () => unsubscribe();
-    }, [api]);
 
     return [ref, api];
 }

@@ -22,7 +22,7 @@ export function BoxSpawner(interval: number) {
         const id = setInterval(() => {
             setBoxes((prevBoxes) => [
                 ...prevBoxes,
-                <Box position={[Math.random() * 10 - 10, 40, -30]} />
+                <Box position={[Math.random() * 10 - 10, 40, -30]} key={prevBoxes.length}/>
             ]);
         }, interval);
 
