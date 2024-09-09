@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="w-screen h-screen">
       <Canvas className="bg-black" frameloop="demand">
-        <Physics gravity={[0, -12, 0]}>
+        <Physics gravity={[0, -13, 0]}>
           <Scene />
         </Physics>
       </Canvas>

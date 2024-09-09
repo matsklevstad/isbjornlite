@@ -12,7 +12,7 @@ export default function Title() {
     const [opacityRight, setOpacityRight] = useState(0);
 
     const [opacityDelay, setOpacityDelay] = useState<number>(0);
-    const delayFrames = 100;
+    const delayFrames = 250;
 
     const [ref] = useBox(() => ({
         position: [0, -8.5, 8.8],

@@ -6,7 +6,7 @@ import { useFrame } from "@react-three/fiber";
 export const BeerSpawner = (interval: number) => {
     const [beers, setBeers] = useState<JSX.Element[]>([]);
     const [startCounter, setStartCounter] = useState(0);
-    const startDelay = 150;
+    const startDelay = 250;
 
     useFrame(() => {
         console.log(startCounter);

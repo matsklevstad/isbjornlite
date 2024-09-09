@@ -8,14 +8,14 @@ import Title from "./Title";
 export default function Scene() {
     return (
         <Suspense fallback={null}>
-            <PerspectiveCamera makeDefault position={[0, -45, 50]} fov={30} near={1}/>
+            <PerspectiveCamera makeDefault position={[0, -40, 50]} fov={25} near={1}/>
             <OrbitControls
             enablePan={false}
             enableRotate={false}
             enableZoom={false}
             />
             {/* {BoxSpawner(1000)} */}
-            {BeerSpawner(1200)}
+            {BeerSpawner(1300)}
             <Title />
             <Box position={[10, 2, 0]}/>
             {/* <directionalLight 
