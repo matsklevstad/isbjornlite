@@ -55,11 +55,10 @@ export default function Home() {
                 key={index}
               >
                 <img
-                  src="https://www.mack.no/img/_productMedium/Mack_Isbjorn_LITE_050can.png"
+                  src="https://www.mack.no/img/_productMedium/isbjorn-lite-fisheye-label.png"
                   alt="Isbjorn"
-                  width={80}
-                  height={80}
-                  className="w-20 h-24 rounded-full border border-gray-600"
+                  
+                  className="w-20 h-20 rounded-full border border-gray-600"
                 />
                 <div className="ml-4 text-white">
                   <p className="font-semibold">{value.name}</p>
