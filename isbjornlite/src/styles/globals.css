@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("@sikt/sds-core");
+
+
 
 :root {
   --background: #ffffff;
@@ -17,11 +20,26 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Tiempos Headline;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@font-face {
+  font-family: 'Tiempos Headline';
+  src: url('../pages/fonts/TestTiemposFine-Regular-BF66457a50e8bc9.otf') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Tiempos Headline';
+  src: url('../pages/fonts/TestTiemposHeadline-Bold-BF66457a5113d17.otf') format('woff2');
+
+  font-weight: bold;
+  font-style: normal;
 }

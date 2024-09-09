@@ -12,12 +12,15 @@
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.6",
+    "@sikt/sds-modal": "^2.0.3",
+    "aos": "^2.3.4",
     "next": "14.2.8",
     "react": "^18",
     "react-dom": "^18",
     "three": "^0.168.0"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
