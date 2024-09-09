@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
-import { BeerModel } from "./Beer";
 import { useFrame } from "@react-three/fiber";
+import { useEffect, useState } from "react";
+import Box from "./Box";
 
-
-export const BeerSpawner = (interval: number) => {
-    const [beers, setBeers] = useState<JSX.Element[]>([]);
+export function BoxSpawner(interval: number) {
+    const [boxes, setBoxes] = useState<JSX.Element[]>([]);
     const [startCounter, setStartCounter] = useState(0);
-    const startDelay = 150;
+    const startDelay = 350;
 
     useFrame(() => {
         console.log(startCounter);
@@ -21,13 +20,9 @@ export const BeerSpawner = (interval: number) => {
         }
 
         const id = setInterval(() => {
-            setBeers((prevBeers) => [
-                ...prevBeers,
-                <BeerModel
-                    key={prevBeers.length}
-                    position={[Math.random() * 10 - 10, 100, -30]}
-                    rotation={[Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2]}
-                />
+            setBoxes((prevBoxes) => [
+                ...prevBoxes,
+                <Box position={[Math.random() * 10 - 10, 40, -30]} />
             ]);
         }, interval);
 
@@ -36,7 +31,7 @@ export const BeerSpawner = (interval: number) => {
 
     return (
         <>
-            {beers}
+            {boxes}
         </>
     );
-};
+}

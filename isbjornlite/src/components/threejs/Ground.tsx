@@ -37,7 +37,7 @@ export default function Ground() {
             </mesh>
 
             <mesh ref={ref}>
-                <planeGeometry args={[150, 200]}/>
+                <planeGeometry args={[250, 200]}/>
                 <MeshReflectorMaterial
                     alphaMap={alphaMap}
                     mixBlur={3} // Adjust these values as needed
@@ -67,7 +67,7 @@ export default function Ground() {
             </mesh>
 
             <mesh rotation={[Math.PI / 4, 0, 0]} position={[0, 50, -70]}>
-                <planeGeometry args={[200, 200]}/>
+                <planeGeometry args={[400, 200]}/>
                 <MeshReflectorMaterial
                     alphaMap={alphaMap}
                     mixBlur={3} // Adjust these values as needed
