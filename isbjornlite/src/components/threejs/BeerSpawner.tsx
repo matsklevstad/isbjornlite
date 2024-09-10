@@ -9,7 +9,7 @@ export const BeerSpawner = (interval: number) => {
     const startDelay = 250;
 
     useFrame(() => {
-        console.log(startCounter);
+        //console.log(startCounter);
         if (startCounter < startDelay) {
             setStartCounter(startCounter + 1);
         }
