@@ -3,7 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Modal } from "@sikt/sds-modal"; // Assuming you're using this modal component
 import "@sikt/sds-modal/dist/index.css"; // Modal styles
-import { app, analytics } from "../firebase"; // adjust path as necessary
+import { app } from "../firebase"; // adjust path as necessary
 import {
   getFirestore,
   collection,
@@ -11,9 +11,15 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 
+interface BeerLog {
+  name: string;
+  location: string;
+  timestamp: string;
+}
+
 export default function Log() {
   const [showModal, setShowModal] = useState(false);
-  const [values, setValues] = useState([]);
+  const [values, setValues] = useState<BeerLog[]>([]);
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
 
@@ -36,16 +42,12 @@ export default function Log() {
   // Listening for Firestore updates and setting values to state
   useEffect(() => {
     AOS.init({ duration: 2000 });
-    if (analytics) {
-      console.log("Firebase analytics initialized", analytics);
-    }
-
 
     // Listen for real-time updates from Firestore
     const unsubscribe = onSnapshot(collection(db, "beers"), (snapshot) => {
-      const newValues = snapshot.docs.map((doc) => ({
+      const newValues: BeerLog[] = snapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data(),
+        ...(doc.data() as BeerLog), // Type assertion here
       }));
       setValues(newValues);
     });
@@ -128,8 +130,8 @@ export default function Log() {
               />
               <div className="ml-4 text-white text-center md:text-left">
                 <p className="font-semibold">{value.name}</p>
-                <p className="text-gray-400">{value.timestamp}</p>
                 <p className="text-gray-400">{value.location}</p>
+                <p className="text-gray-400">{value.timestamp}</p>
               </div>
             </div>
           ))}
