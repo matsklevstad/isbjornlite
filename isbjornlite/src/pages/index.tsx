@@ -26,15 +26,35 @@ export default function Home() {
       timestamp: "2021-09-01 12:00",
       location: "Tromsø",
     },
+    {
+      name: "Kari",
+      timestamp: "2021-09-01 12:30",
+      location: "Tromsø",
+    },
   ]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       AOS.init({ duration: 2000 });
-    }, 5500); // 5000 milliseconds = 5 seconds
+    }, 5500);
 
     return () => clearTimeout(timer);
   }, []);
+
+  const saveIsbjorn = () => {
+    setValues([
+      ...values,
+      {
+        name: "John",
+        timestamp: "2021-09-01 12:00",
+        location: "Oslo",
+      },
+    ]);
+
+    const audio = new Audio("/assets/open-beer-sound.mp3");
+    audio.play();
+    setShowModal(false);
+  };
 
   return (
     <div className="w-screen h-screen relative">
@@ -45,16 +65,7 @@ export default function Home() {
         ariaHideApp={false}
         footer={
           <button
-            onClick={() =>
-              setValues([
-                ...values,
-                {
-                  name: "Ola",
-                  timestamp: "2021-09-01 12:00",
-                  location: "Tromsø",
-                },
-              ])
-            }
+            onClick={saveIsbjorn}
             className="px-4 mt-4 py-2 bg-blue-500 text-white rounded"
           >
             Legg til
@@ -81,16 +92,17 @@ export default function Home() {
       <div
         data-aos="fade-in"
         data-aos-duration="600"
-        className="absolute w-screen h-screen top-0  w-full h-full z-10 flex flex-col  p-4"
+        className="absolute w-screen h-screen top-0 w-full h-full z-10 flex flex-col p-4"
       >
         <h1 className="text-white text-center text-5xl mb-4 font-bold">
           isbjornlite.no
         </h1>
 
-        <div className="flex flex-row gap-4  items-center text-center mb-4">
+        {/* Container with a fixed height and overflow for the list */}
+        <div className="flex flex-col gap-4 px-72 justify-center fixed bottom-4 left-0 right-0 max-h-[330px] overflow-y-auto">
           {values.map((value, index) => (
             <div
-              className=" flex items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg mb-4"
+              className="flex items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg"
               key={index}
             >
               <img
