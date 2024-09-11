@@ -55,7 +55,11 @@ export default function Ground() {
                 />
             </mesh>
 
-            <mesh rotation={[Math.PI / 4, 0, 0]} position={[0, 50, -69]}>
+            
+
+            {/* Code below is back wall, not needed for now */}
+
+            {/* <mesh rotation={[Math.PI / 4, 0, 0]} position={[0, 50, -69]}>
                 <planeGeometry args={[50, 100]}/>
                 <meshBasicMaterial
                 map={gridMap}
@@ -83,7 +87,7 @@ export default function Ground() {
                     distortion={0}
                     mixContrast={1}
                 />
-            </mesh>
+            </mesh> */}
         </>
     )
 }

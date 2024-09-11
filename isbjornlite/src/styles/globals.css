@@ -23,6 +23,20 @@ body {
   font-family: Tiempos Headline;
 }
 
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
