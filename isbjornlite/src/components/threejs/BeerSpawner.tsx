@@ -2,8 +2,12 @@ import { useState, useEffect } from "react";
 import { BeerModel } from "./Beer";
 import { useFrame } from "@react-three/fiber";
 
+interface BeerSpawnerProps {
+    interval: number;
+}
 
-export const BeerSpawner = (interval: number) => {
+
+export const BeerSpawner = ({interval}: BeerSpawnerProps) => {
     const [beers, setBeers] = useState<JSX.Element[]>([]);
     const [startCounter, setStartCounter] = useState(0);
     const startDelay = 250;
