@@ -6,6 +6,7 @@ import Ground from "../Ground";
 import Title from "../Title";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
+import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 
 export default function TitleScene() {
     return (
@@ -43,6 +44,7 @@ export default function TitleScene() {
                     <Ground />
                 </Physics>
             </Canvas>
+            <ScrollDownBtn />
         </Suspense>
     );
 }

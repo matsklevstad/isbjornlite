@@ -1,10 +1,10 @@
-import Home from "../pages/Home";
+import TitleScene from "@/components/threejs/scenes/TitleScene";
 import Log from "./Log";
 
 export default function Index() {
   return (
     <>
-      <Home />
+      <TitleScene />
       <Log />
     </>
   );
