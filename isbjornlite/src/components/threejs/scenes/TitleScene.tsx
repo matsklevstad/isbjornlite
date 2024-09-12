@@ -49,7 +49,7 @@ export default function TitleScene() {
             <BeerSpawner interval={1200} scale={scale}/>
             <Title scale={scale}/>
             
-            <BeerModel position={[0, 80, -65]} rotation={[0, 0, 0]} scale={[scale, scale, scale]}/>
+            <BeerModel position={[0, 110, -110]} rotation={[0, 0, Math.PI / 2]} scale={[scale, scale, scale]}/>
             <Box scale={scale}/>
             {/* <directionalLight 
                     position={[200, 100, 70]}
