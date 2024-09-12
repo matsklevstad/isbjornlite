@@ -47,14 +47,14 @@ export default function Title({scale}: {scale: number}) {
 
     const textGeometryLeft = new TextGeometry('ISBJØRN', {
         font: font,
-        size: 1.5 * scale * 0.9,
+        size: 1.5 * scale,
         height: 0.2,
         depth: 0.2,
     });
 
     const textGeometryRight = new TextGeometry('LITE', {
         font: font,
-        size: 1.5 * scale * 0.9,
+        size: 1.5 * scale,
         height: 0.2,
         depth: 0.2,
     });
@@ -68,10 +68,10 @@ export default function Title({scale}: {scale: number}) {
     const meshLeft = new Mesh(textGeometryLeft, materialLeft);
     const meshRight = new Mesh(textGeometryRight, materialRight);
 
-    meshLeft.position.set(-6.8 * scale * 0.9, -10, 15);
+    meshLeft.position.set(-6.8 * scale, -10, 15);
     meshLeft.rotation.set(Math.PI / 4, 0, 0);
 
-    meshRight.position.set(2.5 * scale * 0.9, -10, 15);
+    meshRight.position.set(2.5 * scale, -10, 15);
     meshRight.rotation.set(Math.PI / 4, 0, 0);
 
     materialLeft.opacity = opacityLeft;

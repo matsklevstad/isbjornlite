@@ -6,6 +6,7 @@ import Ground from "../Ground";
 import Title from "../Title";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
+import { BeerModel } from "../Beer";
 //import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 
 export default function TitleScene() {
@@ -45,13 +46,14 @@ export default function TitleScene() {
               enableRotate={false}
               enableZoom={false}
             />
-            {/* {BoxSpawner(1000)} */}
             <BeerSpawner interval={1200} scale={scale}/>
             <Title scale={scale}/>
+            
+            <BeerModel position={[0, 80, -65]} rotation={[0, 0, 0]} scale={[scale, scale, scale]}/>
             <Box scale={scale}/>
             {/* <directionalLight 
                     position={[200, 100, 70]}
-                    intensity={0.4}
+                    intensity={1.4}
                     color="#e4ebf0"
                     /> */}
             <pointLight
