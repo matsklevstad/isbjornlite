@@ -1,14 +1,14 @@
 import { useBox } from "@react-three/cannon";
 
 interface BoxProps {
-    position: [number, number, number];
+    scale: number;
 }
 
-export default function Box({...props}: BoxProps) {
+export default function Box({ scale}: BoxProps) {
     const [ref] = useBox(() => ({ 
         mass: 0.1, 
         args: [1, 1, 1],
-        ...props
+        position: [8 * scale, 2, 0]
     }));
 
     return (

@@ -48,7 +48,7 @@ export default function TitleScene() {
             {/* {BoxSpawner(1000)} */}
             <BeerSpawner interval={1200} scale={scale}/>
             <Title scale={scale}/>
-            <Box position={[10, 2, 0]} />
+            <Box scale={scale}/>
             {/* <directionalLight 
                     position={[200, 100, 70]}
                     intensity={0.4}
