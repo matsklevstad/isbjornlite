@@ -13,7 +13,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-console.log(firebaseConfig.apiKey);
 
 // Initialize analytics (optional)
 let analytics;
