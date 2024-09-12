@@ -3,9 +3,9 @@ import Log from "./Log";
 
 export default function Index() {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <TitleScene />
       <Log />
-    </>
+    </div>
   );
 }

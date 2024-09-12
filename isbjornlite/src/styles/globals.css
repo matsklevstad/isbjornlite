@@ -28,12 +28,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
-  color: transparent;
+  background: black;
+  color: black;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ffffff;
+  background: #00bbff;
   border-radius: 10px;
 }
 
