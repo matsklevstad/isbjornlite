@@ -6,7 +6,7 @@ import { useBox } from '@react-three/cannon';
 import { MeshStandardMaterial } from 'three';
 import { useFrame } from '@react-three/fiber';
 
-export default function Title() {
+export default function Title({scale}: {scale: number}) {
     const [font, setFont] = useState(null);
     const [opacityLeft, setOpacityLeft] = useState(0);
     const [opacityRight, setOpacityRight] = useState(0);
@@ -47,14 +47,14 @@ export default function Title() {
 
     const textGeometryLeft = new TextGeometry('ISBJØRN', {
         font: font,
-        size: 1.5,
+        size: 1.5 * scale * 0.9,
         height: 0.2,
         depth: 0.2,
     });
 
     const textGeometryRight = new TextGeometry('LITE', {
         font: font,
-        size: 1.5,
+        size: 1.5 * scale * 0.9,
         height: 0.2,
         depth: 0.2,
     });
@@ -68,10 +68,10 @@ export default function Title() {
     const meshLeft = new Mesh(textGeometryLeft, materialLeft);
     const meshRight = new Mesh(textGeometryRight, materialRight);
 
-    meshLeft.position.set(-6.8, -10, 15);
+    meshLeft.position.set(-6.8 * scale * 0.9, -10, 15);
     meshLeft.rotation.set(Math.PI / 4, 0, 0);
 
-    meshRight.position.set(2.5, -10, 15);
+    meshRight.position.set(2.5 * scale * 0.9, -10, 15);
     meshRight.rotation.set(Math.PI / 4, 0, 0);
 
     materialLeft.opacity = opacityLeft;

@@ -1,5 +1,5 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { BeerSpawner } from "../BeerSpawner";
 import Box from "../Box";
 import Ground from "../Ground";
@@ -9,10 +9,30 @@ import { Physics } from "@react-three/cannon";
 //import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 
 export default function TitleScene() {
+  const [scale, setScale] = useState(1);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if(width < 1920) {
+        setScale(1 - ((1920 - width) / 1920) * 0.5);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+
   return (
     <Suspense fallback={null}>
       <div className="w-full h-screen">
-        <Canvas className="bg-black " frameloop="demand">
+        <Canvas className="bg-black " frameloop="demand" id="titleCanvas">
           <Physics gravity={[0, -13, 0]}>
             <PerspectiveCamera
               makeDefault
@@ -26,8 +46,8 @@ export default function TitleScene() {
               enableZoom={false}
             />
             {/* {BoxSpawner(1000)} */}
-            <BeerSpawner interval={1200} />
-            <Title />
+            <BeerSpawner interval={1200} scale={scale}/>
+            <Title scale={scale}/>
             <Box position={[10, 2, 0]} />
             {/* <directionalLight 
                     position={[200, 100, 70]}
@@ -47,7 +67,7 @@ export default function TitleScene() {
               distance={100}
             />
             <ambientLight intensity={1} color="#ffffff" />
-            <Ground />
+            <Ground scale={scale}/>
           </Physics>
         </Canvas>
       </div>

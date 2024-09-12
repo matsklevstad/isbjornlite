@@ -4,7 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { useEffect } from "react";
 import { TextureLoader } from "three";
 
-export default function Ground() {
+export default function Ground({scale}: {scale: number}) {
     const [ref] = usePlane(() => ({
         rotation: [-Math.PI / 4, 0, 0] ,
         type: "Static",
@@ -27,7 +27,7 @@ export default function Ground() {
     return (
         <>
             <mesh rotation={[-Math.PI / 4, 0, 0]} position={[0, 0.01, 0]}>
-                <planeGeometry args={[50, 100]}/>
+                <planeGeometry args={[50 * scale, 100]}/>
                 <meshBasicMaterial
                 map={gridMap}
                 opacity={0.375}

@@ -3,6 +3,7 @@ import { useCompoundBody } from "@react-three/cannon";
 interface BeerBoundingProps {
     position: [number, number, number];
     rotation: [number, number, number];
+    scale: [number, number, number];
 }
 
 export function BeerBounding({ ...props }: BeerBoundingProps) {

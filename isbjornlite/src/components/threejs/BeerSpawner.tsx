@@ -4,10 +4,11 @@ import { useFrame } from "@react-three/fiber";
 
 interface BeerSpawnerProps {
     interval: number;
+    scale: number;
 }
 
 
-export const BeerSpawner = ({interval}: BeerSpawnerProps) => {
+export const BeerSpawner = ({interval, scale}: BeerSpawnerProps) => {
     const [beers, setBeers] = useState<JSX.Element[]>([]);
     const [startCounter, setStartCounter] = useState(0);
     const startDelay = 250;
@@ -29,14 +30,15 @@ export const BeerSpawner = ({interval}: BeerSpawnerProps) => {
                 ...prevBeers,
                 <BeerModel
                     key={prevBeers.length}
-                    position={[Math.random() * 10 - 10, 100, -30]}
+                    position={[(Math.random() * 10 - 10) * scale, 100, -30]}
                     rotation={[Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2]}
+                    scale={[scale, scale, scale]}
                 />
             ]);
         }, interval);
 
         return () => clearInterval(id); // Cleanup interval on component unmount
-    }, [interval, startCounter]);
+    }, [interval, startCounter, scale]);
 
     return (
         <>
