@@ -58,13 +58,15 @@ export default function Log() {
     <div id="scrolltarget">
       <BeerLogModal showModal={showModal} setShowModal={setShowModal} />
 
-      <div className="w-screen h-screen p-4">
-        <button
-          className="px-4 py-2 mb-8 bg-white text-2xl md:text-3xl text-blue-400 border-2 border-blue-400 rounded"
-          onClick={() => setShowModal(!showModal)}
-        >
-          Registrer ny isbjørn
-        </button>
+      <div className="w-screen h-screen  p-4">
+        <div className="flex justify-center">
+          <button
+            className="px-4 py-2 mb-8 text-white bg-blue-400 text-2xl md:text-3xl rounded"
+            onClick={() => setShowModal(!showModal)}
+          >
+            Registrer ny isbjørn
+          </button>
+        </div>
         {beers.length > 0 ? (
           <div className="flex flex-col md:px-16 gap-12 md:flex-row justify-center md:space-x-48">
             <BeerLogStats beers={beers} />

@@ -60,12 +60,13 @@ const BeerLogModal: React.FC<BeerLogModalProps> = ({
       ariaHideApp={false}
       closeButtonLabel="Lukk"
       footer={false}
+      className="text-black"
     >
       <div
         onClick={() => setisTermsAgreed(!isTermsAgreed)}
         className="flex items-center gap-4 mb-4"
       >
-        <p className="text-xl italic ">
+        <p className="text-xl italic text-black">
           Jeg bekrefter at jeg har på ærlig og redlig vis konsumert en
           bjønnunge.
         </p>
@@ -82,11 +83,11 @@ const BeerLogModal: React.FC<BeerLogModalProps> = ({
             placeholder="Navn"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="px-4 text-xl py-2 border rounded w-full md:w-1/2"
+            className="px-4 text-xl py-2 border text-black rounded w-full md:w-1/2"
           />
           <button
             onClick={saveIsbjorn}
-            className="px-4 text-xl py-2 bg-blue-500 text-white rounded w-full md:w-1/4"
+            className="px-4 text-xl py-2 bg-blue-400 text-white rounded w-full md:w-1/4"
           >
             Legg til
           </button>
