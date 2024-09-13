@@ -12,7 +12,7 @@ interface BeerLogListProps {
   values: BeerLog[];
 }
 
-const BeerLogList: React.FC<BeerLogListProps> = ({ values }) => {
+const BeerLogList: React.FC<BeerLogListProps> = ({ values = [] }) => {
   const logContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,9 +27,13 @@ const BeerLogList: React.FC<BeerLogListProps> = ({ values }) => {
       data-aos-delay="200"
       className="flex flex-col gap-4 md:gap-8 px-4 md:px-72 overflow-y-auto h-[80vh] pt-16 mt-4"
     >
-      {values.map((value, index) => (
-        <BeerLogItem key={index} value={value} />
-      ))}
+      {values.length > 0 ? (
+        values.map((value: BeerLog, index: number) => (
+          <BeerLogItem key={index} value={value} />
+        ))
+      ) : (
+        <div>Ingen bjønnunger loggført</div>
+      )}
     </div>
   );
 };
