@@ -3,28 +3,18 @@
 @tailwind utilities;
 @import url("@sikt/sds-core");
 
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 html {
   overflow-x: initial !important;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Tiempos Headline;
+  background: #1d2126;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -53,21 +43,7 @@ body {
   }
 }
 
-@font-face {
-  font-family: 'Tiempos Headline';
-  src: url('../pages/fonts/TestTiemposFine-Regular-BF66457a50e8bc9.otf') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Tiempos Headline';
-  src: url('../pages/fonts/TestTiemposHeadline-Bold-BF66457a5113d17.otf') format('woff2');
-
-  font-weight: bold;
-  font-style: normal;
-}
-
 #titleCanvas {
   touch-action: auto !important;
 }
+

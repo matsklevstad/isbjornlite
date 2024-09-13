@@ -26,8 +26,8 @@ const GravityShift = ({gravity, setGravity, normalGravity, noGravity}: GravitySh
                         hover:opacity-75 transition-opacity duration-200`}
         >
             {arraysEqual(gravity, normalGravity) ? 
-            <Image src="/assets/astronaut2.png" width={45} height={45} alt="gravity"/> :
-            <Image src="/assets/astronaut.png" width={45} height={45} alt="gravity"/>
+            <Image src="/assets/astronaut2.png" width={35} height={35} alt="gravity"/> :
+            <Image src="/assets/astronaut.png" width={35} height={35} alt="gravity"/>
             }
         </button>
     )
