@@ -1,4 +1,4 @@
-//import { IconCircleArrowDownFilled } from "@tabler/icons-react";
+import { IconCircleArrowDownFilled } from "@tabler/icons-react";
 
 const ScrollDownBtn = () => {
   const handleScroll = () => {
@@ -11,12 +11,9 @@ const ScrollDownBtn = () => {
   };
 
   return (
-    <div className="flex w-full h-full absolute justify-center items-end p-10 z-10">
-      <button onClick={handleScroll}>
-        {/* <IconCircleArrowDownFilled size={35} color="#ffffff" /> */}
-       
+      <button onClick={handleScroll} className="absolute right-10 z-10 bottom-10 opacity-90">
+        <IconCircleArrowDownFilled size={35} color="#ffffff" />
       </button>
-    </div>
   );
 };
 
