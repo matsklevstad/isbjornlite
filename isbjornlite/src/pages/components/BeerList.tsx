@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import BeerLogItem from "./BeerLogItem";
+import BeerLogItem from "./BeerItem";
 //import AOS from "aos";
 //import "aos/dist/aos.css"; // Import the AOS CSS
 

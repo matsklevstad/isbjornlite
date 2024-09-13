@@ -1,6 +1,6 @@
 import React from "react";
-import BeerLogChart from "../components/BeerLogChart";
-import BeerLogPie from "../components/BeerLogPie";
+import BeerLogChart from "./BeerChart";
+import BeerLogPie from "./BeerPie";
 
 interface BeerLog {
   name: string;

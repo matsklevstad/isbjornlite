@@ -22,6 +22,7 @@
     "react": "^18",
     "react-dom": "^18",
     "recharts": "^2.12.7",
+    "tabler-icons-react": "^1.56.0",
     "three": "^0.168.0"
   },
   "devDependencies": {

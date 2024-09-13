@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getFirestore, collection, onSnapshot } from "firebase/firestore";
 import { app } from "../firebase";
-import BeerLogModal from "../pages/components/BeerLogModal";
-import BeerLogList from "../pages/components/BeerLogList";
-import BeerLogStats from "../pages/components/BeerLogStats";
+import BeerLogModal from "./components/AddBeerModal";
+import BeerLogList from "./components/BeerList";
+import BeerLogStats from "./components/BeerStatsOverview";
 
 interface BeerLog {
   name: string;

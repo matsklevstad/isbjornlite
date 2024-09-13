@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
 interface BeerLog {
   name: string;
@@ -28,6 +28,16 @@ const BeerLogPie: React.FC<BeerLogPieProps> = ({ beers }) => {
     value: beersPerPerson[person],
   }));
 
+  // List of colors for the pie chart slices
+  const colors = [
+    "#8884d8",
+    "#82ca9d",
+    "#ffc658",
+    "#ff8042",
+    "#00C49F",
+    "#FFBB28",
+  ];
+
   return (
     <div>
       <h2 className="text-xl font-bold">Hvem knekker mest?</h2>
@@ -40,9 +50,15 @@ const BeerLogPie: React.FC<BeerLogPieProps> = ({ beers }) => {
             cx="50%"
             cy="50%"
             outerRadius={80}
-            fill="#8884d8"
             label
-          />
+          >
+            {pieChartData.map((_, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={colors[index % colors.length]}
+              />
+            ))}
+          </Pie>
           <Tooltip />
         </PieChart>
       </ResponsiveContainer>
