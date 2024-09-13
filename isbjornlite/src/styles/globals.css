@@ -17,6 +17,10 @@
   }
 }
 
+html {
+  overflow-x: initial !important;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -35,6 +39,12 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #00bbff;
   border-radius: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
 }
 
 @layer utilities {
