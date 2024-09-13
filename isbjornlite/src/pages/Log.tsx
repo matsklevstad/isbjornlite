@@ -55,7 +55,7 @@ export default function Log() {
   }, [db]);
 
   return (
-    <div>
+    <div id="scrolltarget">
       <BeerLogModal showModal={showModal} setShowModal={setShowModal} />
 
       <div className="w-screen h-screen p-4">
