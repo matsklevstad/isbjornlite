@@ -17,7 +17,7 @@ const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
 
   // Helper function to get weekday name from date
   const getWeekdayName = (date: Date) => {
-    const days = ["M", "T", "O", "T", "F", "L", "S"];
+    const days = ["S", "M", "T", "O", "T", "F", "L"];
     return days[date.getDay()];
   };
 
@@ -38,11 +38,11 @@ const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
     <div className="md:w-1/3">
       <h2 className="text-xl font-bold mb-2">Når knekkes isbjørnene?</h2>
       <BarChart width={300} height={200} data={chartData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="weekday" />
-      <YAxis />
-      <Tooltip />
-      <Bar dataKey="count" fill="#8884d8" />
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="weekday" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="count" fill="#8884d8" />
       </BarChart>
     </div>
   );
