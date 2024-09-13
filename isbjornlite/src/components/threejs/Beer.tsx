@@ -6,6 +6,8 @@ type BeerBoundingProps = {
   position: [number, number, number];
   rotation: [number, number, number];
   scale: [number, number, number];
+  velocity?: [number, number, number];
+  angularVelocity?: [number, number, number];
 };
 
 export function BeerModel({ ...props }: BeerBoundingProps) {
