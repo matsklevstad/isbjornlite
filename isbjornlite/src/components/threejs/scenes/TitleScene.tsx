@@ -9,6 +9,7 @@ import { Physics } from "@react-three/cannon";
 import { BeerModel } from "../Beer";
 import GravityShift from "@/components/buttons/GravityShift";
 import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
+import classes from "@/styles/TitleScene.module.css";
 
 export default function TitleScene() {
   const [scale, setScale] = useState(1);
@@ -36,7 +37,7 @@ export default function TitleScene() {
 
   return (
     <Suspense fallback={null}>
-      <div className="w-full h-screen bg-white relative">
+      <div className={classes.container}>
         <GravityShift
           setGravity={setGravity}
           gravity={gravity}
