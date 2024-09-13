@@ -17,7 +17,7 @@ const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
   }
 
   return (
-    <div className="flex flex-col gap-8 md:w-1/3">
+    <div className="flex flex-col justify-center items-center  gap-8 md:w-1/3">
       <BeerLogChart beers={beers} />
       <BeerLogPie beers={beers} />
     </div>

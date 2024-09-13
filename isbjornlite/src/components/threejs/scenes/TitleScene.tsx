@@ -9,19 +9,18 @@ import { Physics } from "@react-three/cannon";
 import { BeerModel } from "../Beer";
 import GravityShift from "@/components/buttons/GravityShift";
 import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
-//import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 
 export default function TitleScene() {
   const [scale, setScale] = useState(1);
   const normalGravity: [number, number, number] = [0, -13, 0];
   const noGravity: [number, number, number] = [0, -3, 3];
-  const [gravity, setGravity] = useState<[number, number, number]>(normalGravity);
-  
+  const [gravity, setGravity] =
+    useState<[number, number, number]>(normalGravity);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if(width < 1920) {
+      if (width < 1920) {
         setScale(1 - ((1920 - width) / 1920) * 0.5);
       }
     };
@@ -35,11 +34,15 @@ export default function TitleScene() {
     };
   }, []);
 
-
   return (
     <Suspense fallback={null}>
       <div className="w-full h-screen bg-white relative">
-        <GravityShift setGravity={setGravity} gravity={gravity} normalGravity={normalGravity} noGravity={noGravity}/>
+        <GravityShift
+          setGravity={setGravity}
+          gravity={gravity}
+          normalGravity={normalGravity}
+          noGravity={noGravity}
+        />
         <ScrollDownBtn />
         <Canvas className="bg-black " frameloop="demand" id="titleCanvas">
           <Physics gravity={gravity}>
@@ -54,11 +57,20 @@ export default function TitleScene() {
               enableRotate={false}
               enableZoom={false}
             />
-            <BeerSpawner interval={1200} scale={scale} gravity={gravity} normalGravity={normalGravity}/>
-            <Title scale={scale}/>
-            
-            <BeerModel position={[0, 110, -110]} rotation={[0, 0, Math.PI / 2]} scale={[scale, scale, scale]}/>
-            <Box scale={scale}/>
+            <BeerSpawner
+              interval={1200}
+              scale={scale}
+              gravity={gravity}
+              normalGravity={normalGravity}
+            />
+            <Title scale={scale} />
+
+            <BeerModel
+              position={[0, 110, -110]}
+              rotation={[0, 0, Math.PI / 2]}
+              scale={[scale, scale, scale]}
+            />
+            <Box scale={scale} />
             {/* <directionalLight 
                     position={[200, 100, 70]}
                     intensity={2.4}
@@ -77,7 +89,7 @@ export default function TitleScene() {
               distance={100}
             />
             <ambientLight intensity={1} color="#ffffff" />
-            <Ground scale={scale}/>
+            <Ground scale={scale} />
           </Physics>
         </Canvas>
       </div>
