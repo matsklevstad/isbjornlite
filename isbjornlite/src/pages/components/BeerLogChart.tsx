@@ -11,6 +11,9 @@ interface BeerLogChartProps {
 }
 
 const BeerLogChart: React.FC<BeerLogChartProps> = ({ beers }) => {
+  if (beers === undefined) {
+    return null;
+  }
   // Helper function to get weekday name from date
   const getWeekdayName = (date: Date) => {
     const days = ["S", "M", "T", "O", "T", "F", "L"];
