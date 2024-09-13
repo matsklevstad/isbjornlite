@@ -27,7 +27,7 @@ const BeerLogList: React.FC<BeerLogListProps> = ({ beers = [] }) => {
       data-aos-delay="200" */
       className="w-full"
     >
-      <h2 className="text-xl font-bold mb-2 text-left">isbjornlite.live</h2>
+      <h2 className="text-xl font-bold mb-2 text-center">isbjornlite.live</h2>
 
       <div className="flex  flex-col gap-4 md:gap-8  p-4 md:px-16 h-[60vh] overflow-y-auto">
         {beers.length > 0 ? (

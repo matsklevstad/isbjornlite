@@ -14,6 +14,7 @@ const BeerLogChart: React.FC<BeerLogChartProps> = ({ beers }) => {
   if (beers === undefined) {
     return null;
   }
+
   // Helper function to get weekday name from date
   const getWeekdayName = (date: Date) => {
     const days = ["S", "M", "T", "O", "T", "F", "L"];
@@ -27,16 +28,24 @@ const BeerLogChart: React.FC<BeerLogChartProps> = ({ beers }) => {
     return acc;
   }, {});
 
-  // Convert weekday data to array format for Recharts
-  const chartData = Object.keys(beersPerWeekday).map((weekday) => ({
-    weekday,
-    count: beersPerWeekday[weekday],
-  }));
+  // Define an array of weekdays in order (can be Sunday to Saturday or Monday to Sunday)
+  const weekdayOrder = ["S", "M", "T", "O", "T", "F", "L"];
+
+  // Convert weekday data to array format for Recharts and sort based on the order
+  const chartData = Object.keys(beersPerWeekday)
+    .map((weekday) => ({
+      weekday,
+      count: beersPerWeekday[weekday],
+    }))
+    .sort(
+      (a, b) =>
+        weekdayOrder.indexOf(a.weekday) - weekdayOrder.indexOf(b.weekday)
+    );
 
   return (
     <div>
       <h2 className="text-xl font-bold mb-2">Når knekkes isbjørnene?</h2>
-      <BarChart width={300} height={200} data={chartData}>
+      <BarChart width={300} height={300} data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="weekday" />
         <YAxis />
