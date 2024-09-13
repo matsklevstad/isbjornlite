@@ -74,7 +74,7 @@ export default function Log() {
   };
 
   return (
-    <div>
+    <div id="scrolltarget">
       {/* Modal Component */}
       <Modal
         open={showModal}

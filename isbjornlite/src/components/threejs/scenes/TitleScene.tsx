@@ -8,6 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
 import { BeerModel } from "../Beer";
 import GravityShift from "@/components/buttons/GravityShift";
+import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 //import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
 
 export default function TitleScene() {
@@ -39,6 +40,7 @@ export default function TitleScene() {
     <Suspense fallback={null}>
       <div className="w-full h-screen">
         <GravityShift setGravity={setGravity} gravity={gravity} normalGravity={normalGravity} noGravity={noGravity}/>
+        <ScrollDownBtn />
         <Canvas className="bg-black " frameloop="demand" id="titleCanvas">
           <Physics gravity={gravity}>
             <PerspectiveCamera
@@ -79,7 +81,6 @@ export default function TitleScene() {
           </Physics>
         </Canvas>
       </div>
-      {/* <ScrollDownBtn /> */}
     </Suspense>
   );
 }

@@ -1,7 +1,5 @@
 import { arraysEqual } from "@/utils/arrayUtils";
-import { IconAppleFilled } from "@tabler/icons-react";
 import Image from "next/image";
-
 
 interface GravityShiftProps {
     gravity: [number, number, number];
@@ -9,7 +7,6 @@ interface GravityShiftProps {
     normalGravity: [number, number, number];
     noGravity: [number, number, number];
 }
-
 
 const GravityShift = ({gravity, setGravity, normalGravity, noGravity}: GravityShiftProps) => {
 
@@ -23,10 +20,15 @@ const GravityShift = ({gravity, setGravity, normalGravity, noGravity}: GravitySh
 
     return (
         <button 
-        onClick={handleClick} 
-        className="text-black absolute z-10 left-10 bottom-10 cursor-pointer"
+            onClick={handleClick} 
+            className={`absolute z-10 left-10 bottom-10 cursor-pointer 
+                        ${arraysEqual(gravity, noGravity) ? 'opacity-100' : 'opacity-50'} 
+                        hover:opacity-75 transition-opacity duration-200`}
         >
-            <Image src="/assets/gravity3.png" width={50} height={50} alt="gravity"/>
+            {arraysEqual(gravity, normalGravity) ? 
+            <Image src="/assets/astronaut2.png" width={45} height={45} alt="gravity"/> :
+            <Image src="/assets/astronaut.png" width={45} height={45} alt="gravity"/>
+            }
         </button>
     )
 };
