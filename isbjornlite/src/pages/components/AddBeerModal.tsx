@@ -60,16 +60,15 @@ const BeerLogModal: React.FC<BeerLogModalProps> = ({
       ariaHideApp={false}
       closeButtonLabel="Lukk"
       footer={false}
-      className="text-black"
     >
       <div
         onClick={() => setisTermsAgreed(!isTermsAgreed)}
         className="flex items-center gap-4 mb-4"
       >
-        <p className="text-xl italic text-black">
+        <g className="text-xl italic">
           Jeg bekrefter at jeg har på ærlig og redlig vis konsumert en
           bjønnunge.
-        </p>
+        </g>
         <input
           type="checkbox"
           className="form-checkbox h-8 w-8 text-blue-600"
