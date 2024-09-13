@@ -11,8 +11,8 @@ const ScrollDownBtn = () => {
   };
 
   return (
-      <button onClick={handleScroll} className="absolute right-10 z-10 bottom-10 opacity-75">
-        <IconCircleArrowDownFilled size={40} color="#ffffff" />
+      <button onClick={handleScroll} className="absolute right-10 z-10 bottom-10 opacity-90">
+        <IconCircleArrowDownFilled size={35} color="#ffffff" />
       </button>
   );
 };
