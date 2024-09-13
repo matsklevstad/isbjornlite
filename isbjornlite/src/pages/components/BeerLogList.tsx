@@ -9,14 +9,14 @@ interface BeerLog {
 }
 
 interface BeerLogListProps {
-  values: BeerLog[];
+  beers: BeerLog[];
 }
 
-const BeerLogList: React.FC<BeerLogListProps> = ({ values = [] }) => {
+const BeerLogList: React.FC<BeerLogListProps> = ({ beers = [] }) => {
   const logContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    AOS.init();
+    AOS.init({ once: true });
   }, []);
 
   return (
@@ -25,15 +25,19 @@ const BeerLogList: React.FC<BeerLogListProps> = ({ values = [] }) => {
       data-aos="fade-up"
       data-aos-duration="1000"
       data-aos-delay="200"
-      className="flex flex-col gap-4 md:gap-8 px-4 md:px-72 overflow-y-auto h-[80vh] pt-16 mt-4"
+      className="w-full"
     >
-      {values.length > 0 ? (
-        values.map((value: BeerLog, index: number) => (
-          <BeerLogItem key={index} value={value} />
-        ))
-      ) : (
-        <div>Ingen bjønnunger loggført</div>
-      )}
+      <h2 className="text-xl font-bold mb-2 text-left">isbjornlite.live</h2>
+
+      <div className="flex  flex-col gap-4 md:gap-8  p-4 md:px-16 h-[80vh] overflow-y-auto">
+        {beers.length > 0 ? (
+          beers.map((value: BeerLog, index: number) => (
+            <BeerLogItem key={index} value={value} />
+          ))
+        ) : (
+          <div>Ingen bjønnunger loggført</div>
+        )}
+      </div>
     </div>
   );
 };

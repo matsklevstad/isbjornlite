@@ -58,6 +58,7 @@ const BeerLogModal: React.FC<BeerLogModalProps> = ({
       onClose={() => setShowModal(false)}
       heading={"Registerer en ny isbjørn!"}
       ariaHideApp={false}
+      closeButtonLabel="Lukk"
       footer={false}
     >
       <div

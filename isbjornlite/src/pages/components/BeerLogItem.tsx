@@ -19,7 +19,7 @@ const BeerLogItem: React.FC<BeerLogItemProps> = ({ value }) => {
   }
 
   return (
-    <div className="flex flex-row  items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+    <div className="flex flex-row items-center p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
       <div>
         <Image
           src="/assets/isbjorn-lite-logo.png"
