@@ -1,5 +1,6 @@
 import React from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
+import BeerLogChart from "../components/BeerLogChart";
+import BeerLogPie from "../components/BeerLogPie";
 
 interface BeerLog {
   name: string;
@@ -15,35 +16,10 @@ const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
     return null;
   }
 
-  // Helper function to get weekday name from date
-  const getWeekdayName = (date: Date) => {
-    const days = ["S", "M", "T", "O", "T", "F", "L"];
-    return days[date.getDay()];
-  };
-
-  // Map the beers to weekday data
-  const beersPerWeekday = beers.reduce((acc: Record<string, number>, beer) => {
-    const weekdayName = getWeekdayName(new Date(beer.timestamp));
-    acc[weekdayName] = (acc[weekdayName] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Convert weekday data to array format for Recharts
-  const chartData = Object.keys(beersPerWeekday).map((weekday) => ({
-    weekday,
-    count: beersPerWeekday[weekday],
-  }));
-
   return (
-    <div className="md:w-1/3">
-      <h2 className="text-xl font-bold mb-2">Når knekkes isbjørnene?</h2>
-      <BarChart width={300} height={200} data={chartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="weekday" />
-        <YAxis />
-        <Tooltip />
-        <Bar dataKey="count" fill="#8884d8" />
-      </BarChart>
+    <div className="flex flex-col gap-8 md:w-1/3">
+      <BeerLogChart beers={beers} />
+      <BeerLogPie beers={beers} />
     </div>
   );
 };
