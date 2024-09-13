@@ -38,7 +38,7 @@ export default function TitleScene() {
 
   return (
     <Suspense fallback={null}>
-      <div className="w-full h-screen">
+      <div className="w-full h-screen bg-white relative">
         <GravityShift setGravity={setGravity} gravity={gravity} normalGravity={normalGravity} noGravity={noGravity}/>
         <ScrollDownBtn />
         <Canvas className="bg-black " frameloop="demand" id="titleCanvas">

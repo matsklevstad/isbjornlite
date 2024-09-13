@@ -22,7 +22,7 @@ const GravityShift = ({gravity, setGravity, normalGravity, noGravity}: GravitySh
         <button 
             onClick={handleClick} 
             className={`absolute z-10 left-10 bottom-10 cursor-pointer 
-                        ${arraysEqual(gravity, noGravity) ? 'opacity-100' : 'opacity-50'} 
+                        ${arraysEqual(gravity, noGravity) ? 'opacity-100' : 'opacity-100'} 
                         hover:opacity-75 transition-opacity duration-200`}
         >
             {arraysEqual(gravity, normalGravity) ? 
