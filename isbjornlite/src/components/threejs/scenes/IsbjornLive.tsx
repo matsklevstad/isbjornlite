@@ -9,6 +9,7 @@ import {
   onSnapshot,
   getCountFromServer,
   where,
+  getDocs,
 } from "firebase/firestore";
 import { app } from "../../../firebase";
 import BeerLogModal from "@/components/AddBeerModal";
@@ -24,6 +25,7 @@ export default function IsbjornLive() {
   const [showModal, setShowModal] = useState(false);
   const [beers, setBeers] = useState<BeerLog[]>([]);
   const [weekDayStats, setWeekDayStats] = useState<any>([]);
+  const [nameStats, setNameStats] = useState<any>([]);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [isEnd, setIsEnd] = useState(false);
@@ -84,10 +86,30 @@ export default function IsbjornLive() {
     setWeekDayStats(weekdayCounts); // Return array of counts for each weekday
   };
 
+  const fetchNames = async () => {
+    const coll = collection(db, "beers");
+    const snapshot = await getDocs(coll);
+    const uniqueNames = new Set<string>();
+
+    snapshot.forEach((doc) => {
+      const data = doc.data() as BeerLog;
+      uniqueNames.add(data.name);
+    });
+
+    const counts: Record<string, number> = {};
+    for (const name of uniqueNames) {
+      const q = query(coll, where("name", "==", name));
+      const countSnapshot = await getCountFromServer(q);
+      counts[name] = countSnapshot.data().count;
+    }
+    setNameStats(counts);
+  };
+
   useEffect(() => {
     fetchBeers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     fetchWeekDayStats();
+    fetchNames();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -104,7 +126,10 @@ export default function IsbjornLive() {
         </div>
         {beers.length > 0 ? (
           <div className="flex flex-col md:px-16 gap-12 md:flex-row justify-center md:space-x-48">
-            <BeerStatsOverview weekDayStats={weekDayStats}  />
+            <BeerStatsOverview
+              nameStats={nameStats}
+              weekDayStats={weekDayStats}
+            />
 
             <BeerLogList
               beers={beers}

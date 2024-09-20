@@ -7,26 +7,21 @@ interface BeerLog {
 }
 
 interface BeerLogPieProps {
-  beers: BeerLog[];
+  nameStats: any;
 }
 
-const BeerLogPie: React.FC<BeerLogPieProps> = ({ beers }) => {
-  if (beers === undefined) {
+const BeerLogPie: React.FC<BeerLogPieProps> = ({ nameStats }) => {
+  if (nameStats === undefined) {
     return null;
   }
 
-  // Aggregate data by person
-  const beersPerPerson = beers.reduce((acc: Record<string, number>, beer) => {
-    const personName = beer.name;
-    acc[personName] = (acc[personName] || 0) + 1;
-    return acc;
-  }, {});
-
   // Convert aggregated data to array format for Recharts
-  const pieChartData = Object.keys(beersPerPerson).map((person) => ({
-    name: person,
-    value: beersPerPerson[person],
-  }));
+  const pieChartData = Object.keys(nameStats)
+    .filter((person) => nameStats[person] > 3)
+    .map((person) => ({
+      name: person,
+      value: nameStats[person],
+    }));
 
   // List of colors for the pie chart slices
   const colors = [
@@ -50,6 +45,7 @@ const BeerLogPie: React.FC<BeerLogPieProps> = ({ beers }) => {
   return (
     <div>
       <h2 className="text-xl font-bold">Hvem knekker mest?</h2>
+      <p>Må ha drukket minst 3</p>
       <ResponsiveContainer width={250} height={250}>
         <PieChart>
           <Pie
