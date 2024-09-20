@@ -89,19 +89,18 @@ export default function IsbjornLive() {
   const fetchNames = async () => {
     const coll = collection(db, "beers");
     const snapshot = await getDocs(coll);
-    const uniqueNames = new Set<string>();
+
+    const counts: Record<string, number> = {};
 
     snapshot.forEach((doc) => {
       const data = doc.data() as BeerLog;
-      uniqueNames.add(data.name);
+      console.log(data)
+      if (counts[data.name]) {
+        counts[data.name]++;
+      } else {
+        counts[data.name] = 1;
+      }
     });
-
-    const counts: Record<string, number> = {};
-    for (const name of uniqueNames) {
-      const q = query(coll, where("name", "==", name));
-      const countSnapshot = await getCountFromServer(q);
-      counts[name] = countSnapshot.data().count;
-    }
     setNameStats(counts);
   };
 

@@ -1,11 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell } from "recharts";
 
-interface BeerLog {
-  name: string;
-  timestamp: string;
-}
-
 interface BeerLogPieProps {
   nameStats: any;
 }
