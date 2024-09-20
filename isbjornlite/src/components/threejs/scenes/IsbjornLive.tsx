@@ -7,11 +7,13 @@ import {
   startAfter,
   orderBy,
   onSnapshot,
+  getCountFromServer,
+  where,
 } from "firebase/firestore";
 import { app } from "../../../firebase";
 import BeerLogModal from "@/components/AddBeerModal";
 import BeerLogList from "@/components/BeerList";
-//import BeerStatsOverview from "../BeerStatsOverview";
+import BeerStatsOverview from "../BeerStatsOverview";
 
 interface BeerLog {
   name: string;
@@ -21,6 +23,7 @@ interface BeerLog {
 export default function IsbjornLive() {
   const [showModal, setShowModal] = useState(false);
   const [beers, setBeers] = useState<BeerLog[]>([]);
+  const [weekDayStats, setWeekDayStats] = useState<any>([]);
   const [lastVisible, setLastVisible] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [isEnd, setIsEnd] = useState(false);
@@ -61,9 +64,30 @@ export default function IsbjornLive() {
     return () => unsubscribe();
   };
 
+  const fetchWeekDayStats = async () => {
+    const db = getFirestore();
+    const coll = collection(db, "beers");
+
+    const weekdayCounts: number[] = [];
+
+    // Loop through each day of the week (0 = Sunday, 6 = Saturday)
+    for (let i = 0; i <= 6; i++) {
+      // Query Firestore for the specific weekday
+      const q = query(coll, where("weekDay", "==", i));
+
+      // Get the count of documents (beers) for the specific weekday
+      const snapshot = await getCountFromServer(q);
+      weekdayCounts[i] = snapshot.data().count; // Store the count in the array
+    }
+
+    console.log("Weekday beer counts:", weekdayCounts);
+    setWeekDayStats(weekdayCounts); // Return array of counts for each weekday
+  };
+
   useEffect(() => {
     fetchBeers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchWeekDayStats();
   }, []);
 
   return (
@@ -80,8 +104,8 @@ export default function IsbjornLive() {
         </div>
         {beers.length > 0 ? (
           <div className="flex flex-col md:px-16 gap-12 md:flex-row justify-center md:space-x-48">
-            {/*             <BeerStatsOverview beers={beers} />
-             */}{" "}
+            <BeerStatsOverview weekDayStats={weekDayStats}  />
+
             <BeerLogList
               beers={beers}
               fetchMoreBeers={() => fetchBeers(true)}

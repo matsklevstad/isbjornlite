@@ -1,46 +1,23 @@
 import React from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 
-interface BeerLog {
-  name: string;
-  timestamp: string;
-}
-
 interface BeerLogChartProps {
-  beers: BeerLog[];
+  weekDayStats: number[]; // Array with beer count per weekday, [0,0,0,0,0,1,0] format
 }
 
-const BeerLogChart: React.FC<BeerLogChartProps> = ({ beers }) => {
-  if (beers === undefined) {
-    return null;
+const BeerLogChart: React.FC<BeerLogChartProps> = ({ weekDayStats }) => {
+  if (!weekDayStats || weekDayStats.length !== 7) {
+    return null; // Ensure the array has 7 elements (one for each weekday)
   }
 
-  // Helper function to get weekday name from date
-  const getWeekdayName = (date: Date) => {
-    const days = ["S", "M", "T", "O", "T", "F", "L"];
-    return days[date.getDay()];
-  };
-
-  // Map the beers to weekday data
-  const beersPerWeekday = beers.reduce((acc: Record<string, number>, beer) => {
-    const weekdayName = getWeekdayName(new Date(beer.timestamp));
-    acc[weekdayName] = (acc[weekdayName] || 0) + 1;
-    return acc;
-  }, {});
-
-  // Define an array of weekdays in order (can be Sunday to Saturday or Monday to Sunday)
+  // Define weekday names in the desired order
   const weekdayOrder = ["S", "M", "T", "O", "T", "F", "L"];
 
-  // Convert weekday data to array format for Recharts and sort based on the order
-  const chartData = Object.keys(beersPerWeekday)
-    .map((weekday) => ({
-      weekday,
-      count: beersPerWeekday[weekday],
-    }))
-    .sort(
-      (a, b) =>
-        weekdayOrder.indexOf(a.weekday) - weekdayOrder.indexOf(b.weekday)
-    );
+  // Convert weekDayStats array into the format required by Recharts
+  const chartData = weekDayStats.map((count, index) => ({
+    weekday: weekdayOrder[index], // Map index to weekday name
+    count, // Beer count for that weekday
+  }));
 
   return (
     <div>

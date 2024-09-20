@@ -38,6 +38,7 @@ const BeerLogModal: React.FC<BeerLogModalProps> = ({
           .join(" ")
           .trim(),
         timestamp: new Date().toISOString(),
+        weekDay: new Date().getDay(),
       });
       console.log("Document written with ID: ", docRef.id);
       setName("");

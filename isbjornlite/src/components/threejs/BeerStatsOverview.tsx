@@ -1,26 +1,27 @@
 import React from "react";
 
-import BeerLogPie from "../BeerPie";
+//import BeerLogPie from "../BeerPie";
 import BeerLogChart from "../BeerChart";
 
-interface BeerLog {
+/*interface BeerLog {
   name: string;
   timestamp: string;
-}
+}*/
 
 interface BeerStatsOverviewProps {
-  beers: BeerLog[];
+  //beers: BeerLog[];
+  weekDayStats: any;
 }
 
-const BeerStatsOverview: React.FC<BeerStatsOverviewProps> = ({ beers }) => {
-  if (beers === undefined) {
+const BeerStatsOverview: React.FC<BeerStatsOverviewProps> = ({ weekDayStats }) => {
+  if (weekDayStats === undefined) {
     return null;
   }
 
   return (
     <div className="flex flex-col justify-center items-center  gap-8 md:w-1/3">
-      <BeerLogChart beers={beers} />
-      <BeerLogPie beers={beers} />
+      <BeerLogChart  weekDayStats={weekDayStats} />
+      {/* <BeerLogPie beers={beers} /> */}
     </div>
   );
 };
