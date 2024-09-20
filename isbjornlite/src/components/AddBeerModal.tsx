@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Modal } from "@sikt/sds-modal";
 import "@sikt/sds-modal/dist/index.css";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { app } from "../../firebase";
+import { app } from "@/firebase";
+
 
 interface BeerLogModalProps {
   showModal: boolean;

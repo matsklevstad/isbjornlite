@@ -36,6 +36,15 @@ const BeerLogPie: React.FC<BeerLogPieProps> = ({ beers }) => {
     "#ff8042",
     "#00C49F",
     "#FFBB28",
+    "#FF8042",
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#0088FE",
+    "#FF6384",
+    "#36A2EB",
+    "#FFCE56",
   ];
 
   return (

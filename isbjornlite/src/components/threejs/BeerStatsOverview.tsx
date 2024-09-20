@@ -1,17 +1,18 @@
 import React from "react";
-import BeerLogChart from "./BeerChart";
-import BeerLogPie from "./BeerPie";
+
+import BeerLogPie from "../BeerPie";
+import BeerLogChart from "../BeerChart";
 
 interface BeerLog {
   name: string;
   timestamp: string;
 }
 
-interface BeerLogStatsProps {
+interface BeerStatsOverviewProps {
   beers: BeerLog[];
 }
 
-const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
+const BeerStatsOverview: React.FC<BeerStatsOverviewProps> = ({ beers }) => {
   if (beers === undefined) {
     return null;
   }
@@ -24,4 +25,4 @@ const BeerLogStats: React.FC<BeerLogStatsProps> = ({ beers }) => {
   );
 };
 
-export default BeerLogStats;
+export default BeerStatsOverview;

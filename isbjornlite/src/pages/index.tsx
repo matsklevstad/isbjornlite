@@ -1,11 +1,12 @@
 import TitleScene from "@/components/threejs/scenes/TitleScene";
-import Log from "./Log";
+
+import IsbjornLive from "../components/threejs/scenes/IsbjornLive";
 
 export default function Index() {
   return (
     <div className="overflow-x-hidden">
       <TitleScene />
-      <Log />
+      <IsbjornLive />
     </div>
   );
 }
