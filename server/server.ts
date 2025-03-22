@@ -4,6 +4,7 @@ dotenv.config();
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./db/connect";
+import userRoutes from './routes/userRoutes';
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.use(
 
 // Middleware
 app.use(express.json());
+
+app.use('/api/users', userRoutes);
 
 // Add a test route to check basic functionality
 app.get('/', (req, res) => {

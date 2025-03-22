@@ -16,6 +16,7 @@ const generateToken = (userId: string) => {
 // Register a new user
 export const register = async (req: Request, res: Response) => {
   try {
+    console.log("Registering user:", req.body);
     const { username, email, password, image } = req.body;
 
     // Check if user already exists
@@ -32,6 +33,15 @@ export const register = async (req: Request, res: Response) => {
       password,
       image: image || "default-profile.png", // Use default if not provided
     });
+
+    // Verify user creation by fetching it back
+    const verifiedUser = await User.findById(user._id);
+    if (!verifiedUser) {
+      console.error("CRITICAL ERROR: User created but can't be found!");
+      res.status(500).json({ success: false, message: "Database consistency error" });
+      return;
+    }
+    console.log("User verified in database:", verifiedUser._id);
 
     // Generate token
     const token = generateToken(String(user._id));
@@ -59,10 +69,10 @@ export const register = async (req: Request, res: Response) => {
 // Login user
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     // Find user and include password field
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ username }).select("+password");
     if (!user) {
       res.status(401).json({ success: false, message: "Invalid credentials" });
       return;
