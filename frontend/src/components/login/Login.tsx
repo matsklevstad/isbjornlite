@@ -10,8 +10,9 @@ import {
   TextInput,
   Title,
   Alert,
+  Card,
 } from "@mantine/core";
-import classes from "./Login.module.css";
+
 import { useAuthStore } from "@/stores/authStore";
 
 export function Login() {
@@ -53,9 +54,9 @@ export function Login() {
   };
 
   return (
-    <div className={classes.wrapper}>
-      <Paper className={classes.form} radius={0} p={30}>
-        <Title order={2} className={classes.title} ta="center" mt="md" mb={50}>
+    <Card w="30rem" mx="auto" mt={100}>
+      <Paper radius={0} p={30}>
+        <Title order={2} ta="center" mt="md" mb={50}>
           Velkommen til Isbjørn Lite!
         </Title>
 
@@ -106,6 +107,6 @@ export function Login() {
           </Anchor>
         </Text>
       </Paper>
-    </div>
+    </Card>
   );
 }
