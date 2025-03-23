@@ -138,7 +138,7 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch (error) {
+        } catch {
           // Token invalid, logout
           get().logout();
           set({ isLoading: false });

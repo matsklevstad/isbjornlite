@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, JSX } from "react";
 import { BeerModel } from "./Beer";
 import { useFrame } from "@react-three/fiber";
 import { arraysEqual } from "@/utils/arrayUtils";

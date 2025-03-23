@@ -61,14 +61,14 @@ const userSchema = new Schema<IUser>(
 );
 
 // Pre-save hook to hash password before saving
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   // Only hash the password if it has been modified (or is new)
   if (!this.isModified("password")) return next();
-  
+
   try {
     // Generate a salt with cost factor 10
     const salt = await bcrypt.genSalt(10);
-    
+
     // Hash password with the generated salt
     this.password = await bcrypt.hash(this.password, salt);
     next();
@@ -78,15 +78,18 @@ userSchema.pre("save", async function(next) {
 });
 
 // Method to compare password for login
-userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
+userSchema.methods.comparePassword = async function (
+  candidatePassword: string
+): Promise<boolean> {
   try {
     // Compare the provided password with the hashed password
     return await bcrypt.compare(candidatePassword, this.password);
-  } catch (error) {
+  } catch {
     throw new Error("Password comparison failed");
   }
 };
 
 // Important: Check if the model exists before creating it
 // This is necessary for Next.js hot reloading and serverless functions
-export const UserModel = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+export const UserModel =
+  mongoose.models.User || mongoose.model<IUser>("User", userSchema);
