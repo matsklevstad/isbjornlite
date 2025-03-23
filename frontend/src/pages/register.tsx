@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { userService } from "@/services/userService";
-import api from "@/services/api";
+import { useAuthStore } from "@/stores/authStore";
 
 const Register = () => {
   const router = useRouter();
+  const { register } = useAuthStore();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -13,8 +13,8 @@ const Register = () => {
     confirmPassword: "",
     image: "default-profile.png", // Default image for new users
   });
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,6 +22,8 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    setLoading(true);
 
     // Basic validation
     if (!formData.username || !formData.email || !formData.password) {
@@ -35,39 +37,19 @@ const Register = () => {
     }
 
     try {
-      setLoading(true);
-      setError("");
-
-      console.log(
-        "Sending registration request to:",
-        `${api.defaults.baseURL}/users/register`
-      );
-
-      // Use userService instead of axios directly
-      const userData = {
+      await register({
         username: formData.username,
         email: formData.email,
         password: formData.password,
         image: formData.image,
-      };
+      });
 
-      const response = await userService.register(userData);
-      console.log("Registration response:", response);
-
-      // If registration is successful
-      if (response.data.success) {
-        // Store token in localStorage or cookies
-        localStorage.setItem("token", response.data.data.token);
-
-        // Redirect to login or dashboard
-        router.push("/login");
-      }
+      // Registration successful, redirect
+      setLoading(false);
+      router.push("/login");
     } catch (err: any) {
       console.error("Registration error:", err);
-      setError(
-        err.response?.data?.message || "Something went wrong you fucker"
-      );
-    } finally {
+      setError(err.response?.data?.message || "Something went wrong");
       setLoading(false);
     }
   };

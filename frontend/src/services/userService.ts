@@ -9,11 +9,11 @@ interface Credentials {
 
 export const userService = {
     register: (userData: User): Promise<any> => 
-        api.post('/users/register', userData),
+        api.post('/api/users/register', userData),
     
     login: (credentials: Credentials): Promise<any> => 
-        api.post('/users/login', credentials),
+        api.post('/api/users/login', credentials),
     
     getProfile: (): Promise<any> => 
-        api.get('/users/profile'),
+        api.get('/api/users/profile'),
 };

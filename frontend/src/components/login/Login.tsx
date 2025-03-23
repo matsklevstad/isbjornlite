@@ -11,12 +11,12 @@ import {
   Title,
   Alert,
 } from "@mantine/core";
-import { userService } from "@/services/userService";
 import classes from "./Login.module.css";
-import api from "@/services/api";
+import { useAuthStore } from "@/stores/authStore";
 
 export function Login() {
   const router = useRouter();
+  const { login } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -37,18 +37,9 @@ export function Login() {
     setError("");
 
     try {
-      console.log("Sending request to:", `${api.defaults.baseURL}/users/login`);
-      // Call login service
-      const response = await userService.login({ username, password });
-
-      // Store token in localStorage or sessionStorage based on "remember me" setting
-      const storage = rememberMe ? localStorage : sessionStorage;
-      storage.setItem("token", response.data.data.token);
-
-      // Also store user data if needed
-      storage.setItem("user", JSON.stringify(response.data.data));
-
-      // Redirect to home page after successful login
+      // Call the login function from the auth store
+      await login(username, password, rememberMe);
+      // Redirect to the home page or dashboard
       router.push("/");
     } catch (error: any) {
       // Handle login errors

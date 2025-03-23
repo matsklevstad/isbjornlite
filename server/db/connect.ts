@@ -9,7 +9,6 @@ export const connectDB = async () => {
     }
 
     const conn = await mongoose.connect(connectionString, {
-      // Modern Mongoose doesn't need useNewUrlParser and useUnifiedTopology anymore
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     });
