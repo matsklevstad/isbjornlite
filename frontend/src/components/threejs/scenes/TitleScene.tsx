@@ -162,7 +162,7 @@ export default function TitleScene() {
             {/* Reduced light intensity for better performance */}
             <pointLight
               position={[0, 20, 60]}
-              intensity={5000} // Reduced from 15000
+              intensity={5000} // Reduced from 1500
               color="#ffffff"
               distance={65}
             />
