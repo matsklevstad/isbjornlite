@@ -6,7 +6,7 @@ let beerImage: HTMLImageElement | null = null;
 // Preload the beer image
 if (typeof window !== "undefined") {
   beerImage = new Image();
-  beerImage.src = "./assets/isbjorn.png"; // Update this path to your image
+  beerImage.src = "./assets/isbjorn2.png"; // Update this path to your image
 }
 
 /**
