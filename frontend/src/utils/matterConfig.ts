@@ -1,5 +1,14 @@
 import { Engine, Render, Bodies, Body } from "matter-js";
 
+// Add this near the top of your file for image caching
+let beerImage: HTMLImageElement | null = null;
+
+// Preload the beer image
+if (typeof window !== "undefined") {
+  beerImage = new Image();
+  beerImage.src = "./assets/rect123.png"; // Update this path to your image
+}
+
 /**
  * Creates and configures a Matter.js engine and renderer
  */
@@ -67,10 +76,19 @@ export const createBeer = (x: number, y: number, width: number) => {
     throw new Error("Invalid beer size");
   }
 
+  const spriteScale = 0.1;
+
   return Bodies.rectangle(x, y, beerSize.width, beerSize.height, {
     restitution: 0.2, // Bounciness
     render: {
       fillStyle: "#fff",
+      sprite: beerImage
+        ? {
+            texture: beerImage.src,
+            xScale: spriteScale,
+            yScale: spriteScale,
+          }
+        : undefined,
     },
     friction: 0.08,
     chamfer: { radius: 4 }, // Rounded edges
