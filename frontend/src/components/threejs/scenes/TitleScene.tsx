@@ -1,7 +1,6 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Suspense, useEffect, useState } from "react";
 import { BeerSpawner } from "../BeerSpawner";
-import Box from "../Box";
 import Ground from "../Ground";
 import Title from "../Title";
 import { Canvas } from "@react-three/fiber";
@@ -71,7 +70,6 @@ export default function TitleScene() {
               rotation={[0, 0, Math.PI / 2]}
               scale={[scale, scale, scale]}
             />
-            <Box scale={scale} />
             {/* <directionalLight 
                     position={[200, 100, 70]}
                     intensity={2.4}

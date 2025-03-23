@@ -29,7 +29,7 @@ export const BeerSpawner = ({
 
   const [velocity, setVelocity] =
     useState<[number, number, number]>(normalVelocity);
-  const startDelay = 250;
+  const startDelay = 0;
 
   useFrame(() => {
     //console.log(startCounter);
