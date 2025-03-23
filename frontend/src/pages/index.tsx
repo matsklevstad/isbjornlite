@@ -1,4 +1,8 @@
-import TitleScene from "@/components/threejs/scenes/TitleScene";
+import dynamic from 'next/dynamic'
+
+const TitleScene = dynamic(() => import('../components/threejs/scenes/TitleScene'), {
+  ssr: false,
+})
 
 export default function Index() {
   return (

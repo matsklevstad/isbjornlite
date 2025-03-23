@@ -1,6 +1,6 @@
-import React from 'react';
-import { useGLTF } from '@react-three/drei';
-import { BeerBounding } from './boundingBoxes/BeerBounding';
+import React from "react";
+import { useGLTF } from "@react-three/drei";
+import { BeerBounding } from "./boundingBoxes/BeerBounding";
 
 type BeerBoundingProps = {
   position: [number, number, number];
@@ -11,8 +11,8 @@ type BeerBoundingProps = {
 };
 
 export function BeerModel({ ...props }: BeerBoundingProps) {
-    const { nodes, materials } = useGLTF('/3d/beer.glb')
-    const [ref] = BeerBounding({...props});
+  const { nodes, materials } = useGLTF("/3d/beer.glb");
+  const [ref] = BeerBounding({ ...props });
 
   const modelHeight = 6.25 + 0.35 + 0.4;
   const modelCenter = modelHeight / 2;
@@ -42,13 +42,11 @@ export function BeerModel({ ...props }: BeerBoundingProps) {
           castShadow
           receiveShadow
           geometry={nodes.Canmodel_obj_4.geometry}
-          material={materials['Material.001']}
+          material={materials["Material.001"]}
         />
       </group>
     </group>
-  )
+  );
 }
 
-useGLTF.preload('/3d/beer.glb')
-
-
+useGLTF.preload("/3d/beer.glb");

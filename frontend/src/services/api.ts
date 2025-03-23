@@ -1,5 +1,3 @@
-"use client";
-
 import axios from "axios";
 
 // Create an axios instance with default configs
