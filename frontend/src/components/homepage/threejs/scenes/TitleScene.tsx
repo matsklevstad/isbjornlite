@@ -6,7 +6,6 @@ import Title from "../Title";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
 import { BeerModel } from "../Beer";
-import GravityShift from "@/components/homepage/buttons/GravityShift";
 import AddBeerBtn from "@/components/homepage/buttons/AddBeerBtn";
 
 import classes from "@/styles/TitleScene.module.css";
@@ -15,8 +14,6 @@ export default function TitleScene() {
   const [scale, setScale] = useState(1);
   const normalGravity: [number, number, number] = [0, -13, 0];
   const noGravity: [number, number, number] = [0, -3, 3];
-  const [gravity, setGravity] =
-    useState<[number, number, number]>(normalGravity);
 
   useEffect(() => {
     const handleResize = () => {
@@ -38,15 +35,15 @@ export default function TitleScene() {
   return (
     <Suspense fallback={null}>
       <div className={classes.container}>
-        <GravityShift
+        {/* <GravityShift
           setGravity={setGravity}
           gravity={gravity}
           normalGravity={normalGravity}
           noGravity={noGravity}
-        />
+        /> */}
         <AddBeerBtn />
         <Canvas className="bg-black " frameloop="demand" id="titleCanvas">
-          <Physics gravity={gravity}>
+          <Physics gravity={noGravity}>
             <PerspectiveCamera
               makeDefault
               position={[0, -40, 50]}
@@ -61,7 +58,7 @@ export default function TitleScene() {
             <BeerSpawner
               interval={1200}
               scale={scale}
-              gravity={gravity}
+              gravity={noGravity}
               normalGravity={normalGravity}
             />
             <Title scale={scale} />

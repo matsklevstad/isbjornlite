@@ -138,10 +138,21 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch {
-          // Token invalid, logout
-          get().logout();
+        } catch (error: any) {
+          // Don't immediately logout - only if it's an auth error
+          console.error("Auth check error:", error?.response?.status || error);
+
+          // Only logout on specific auth errors (401, 403)
+          if (
+            error?.response?.status === 401 ||
+            error?.response?.status === 403
+          ) {
+            get().logout();
+          }
+
           set({ isLoading: false });
+          // Still mark as not authenticated on errors
+          set({ isAuthenticated: false });
         }
       },
     }),
@@ -150,6 +161,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         token: state.token,
         user: state.user,
+        isAuthenticated: state.isAuthenticated,
       }),
     }
   )

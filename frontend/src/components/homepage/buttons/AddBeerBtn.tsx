@@ -6,7 +6,7 @@ import {
   SegmentedControl,
   Checkbox,
 } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { Beer } from "@/models/beer";
@@ -24,8 +24,8 @@ const AddBeerBtn = () => {
   const mutation = useMutation<Beer, Error, Beer>({
     mutationFn: beerService.createBeer,
     onSuccess: () => {
-      alert("Isbjørn er lagt til!");
       queryClient.invalidateQueries({ queryKey: ["beers"] });
+      new Audio("./assets/open-beer-sound.mp3").play();
     },
 
     onError: (error: Error) => {
@@ -63,8 +63,8 @@ const AddBeerBtn = () => {
     <>
       <button
         onClick={() => setOpened(true)}
-        className="absolute right-10 bottom-10 z-10 opacity-90">
-        <IconPlus size={35} color="#ffffff" />
+        className="absolute left-1/2 -translate-x-1/2 bottom-10 z-10 opacity-90">
+        <IconCirclePlusFilled size={40} color="#ffffff" />
       </button>
 
       <Modal

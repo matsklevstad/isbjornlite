@@ -1,9 +1,8 @@
 import axios from "axios";
+import { useAuthStore } from "@/stores/authStore"; // Import your auth store
 
 // Create an axios instance with default configs
 const api = axios.create({
-  // No baseURL needed when API routes are in the same Next.js app
-  // The requests will be relative to the current domain
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,10 +11,9 @@ const api = axios.create({
 // Request interceptor for adding auth token
 api.interceptors.request.use(
   (config) => {
-    // For server-side rendering, localStorage might not be available
+    // Get token from Zustand store instead of directly from localStorage
     if (typeof window !== "undefined") {
-      const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
+      const token = useAuthStore.getState().token;
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -33,15 +31,8 @@ api.interceptors.response.use(
     if (typeof window !== "undefined") {
       // Handle token expiration or other auth errors
       if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-
-        // If you implement Zustand later, you could import your store here
-        // and call its logout function instead
-
-        if (!window.location.pathname.includes("/login")) {
-          window.location.href = "/login";
-        }
+        // Use your auth store's logout method instead
+        useAuthStore.getState().logout();
       }
     }
     return Promise.reject(error);
