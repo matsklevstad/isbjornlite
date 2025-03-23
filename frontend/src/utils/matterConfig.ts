@@ -70,13 +70,14 @@ export const createWalls = (width: number, height: number) => {
  * Creates a beer bottle physics object
  */
 export const createBeer = (x: number, y: number, width: number) => {
-  const beerSize = getBeerSize(width);
+  const scale = getBeerScale(width); // Scale factor for the beer bottle
+  const beerSize = { width: 30 * scale, height: 80 * scale }; // Size of the beer bottle
 
   if (!beerSize) {
     throw new Error("Invalid beer size");
   }
 
-  const spriteScale = 0.1;
+  const spriteScale = 0.1 * scale; // Scale factor for the sprite
 
   return Bodies.rectangle(x, y, beerSize.width, beerSize.height, {
     restitution: 0.2, // Bounciness
@@ -111,13 +112,10 @@ export const applyRandomForce = (body: Matter.Body) => {
   });
 };
 
-const getBeerSize = (width: number) => {
-  const baseWidth = 30; // Base width of the beer bottle
-  const baseHeight = 80; // Base height of the beer bottle
-
+const getBeerScale = (width: number) => {
   if (width <= 800) {
-    return { width: baseWidth * 0.8, height: baseHeight * 0.8 };
+    return 0.8;
   } else {
-    return { width: baseWidth, height: baseHeight };
+    return 1;
   }
 };
