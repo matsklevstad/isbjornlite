@@ -10,7 +10,7 @@ interface DecodedToken {
 }
 
 // Extend the NextApiRequest type
-interface AuthenticatedRequest extends NextApiRequest {
+export interface AuthenticatedRequest extends NextApiRequest {
   user?: DecodedToken;
 }
 
