@@ -4,8 +4,10 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IBeer extends Document {
   name: string;
   brewery: string;
-  volume: number;
-  image: string;
+  volume: string;
+  image?: string;
+  createdBy: mongoose.Schema.Types.ObjectId; // Reference to User
+  createdByUsername: string; // Store username directly
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,8 +17,10 @@ export interface Beer {
   _id?: string;
   name: string;
   brewery: string;
-  volume: number;
-  image: string;
+  volume: string;
+  image?: string;
+  createdBy: string; // User ID
+  createdByUsername: string; // Username
 }
 
 const beerSchema = new Schema<IBeer>(
@@ -32,13 +36,22 @@ const beerSchema = new Schema<IBeer>(
       trim: true,
     },
     volume: {
-      type: Number,
+      type: String,
       required: [true, "Please provide a volume"],
-      min: [0, "Volume cannot be negative"],
+      trim: true,
     },
     image: {
       type: String,
       required: false,
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    createdByUsername: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true } // Automatically add createdAt and updatedAt fields

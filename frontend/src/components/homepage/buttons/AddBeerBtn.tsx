@@ -7,35 +7,51 @@ import {
   Checkbox,
 } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { beerService } from "@/services/beerService";
+import { Beer } from "@/models/beer";
+import { useAuthStore } from "@/stores/authStore";
 
 const AddBeerBtn = () => {
   const [opened, setOpened] = useState(false);
   const [volume, setVolume] = useState(""); // Selected volume from segmented control
   const [confirmed, setConfirmed] = useState(false);
+  const { user } = useAuthStore();
+
+  const queryClient = useQueryClient();
+
+  // Create a mutation that uses your createBeer API function
+  const mutation = useMutation<Beer, Error, Beer>({
+    mutationFn: beerService.createBeer,
+    onSuccess: () => {
+      alert("Isbjørn er lagt til!");
+      queryClient.invalidateQueries({ queryKey: ["beers"] });
+    },
+
+    onError: (error: Error) => {
+      console.error("Error adding beer:", error);
+      alert("Det oppstod en feil ved innsending av skjemaet.");
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!confirmed) {
-      alert(
-        "Du må bekrefte at du på ærlig og redlig vis har drukket opp en isbjørn lite!"
-      );
-      return;
-    }
-    if (!volume) {
-      alert("Vennligst velg en volumstørrelse.");
+
+    // Check if user is authenticated
+    if (!user) {
+      alert("You must be logged in to add a beer.");
       return;
     }
 
-    // Create a new beer object using default values for missing fields
-    const newBeer = {
-      name: "Standard Beer", // Default beer name
-      type: "Standard Type", // Default beer type
-      brewery: "Standard Brewery", // Default brewery name
-      volume, // Volume from segmented control
+    const newBeer: Beer = {
+      name: "Standard Beer",
+      brewery: "Standard Brewery",
+      volume,
+      createdBy: user._id as string, // Ensure this is a string
+      createdByUsername: user.username,
     };
 
-    // TODO: Add your API call to post the beer here
-    console.log("New Beer:", newBeer);
+    mutation.mutate(newBeer);
 
     // Close modal and reset fields
     setOpened(false);
@@ -58,7 +74,6 @@ const AddBeerBtn = () => {
         <form onSubmit={handleSubmit}>
           <Stack>
             <SegmentedControl
-              label="Velg volum"
               color="blue"
               data={[
                 { label: "0.33 L", value: "0.33" },

@@ -2,24 +2,18 @@
 
 import { create } from "zustand";
 import api from "@/services/api";
+import { IBeer } from "@/models/beer";
 
-// Define the Beer interface based on the API endpoint implementation
-interface Beer {
-  _id?: string;
-  name: string;
-  type: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+
 
 interface BeerState {
-  beers: Beer[];
+  beers: IBeer[];
   isLoading: boolean;
   error: string | null;
 
   // Actions
-  getBeers: () => Promise<Beer[]>;
-  addBeer: (beer: Beer) => Promise<Beer>;
+  getBeers: () => Promise<IBeer[]>;
+  addBeer: (beer: IBeer) => Promise<IBeer>;
   resetError: () => void;
 }
 
@@ -36,7 +30,7 @@ export const useBeerStore = create<BeerState>()((set, get) => ({
       const beers = response.data.data;
 
       set({ beers, isLoading: false });
-      return beers;
+      return beers as IBeer[];
     } catch (error: any) {
       set({
         error: error.response?.data?.message || "Failed to fetch beers",
@@ -46,12 +40,14 @@ export const useBeerStore = create<BeerState>()((set, get) => ({
     }
   },
 
-  addBeer: async (beer: Beer) => {
+  addBeer: async (beer: IBeer) => {
     try {
       set({ isLoading: true, error: null });
 
       const response = await api.post("/api/beer", beer);
       const newBeer = response.data.data;
+
+      console.log("New beer added:", newBeer);
 
       // Update the beers array with the new beer
       set((state) => ({
@@ -61,6 +57,7 @@ export const useBeerStore = create<BeerState>()((set, get) => ({
 
       return newBeer;
     } catch (error: any) {
+        console.error("Error adding beer:", error);
       set({
         error: error.response?.data?.message || "Failed to add beer",
         isLoading: false,
