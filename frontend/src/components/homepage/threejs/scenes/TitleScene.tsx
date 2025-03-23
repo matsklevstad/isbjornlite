@@ -6,8 +6,9 @@ import Title from "../Title";
 import { Canvas } from "@react-three/fiber";
 import { Physics } from "@react-three/cannon";
 import { BeerModel } from "../Beer";
-import GravityShift from "@/components/buttons/GravityShift";
-import ScrollDownBtn from "@/components/buttons/ScrollDownBtn";
+import GravityShift from "@/components/homepage/buttons/GravityShift";
+import AddBeerBtn from "@/components/homepage/buttons/AddBeerBtn";
+
 import classes from "@/styles/TitleScene.module.css";
 
 export default function TitleScene() {
@@ -43,7 +44,7 @@ export default function TitleScene() {
           normalGravity={normalGravity}
           noGravity={noGravity}
         />
-        <ScrollDownBtn />
+        <AddBeerBtn />
         <Canvas className="bg-black " frameloop="demand" id="titleCanvas">
           <Physics gravity={gravity}>
             <PerspectiveCamera
