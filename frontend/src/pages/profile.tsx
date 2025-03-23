@@ -17,7 +17,7 @@ export default function Profile() {
 
     // Get container dimensions
     const width = sceneRef.current.clientWidth;
-    const height = sceneRef.current.clientHeight;
+    const height = window.innerHeight;
 
     // Create engine and renderer
     const { engine, render } = createMatterWorld(
