@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/db";
 import { BeerModel } from "@/models/beer";
-import { UserModel } from "@/models/user";
-import mongoose from "mongoose";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
@@ -24,13 +22,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
       {
         $lookup: {
-          from: "users", // Name of the users collection
+          from: "users",
           localField: "_id",
           foreignField: "_id",
           as: "userData",
         },
       },
-      { $unwind: "$userData" }, // Convert array from $lookup to an object
+      { $unwind: "$userData" },
       {
         $project: {
           _id: 0,
@@ -38,9 +36,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           username: "$userData.username",
           totalBeers: 1,
           totalVolume: 1,
+          // Include user creation date to break ties
+          userCreatedAt: "$userData.createdAt",
         },
       },
-      { $sort: { totalBeers: -1 } }, // Sort by most beers first
+      // First sort by totalBeers desc, then by userCreatedAt asc
+      { $sort: { totalBeers: -1, userCreatedAt: 1 } },
     ]);
 
     return res.status(200).json({ success: true, data: beers });

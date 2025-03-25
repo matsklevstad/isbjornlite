@@ -11,12 +11,14 @@ export const beerService = {
     }
   },
 
-  getBeer: async (id: string): Promise<IBeer> => {
+  getUserBeers: async (): Promise<IBeer[]> => {
     try {
-      const res = await api.get(`api/beer/${id}`);
+      const res = await api.get("/api/beer/user");
       return res.data.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch user beers"
+      );
     }
   },
 

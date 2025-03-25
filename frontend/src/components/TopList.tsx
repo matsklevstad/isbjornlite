@@ -5,7 +5,6 @@ import {
   Loader,
   Alert,
   Title,
-  Table,
   Center,
   Stack,
   Text,
@@ -24,7 +23,7 @@ const TopList = () => {
     queryFn: beerService.getToplist,
   });
 
-  if (isLoading) return <Loader />;
+  if (isLoading) return;
   if (error)
     return <Alert color="red">Error: {(error as Error).message}</Alert>;
 
@@ -41,8 +40,9 @@ const TopList = () => {
       <Stack w="100%" justify="center" m="auto">
         {/* Render the podium cards */}
         <PodiumCards podium={podium} />
+
         {/* Render the rest of the list */}
-        <Center mt="lg">
+        <Stack mt="lg" gap="sm">
           {rest.map((user, index) => (
             <Group
               key={index}
@@ -50,6 +50,7 @@ const TopList = () => {
               justify="space-between"
               p="xs"
               w="100%"
+              style={{ borderRadius: "8px" }}
             >
               <Center
                 w={30}
@@ -71,9 +72,9 @@ const TopList = () => {
               </Title>
             </Group>
           ))}
-        </Center>
+        </Stack>
         <Text ta="center" c="dimmed">
-          Finner du ikke navnet ditt på listen? Prøv å drikke mer ...
+          Finner du ikke navnet ditt på listen? Jobba på ...
         </Text>
       </Stack>
     </Card>
