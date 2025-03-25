@@ -24,7 +24,7 @@ export const beerService = {
 
   createBeer: async (beerData: Beer): Promise<Beer> => {
     try {
-      const res = await api.post("api/beer/", beerData);
+      const res = await api.post("api/beer/beer", beerData);
       return res.data.data;
     } catch (error: any) {
       throw new Error(error.response.data.message);

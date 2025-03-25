@@ -12,7 +12,7 @@ const TitleScene = dynamic(
 export default function Index() {
   return (
     <div className="overflow-x-hidden">
-      {/*<TitleScene />*/}
+      <TitleScene />
       <Container fluid h="100vh" bg="#071B2C">
         <Overview />
       </Container>
