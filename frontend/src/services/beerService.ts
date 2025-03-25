@@ -36,4 +36,13 @@ export const beerService = {
       throw new Error(error.response.data.message);
     }
   },
+
+  getToplist: async (): Promise<any[]> => {
+    try {
+      const res = await api.get("/api/beer/toplist");
+      return res.data.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  },
 };

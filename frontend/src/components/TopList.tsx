@@ -1,0 +1,83 @@
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { beerService } from "@/services/beerService";
+import {
+  Loader,
+  Alert,
+  Title,
+  Table,
+  Center,
+  Stack,
+  Text,
+  Card,
+  Group,
+} from "@mantine/core";
+import PodiumCards from "./PodiumCards";
+
+const TopList = () => {
+  const {
+    data: toplist,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["toplist"],
+    queryFn: beerService.getToplist,
+  });
+
+  if (isLoading) return <Loader />;
+  if (error)
+    return <Alert color="red">Error: {(error as Error).message}</Alert>;
+
+  const podium = toplist!.slice(0, 3);
+  const rest = toplist!.slice(3, 10); // Show top 4-10
+
+  return (
+    <Card bg="#071B2C" w="100%">
+      <Center>
+        <Title order={1} c="white" mb="xl">
+          Topplisten
+        </Title>
+      </Center>
+      <Stack w="100%" justify="center" m="auto">
+        {/* Render the podium cards */}
+        <PodiumCards podium={podium} />
+        {/* Render the rest of the list */}
+        <Center mt="lg">
+          {rest.map((user, index) => (
+            <Group
+              key={index}
+              bg="#1a3751"
+              justify="space-between"
+              p="xs"
+              w="100%"
+            >
+              <Center
+                w={30}
+                h={30}
+                style={{
+                  backgroundColor: "#1E1E1E",
+                  borderRadius: "50%",
+                }}
+              >
+                <Text c="white" size="lg">
+                  {index + 4}
+                </Text>
+              </Center>
+              <Title order={3} c="white" m="0">
+                {user.username}
+              </Title>
+              <Title order={3} c="white" m="0">
+                {user.totalBeers}
+              </Title>
+            </Group>
+          ))}
+        </Center>
+        <Text ta="center" c="dimmed">
+          Finner du ikke navnet ditt på listen? Prøv å drikke mer ...
+        </Text>
+      </Stack>
+    </Card>
+  );
+};
+
+export default TopList;
