@@ -24,7 +24,12 @@ const AddBeerBtn = () => {
   const mutation = useMutation<Beer, Error, Beer>({
     mutationFn: beerService.createBeer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["beers"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          const key = query.queryKey[0];
+          return ["beers", "toplist", "userBeers"].includes(key as string);
+        },
+      });
       new Audio("./assets/open-beer-sound.mp3").play();
     },
 
@@ -63,14 +68,16 @@ const AddBeerBtn = () => {
     <>
       <button
         onClick={() => setOpened(true)}
-        className="absolute left-1/2 -translate-x-1/2 bottom-10 z-10 opacity-90">
+        className="absolute left-1/2 -translate-x-1/2 bottom-10 z-10 opacity-90"
+      >
         <IconCirclePlusFilled size={40} color="#ffffff" />
       </button>
 
       <Modal
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Register en ny isbjørn">
+        title="Register en ny isbjørn"
+      >
         <form onSubmit={handleSubmit}>
           <Stack>
             <SegmentedControl

@@ -11,18 +11,20 @@ export const beerService = {
     }
   },
 
-  getBeer: async (id: string): Promise<IBeer> => {
+  getUserBeers: async (): Promise<IBeer[]> => {
     try {
-      const res = await api.get(`api/beer/${id}`);
+      const res = await api.get("/api/beer/user");
       return res.data.data;
     } catch (error: any) {
-      throw new Error(error.response.data.message);
+      throw new Error(
+        error.response?.data?.message || "Failed to fetch user beers"
+      );
     }
   },
 
   createBeer: async (beerData: Beer): Promise<Beer> => {
     try {
-      const res = await api.post("api/beer/", beerData);
+      const res = await api.post("api/beer/beer", beerData);
       return res.data.data;
     } catch (error: any) {
       throw new Error(error.response.data.message);
@@ -32,6 +34,15 @@ export const beerService = {
   deleteBeer: async (id: string): Promise<void> => {
     try {
       await api.delete(`api/beer/${id}`);
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  },
+
+  getToplist: async (): Promise<any[]> => {
+    try {
+      const res = await api.get("/api/beer/toplist");
+      return res.data.data;
     } catch (error: any) {
       throw new Error(error.response.data.message);
     }

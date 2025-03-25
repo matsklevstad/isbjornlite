@@ -1,18 +1,28 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthInitializer from "@/components/AuthInitializer";
 
 const queryClient = new QueryClient();
 
+const theme = createTheme({
+  breakpoints: {
+    xs: "30em",
+    sm: "48em",
+    md: "64em",
+    lg: "74em",
+    xl: "90em",
+  },
+});
+
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider>
+        <MantineProvider theme={theme}>
           <Head>
             <title>Isbjørn Lites venner </title>
             <meta

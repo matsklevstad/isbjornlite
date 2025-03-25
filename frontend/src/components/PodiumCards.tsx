@@ -1,0 +1,52 @@
+import React from "react";
+import { Card, Text, Center, Stack, Group } from "@mantine/core";
+
+interface Props {
+  podium: { username: string; totalBeers: number }[];
+}
+
+const PodiumCards = (props: Props) => {
+  if (props.podium.length < 3) return null;
+
+  // Correct order: 2nd place, 1st place, 3rd place
+  const orderedPodium = [props.podium[1], props.podium[0], props.podium[2]];
+
+  const cardConfig = [
+    { color: "#a3a3a3", tilt: "-10deg", top: 20 }, // 2nd place
+    { color: "white", tilt: "0deg", top: -20 }, // 1st place
+    { color: "#ff9800", tilt: "10deg", top: 20 }, // 3rd place
+  ];
+
+  return (
+    <Center mb="lg">
+      <Group gap="xs" wrap="nowrap">
+        {orderedPodium.map((user, index) => (
+          <Card
+            key={index}
+            radius="md"
+            w={{ base: "100", sm: "200" }}
+            h={{ base: "150", sm: "250" }}
+            bg={cardConfig[index].color}
+            c={cardConfig[index].color === "white" ? "black" : "white"}
+            style={{
+              transform: `rotate(${cardConfig[index].tilt})`,
+              position: "relative",
+              top: cardConfig[index].top,
+            }}
+          >
+            <Stack align="center" justify="space-between" h="100%">
+              <Text fz={{ base: "1rem", sm: "2rem" }} fw={700}>
+                {user.username}
+              </Text>
+              <Text fz={{ base: "2rem", sm: "4rem" }} fw={800}>
+                {user.totalBeers}
+              </Text>
+            </Stack>
+          </Card>
+        ))}
+      </Group>
+    </Center>
+  );
+};
+
+export default PodiumCards;
