@@ -1,16 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
-import {
-  Loader,
-  Alert,
-  Title,
-  Center,
-  Stack,
-  Text,
-  Card,
-  Group,
-} from "@mantine/core";
+import { Alert, Title, Center, Stack, Text, Card, Group } from "@mantine/core";
 import PodiumCards from "./PodiumCards";
 
 const TopList = () => {

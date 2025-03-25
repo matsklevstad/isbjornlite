@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
-import { Loader, Alert, Text, Group, Badge, Center } from "@mantine/core";
+import { Alert, Text, Group, Badge, Center } from "@mantine/core";
 
 const UserStats = () => {
   const { data, isLoading, error } = useQuery({
