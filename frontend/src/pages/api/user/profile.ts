@@ -43,6 +43,7 @@ export default async function handler(
         username: user.username,
         email: user.email,
         image: user.image,
+        createdAt: user.createdAt,
         // Add other fields as needed
       },
     });

@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
+import { formatDate } from "@/utils/formatDate";
 
 export default function Profile() {
   const router = useRouter();
@@ -58,24 +59,16 @@ export default function Profile() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Profile information */}
-      <div className="absolute top-0 left-0 p-4 bg-gray-800 text-white z-10">
-        <h1 className="text-2xl font-bold">
-          Username: {profileData?.username}
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 text-white z-10">
+        <h1 className="text-2xl font-bold text-center">
+          {profileData?.username}
         </h1>
-        {beers && beers.length > 0 ? (
-          <div>
-            <h2 className="text-xl font-semibold">Beers:</h2>
-            <ul>
-              {beers.map((beer) => (
-                <li key={String(beer._id)} className="text-lg">
-                  {beer.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : (
-          <p>No beers found for this user.</p>
-        )}
+        <p className="text-center font-bold">
+          Medlem siden {formatDate(profileData?.createdAt || "")}
+        </p>
+        <p className="text-center font-bold">
+          Har drukket {beers?.length} isbjørn
+        </p>
       </div>
       {/* Canvas container */}
       {beers && <FallingBeers beers={beers} />}

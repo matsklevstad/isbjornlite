@@ -47,7 +47,7 @@ export const useAuthStore = create<AuthState>()(
           set({ isLoading: true, error: null });
 
           // Call register API
-          const response = await api.post("/api/users/register", data);
+          const response = await api.post("/api/user/register", data);
           const { token, ...userData } = response.data.data;
 
           // Update state with user data and token
@@ -81,7 +81,7 @@ export const useAuthStore = create<AuthState>()(
           console.log(rememberMe);
 
           // Call login API
-          const response = await api.post("/api/users/login", {
+          const response = await api.post("/api/user/login", {
             username,
             password,
           });
@@ -126,10 +126,10 @@ export const useAuthStore = create<AuthState>()(
 
           // If no userId provided or it's "me", fetch current user's profile
           if (!userId || userId === "me") {
-            response = await api.get("/api/users/profile");
+            response = await api.get("/api/user/profile");
           } else {
             // Otherwise fetch specific user by ID
-            response = await api.get(`/api/users/${userId}`);
+            response = await api.get(`/api/user/${userId}`);
           }
 
           set({ isLoading: false });
@@ -158,7 +158,7 @@ export const useAuthStore = create<AuthState>()(
           api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           // Verify token by fetching user profile
-          const response = await api.get("/api/users/profile");
+          const response = await api.get("/api/user/profile");
           set({
             user: response.data.data,
             isAuthenticated: true,

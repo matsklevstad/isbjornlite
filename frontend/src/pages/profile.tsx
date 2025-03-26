@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import FallingBeers from "@/components/profile/FallingBeers";
 import { beerService } from "@/services/beerService";
 import { useQuery } from "@tanstack/react-query";
+import { formatDate } from "@/utils/formatDate";
 
 export default function Profile() {
   const router = useRouter();
@@ -45,9 +46,15 @@ export default function Profile() {
   // User is authenticated, show profile
   return (
     <div className="relative w-screen h-screen overflow-hidden">
-      <h1 className="relative z-10 text-white top-4 left-1/2 transform -translate-x-1/2 text-2xl font-bold ">
-        Welcome, {user?.username}
-      </h1>
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 text-white z-10">
+        <h1 className="text-2xl font-bold text-center">{user?.username}</h1>
+        <p className="text-center font-bold">
+          Medlem siden {formatDate(user?.createdAt || "")}
+        </p>
+        <p className="text-center font-bold">
+          Har drukket {beers?.length} isbjørn
+        </p>
+      </div>
       {beers && <FallingBeers beers={beers} />}
     </div>
   );

@@ -43,6 +43,7 @@ export default async function handler(
         _id: user._id,
         username: user.username,
         image: user.image,
+        createdAt: user.createdAt,
         // Note: You might exclude email or other private info for public profiles
       },
     });
