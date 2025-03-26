@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
-import { verifyToken } from "@/utils/auth";
+import mongoose from "mongoose";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,17 +16,18 @@ export default async function handler(
   try {
     await connectDB();
 
-    // Get the user ID from the auth token
-    const userId = verifyToken(req);
+    // Get userId from the URL parameter
+    const { userId } = req.query;
 
-    if (!userId) {
-      return res.status(401).json({
+    // Validate MongoDB ObjectId format
+    if (!mongoose.Types.ObjectId.isValid(userId as string)) {
+      return res.status(400).json({
         success: false,
-        message: "Unauthorized",
+        message: "Invalid user ID format",
       });
     }
 
-    // Find the authenticated user
+    // Find the user by ID
     const user = await UserModel.findById(userId).select("-password");
 
     if (!user) {
@@ -35,15 +36,14 @@ export default async function handler(
         .json({ success: false, message: "User not found" });
     }
 
-    // Return user data
+    // Return public user data (may differ from what logged-in users see of themselves)
     return res.status(200).json({
       success: true,
       data: {
         _id: user._id,
         username: user.username,
-        email: user.email,
         image: user.image,
-        // Add other fields as needed
+        // Note: You might exclude email or other private info for public profiles
       },
     });
   } catch (error) {

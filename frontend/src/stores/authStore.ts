@@ -29,6 +29,7 @@ interface AuthState {
   logout: () => void;
   setUser: (user: User) => void;
   checkAuth: () => Promise<void>;
+  fetchProfile: (userId: string) => Promise<User | null>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -115,6 +116,31 @@ export const useAuthStore = create<AuthState>()(
         delete api.defaults.headers.common["Authorization"];
 
         // Optionally redirect (needs to be done in component)
+      },
+
+      fetchProfile: async (userId: string) => {
+        try {
+          set({ isLoading: true });
+
+          let response;
+
+          // If no userId provided or it's "me", fetch current user's profile
+          if (!userId || userId === "me") {
+            response = await api.get("/api/users/profile");
+          } else {
+            // Otherwise fetch specific user by ID
+            response = await api.get(`/api/users/${userId}`);
+          }
+
+          set({ isLoading: false });
+          return response.data.data;
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.message || "Failed to fetch profile",
+            isLoading: false,
+          });
+          return null;
+        }
       },
 
       setUser: (user: User) => {

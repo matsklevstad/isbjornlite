@@ -1,111 +1,66 @@
-import { Engine, Render, Runner, World } from "matter-js";
-import {
-  createMatterWorld,
-  createWalls,
-  createBeer,
-  applyRandomForce,
-} from "@/utils/matterConfig";
-import { useEffect, useRef } from "react";
+import FallingBeers from "@/components/profile/FallingBeers";
+import { User } from "@/models/user";
+import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Profile() {
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine>();
-  const renderRef = useRef<Matter.Render>();
+  const router = useRouter();
+  const { userId } = router.query;
 
+  const [profileData, setProfileData] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const { fetchProfile, user } = useAuthStore();
+
+  // Fetch profile data when component mounts or userId changes
   useEffect(() => {
-    if (!sceneRef.current) return;
+    const loadProfile = async () => {
+      try {
+        // Special case: "me" redirects to current user's profile
+        if (user && userId === user?._id) {
+          router.replace(`/profile/${user._id}`);
+          return;
+        }
 
-    // Get container dimensions
-    const width = sceneRef.current.clientWidth;
-    const height = window.innerHeight;
-
-    // Create engine and renderer
-    const { engine, render } = createMatterWorld(
-      sceneRef.current,
-      width,
-      height
-    );
-    engineRef.current = engine;
-    renderRef.current = render;
-
-    // Create walls
-    const walls = createWalls(width, height);
-    World.add(engine.world, walls);
-
-    // Start the engine and renderer
-    const runner = Runner.create();
-    Runner.run(runner, engine);
-    Render.run(render);
-
-    // Handle window resizing
-    const handleResize = () => {
-      if (sceneRef.current && renderRef.current) {
-        const newWidth = sceneRef.current.clientWidth;
-
-        // Update renderer
-        renderRef.current.options.width = newWidth;
-        Render.setPixelRatio(renderRef.current, window.devicePixelRatio);
-
-        // Update wall positions
-        World.remove(engine.world, walls);
-        const newWalls = createWalls(newWidth, height);
-        World.add(engine.world, newWalls);
+        // Fetch profile data using the store function
+        const data = await fetchProfile(userId as string);
+        if (!data) {
+          console.error("Profile with id: " + { userId } + " not found");
+          //router.replace("/404");
+          return;
+        }
+        setProfileData(data);
+      } catch (error) {
+        console.error("Failed to load profile:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      Render.stop(render);
-      World.clear(engine.world, false);
-      Engine.clear(engine);
-      render.canvas?.remove();
-      render.element && (render.element.innerHTML = "");
-    };
-  }, []);
-
-  // Function to spawn beer bottles
-  const handleClick = () => {
-    if (!engineRef.current || !sceneRef.current) return;
-
-    // Get container width for random x position
-    const width = sceneRef.current.clientWidth;
-
-    // Create beer object at random x position
-    const beer = createBeer(Math.random() * (width - 100) + 50, -40, width);
-
-    // Apply random force and spin
-    applyRandomForce(beer);
-
-    // Add to world
-    World.add(engineRef.current.world, beer);
-
-    console.log("Beer spawned!");
-  };
-
-  // New Effect: Auto-spawning beer bottles
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    if (true) {
-      // Spawn a beer every 1000ms (1 second)
-      intervalId = setInterval(() => {
-        handleClick();
-      }, 1000);
+    // Only fetch when userId is available (after hydration)
+    if (userId) {
+      loadProfile();
     }
+  }, [userId, fetchProfile, router, user]);
 
-    // Clean up interval on unmount or when autoSpawn changes
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, []); // Dependency array includes autoSpawn to restart when toggled
+  // Loading state - temporary loading screen
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-900">
+        <div className="text-white text-xl">Loading profile...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-screen h-screen overflow-hidden">
+      {/* Profile information */}
+      <div className="absolute top-0 left-0 p-4 bg-gray-800 text-white">
+        <h1 className="text-2xl font-bold">Username: {profileData?.username}</h1>
+        
+      </div>
       {/* Canvas container */}
-      <div ref={sceneRef} className="w-full h-full mb-4" />
+      <FallingBeers />
     </div>
   );
 }
