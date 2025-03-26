@@ -22,6 +22,15 @@ export const beerService = {
     }
   },
 
+  getBeersByUserId: async (userId: string): Promise<IBeer[]> => {
+    try {
+      const res = await api.get(`/api/beer/users/${userId}`);
+      return res.data.data;
+    } catch (error: any) {
+      throw new Error(error.response.data.message);
+    }
+  },
+
   createBeer: async (beerData: Beer): Promise<Beer> => {
     try {
       const res = await api.post("api/beer/beer", beerData);

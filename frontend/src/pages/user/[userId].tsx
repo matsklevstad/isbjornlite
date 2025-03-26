@@ -3,6 +3,8 @@ import { User } from "@/models/user";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { beerService } from "@/services/beerService";
 
 export default function Profile() {
   const router = useRouter();
@@ -12,6 +14,13 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
 
   const { fetchProfile, user } = useAuthStore();
+
+  // Fetch profile data using react-query
+  const { data: beers, isLoading: loadingBeers } = useQuery({
+    queryKey: ["userBeers", userId],
+    queryFn: () => beerService.getBeersByUserId(userId as string),
+    enabled: !!userId,
+  });
 
   // Fetch profile data when component mounts or userId changes
   useEffect(() => {
@@ -31,14 +40,14 @@ export default function Profile() {
         setLoading(false);
       }
     };
-    // Only fetch when userId is available (after hydration)
+    // Only fetch when userId is available
     if (userId) {
       loadProfile();
     }
   }, [userId, fetchProfile, router, user]);
 
   // Loading state - temporary loading screen
-  if (loading) {
+  if (loading || loadingBeers) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900">
         <div className="text-white text-xl">Loading profile...</div>
@@ -53,6 +62,20 @@ export default function Profile() {
         <h1 className="text-2xl font-bold">
           Username: {profileData?.username}
         </h1>
+        {beers && beers.length > 0 ? (
+          <div>
+            <h2 className="text-xl font-semibold">Beers:</h2>
+            <ul>
+              {beers.map((beer) => (
+                <li key={String(beer._id)} className="text-lg">
+                  {beer.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p>No beers found for this user.</p>
+        )}
       </div>
       {/* Canvas container */}
       <FallingBeers />
