@@ -17,17 +17,11 @@ export default function Profile() {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        // Special case: "me" redirects to current user's profile
-        if (user && userId === user?._id) {
-          router.replace(`/profile/${user._id}`);
-          return;
-        }
-
         // Fetch profile data using the store function
         const data = await fetchProfile(userId as string);
         if (!data) {
-          console.error("Profile with id: " + { userId } + " not found");
-          //router.replace("/404");
+          console.error(`Profile with id: ${userId} not found`);
+          router.replace("/404");
           return;
         }
         setProfileData(data);
@@ -55,9 +49,10 @@ export default function Profile() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Profile information */}
-      <div className="absolute top-0 left-0 p-4 bg-gray-800 text-white">
-        <h1 className="text-2xl font-bold">Username: {profileData?.username}</h1>
-        
+      <div className="absolute top-0 left-0 p-4 bg-gray-800 text-white z-10">
+        <h1 className="text-2xl font-bold">
+          Username: {profileData?.username}
+        </h1>
       </div>
       {/* Canvas container */}
       <FallingBeers />
