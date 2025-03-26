@@ -103,7 +103,7 @@ export default function Profile() {
   }, []); // Dependency array includes autoSpawn to restart when toggled
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-gray-500">
+    <div className="relative w-screen h-screen overflow-hidden">
       {/* Canvas container */}
       <div ref={sceneRef} className="w-full h-full mb-4" />
     </div>
