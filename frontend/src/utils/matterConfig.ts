@@ -69,7 +69,7 @@ export const createWalls = (width: number, height: number) => {
 /**
  * Creates a beer bottle physics object
  */
-export const createBeer = (x: number, y: number, width: number) => {
+export const createBeer = (x: number, y: number, width: number, label: string) => {
   const scale = getBeerScale(width); // Scale factor for the beer bottle
   const beerSize = { width: 30 * scale, height: 80 * scale }; // Size of the beer bottle
 
@@ -93,7 +93,7 @@ export const createBeer = (x: number, y: number, width: number) => {
     },
     friction: 0.08,
     chamfer: { radius: 4 }, // Rounded edges
-    label: "beer",
+    label: label,
   });
 };
 

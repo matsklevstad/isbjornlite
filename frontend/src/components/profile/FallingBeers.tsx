@@ -1,4 +1,4 @@
-import { Engine, Render, Runner, World } from "matter-js";
+import { Engine, Render, Runner, World, Query, Body } from "matter-js";
 import {
   createMatterWorld,
   createWalls,
@@ -20,9 +20,42 @@ export default function FallingBeers({
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine>();
   const renderRef = useRef<Matter.Render>();
+  const beerBodiesMap = useRef<Map<string, Beer>>(new Map());
 
   // Set to keep track of spawned beer IDs
   const spawnedBeerIdsRef = useRef<Set<string>>(new Set());
+
+  const handleCanvasClick = (event: MouseEvent) => {
+    if (!engineRef.current || !renderRef.current?.canvas) return;
+
+    // Get mouse position relative to canvas
+    const canvas = renderRef.current.canvas;
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    // Find bodies at click position
+    const bodies = Query.point(engineRef.current.world.bodies, { x, y });
+
+    // Check if any beer was clicked
+    bodies.forEach((body) => {
+      if (body.label.startsWith("beer-")) {
+        const beerId = body.label.replace("beer-", "");
+        const beerData = beerBodiesMap.current.get(beerId);
+
+        if (beerData) {
+          console.log("Clicked beer:", beerData);
+
+          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
+
+          Body.applyForce(body, body.position, {
+            x: (Math.random() - 0.5) * 0.05, // Small random horizontal force
+            y: -0.2, // Vertical lift force (negative is upward)
+          });
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     if (!sceneRef.current) return;
@@ -67,6 +100,11 @@ export default function FallingBeers({
 
     window.addEventListener("resize", handleResize);
 
+    // Handle canvas click
+    if (render.canvas) {
+      render.canvas.addEventListener("click", handleCanvasClick);
+    }
+
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -75,13 +113,12 @@ export default function FallingBeers({
       Engine.clear(engine);
       render.canvas?.remove();
       render.element && (render.element.innerHTML = "");
+      render.canvas?.removeEventListener("click", handleCanvasClick);
     };
   }, []);
 
   // Function to spawn beer bottles
   const spawnBeer = (beer: Beer) => {
-    console.log("Spawning beer:", beer); // For debugging
-
     if (!engineRef.current || !sceneRef.current || !beer._id) return;
 
     // Skip if we've already spawned this beer
@@ -96,7 +133,7 @@ export default function FallingBeers({
     const y = -40;
 
     // Create beer object at random x position
-    const beerBody = createBeer(x, y, width);
+    const beerBody = createBeer(x, y, width, `beer-${beer._id}`);
 
     // Apply random force and spin
     applyRandomForce(beerBody);
@@ -105,18 +142,13 @@ export default function FallingBeers({
     World.add(engineRef.current.world, beerBody);
 
     spawnedBeerIdsRef.current.add(beer._id);
-
-    console.log(`Spawned beer ${beer._id}`); // For debugging
+    beerBodiesMap.current.set(beer._id, beer);
   };
 
   // Auto-spawn beers at intervals
   useEffect(() => {
-    console.log("Auto-spawning beers every", autoSpawnInterval, "ms");
-
     const interval = setInterval(() => {
-      console.log("Auto-spawning beer..."); // For debugging
       if (beers.length > 0) {
-        console.log("Available beers:", beers); // For debugging
         const beer = beers[Math.floor(Math.random() * beers.length)];
         spawnBeer(beer);
       }
