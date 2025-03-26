@@ -6,22 +6,26 @@ import {
   applyRandomForce,
 } from "@/utils/matterConfig";
 import { useEffect, useRef } from "react";
+import { Beer } from "@/models/beer";
 
 interface FallingBeersProps {
+  beers: Beer[]; // List of beers to spawn
   autoSpawnInterval?: number; // ms between auto-spawns
-  enabled?: boolean; // whether the animation is enabled
 }
 
 export default function FallingBeers({
+  beers = [],
   autoSpawnInterval = 100,
-  enabled = true,
 }: FallingBeersProps) {
   const sceneRef = useRef<HTMLDivElement>(null);
   const engineRef = useRef<Matter.Engine>();
   const renderRef = useRef<Matter.Render>();
 
+  // Set to keep track of spawned beer IDs
+  const spawnedBeerIdsRef = useRef<Set<string>>(new Set());
+
   useEffect(() => {
-    if (!sceneRef.current || !enabled) return;
+    if (!sceneRef.current) return;
 
     // Get container dimensions
     const width = sceneRef.current.clientWidth;
@@ -72,38 +76,54 @@ export default function FallingBeers({
       render.canvas?.remove();
       render.element && (render.element.innerHTML = "");
     };
-  }, [enabled]);
+  }, []);
 
   // Function to spawn beer bottles
-  const spawnBeer = () => {
-    if (!engineRef.current || !sceneRef.current) return;
+  const spawnBeer = (beer: Beer) => {
+    console.log("Spawning beer:", beer); // For debugging
+
+    if (!engineRef.current || !sceneRef.current || !beer._id) return;
+
+    // Skip if we've already spawned this beer
+    if (spawnedBeerIdsRef.current.has(beer._id)) {
+      return;
+    }
 
     // Get container width for random x position
     const width = sceneRef.current.clientWidth;
 
+    const x = Math.random() * (width - 100) + 50;
+    const y = -40;
+
     // Create beer object at random x position
-    const beer = createBeer(Math.random() * (width - 100) + 50, -40, width);
+    const beerBody = createBeer(x, y, width);
 
     // Apply random force and spin
-    applyRandomForce(beer);
+    applyRandomForce(beerBody);
 
     // Add to world
-    World.add(engineRef.current.world, beer);
+    World.add(engineRef.current.world, beerBody);
+
+    spawnedBeerIdsRef.current.add(beer._id);
+
+    console.log(`Spawned beer ${beer._id}`); // For debugging
   };
 
-  // Auto-spawning beer bottles
+  // Auto-spawn beers at intervals
   useEffect(() => {
-    if (!enabled) return;
+    console.log("Auto-spawning beers every", autoSpawnInterval, "ms");
 
-    const intervalId = setInterval(() => {
-      spawnBeer();
+    const interval = setInterval(() => {
+      console.log("Auto-spawning beer..."); // For debugging
+      if (beers.length > 0) {
+        console.log("Available beers:", beers); // For debugging
+        const beer = beers[Math.floor(Math.random() * beers.length)];
+        spawnBeer(beer);
+      }
     }, autoSpawnInterval);
 
-    // Clean up interval on unmount or when props change
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [autoSpawnInterval, enabled]);
+    return () => clearInterval(interval);
+  }, [beers, autoSpawnInterval]);
 
   return <div ref={sceneRef} className="w-full h-full absolute top-0 z-0" />;
 }

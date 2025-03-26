@@ -11,7 +11,7 @@ export const beerService = {
     }
   },
 
-  getUserBeers: async (): Promise<IBeer[]> => {
+  getUserBeers: async (): Promise<Beer[]> => {
     try {
       const res = await api.get("/api/beer/user");
       return res.data.data;
@@ -22,7 +22,7 @@ export const beerService = {
     }
   },
 
-  getBeersByUserId: async (userId: string): Promise<IBeer[]> => {
+  getBeersByUserId: async (userId: string): Promise<Beer[]> => {
     try {
       const res = await api.get(`/api/beer/users/${userId}`);
       return res.data.data;

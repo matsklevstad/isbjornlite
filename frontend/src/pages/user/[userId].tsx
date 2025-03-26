@@ -78,7 +78,7 @@ export default function Profile() {
         )}
       </div>
       {/* Canvas container */}
-      <FallingBeers />
+      {beers && <FallingBeers beers={beers} />}
     </div>
   );
 }

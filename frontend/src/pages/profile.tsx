@@ -2,11 +2,20 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useAuthStore } from "@/stores/authStore";
 import FallingBeers from "@/components/profile/FallingBeers";
+import { beerService } from "@/services/beerService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Profile() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, checkAuth } = useAuthStore();
   const [isMounted, setIsMounted] = useState(false);
+
+  // Fetch beers using react-query
+  const { data: beers, isLoading: loadingBeers } = useQuery({
+    queryKey: ["userBeers", user?._id],
+    queryFn: () => beerService.getUserBeers(),
+    enabled: !!user?._id,
+  });
 
   // Check if we're running on client-side
   useEffect(() => {
@@ -24,7 +33,7 @@ export default function Profile() {
   }, [isMounted, isLoading, isAuthenticated, router]);
 
   // Show loading state during SSR or while checking auth
-  if (!isMounted || isLoading) {
+  if (!isMounted || isLoading || loadingBeers) {
     return <div>Loading...</div>;
   }
 
@@ -39,7 +48,7 @@ export default function Profile() {
       <h1 className="relative z-10 text-white top-4 left-1/2 transform -translate-x-1/2 text-2xl font-bold ">
         Welcome, {user?.username}
       </h1>
-      <FallingBeers />
+      {beers && <FallingBeers beers={beers} />}
     </div>
   );
 }
