@@ -133,7 +133,7 @@ export default function FallingBeers({
     const y = -40;
 
     // Create beer object at random x position
-    const beerBody = createBeer(x, y, width, `beer-${beer._id}`);
+    const beerBody = createBeer(x, y, width, `beer-${beer._id}`, beer.volume);
 
     // Apply random force and spin
     applyRandomForce(beerBody);
