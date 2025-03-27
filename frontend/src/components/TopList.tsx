@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { Alert, Title, Center, Stack, Text, Card, Group } from "@mantine/core";
 import PodiumCards from "./PodiumCards";
+import { useRouter } from "next/router";
 
 const TopList = () => {
   const {
@@ -13,6 +14,7 @@ const TopList = () => {
     queryKey: ["toplist"],
     queryFn: beerService.getToplist,
   });
+  const router = useRouter();
 
   if (isLoading) return;
   if (error)
@@ -42,15 +44,16 @@ const TopList = () => {
               p="xs"
               w="100%"
               style={{ borderRadius: "8px" }}
-            >
+              onClick={() => {
+                router.push(`/user/${user.userId}`);
+              }}>
               <Center
                 w={30}
                 h={30}
                 style={{
                   backgroundColor: "#1E1E1E",
                   borderRadius: "50%",
-                }}
-              >
+                }}>
                 <Text c="white" size="lg">
                   {index + 4}
                 </Text>

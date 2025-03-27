@@ -1,111 +1,61 @@
-import { Engine, Render, Runner, World } from "matter-js";
-import {
-  createMatterWorld,
-  createWalls,
-  createBeer,
-  applyRandomForce,
-} from "@/utils/matterConfig";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useAuthStore } from "@/stores/authStore";
+import FallingBeers from "@/components/profile/FallingBeers";
+import { beerService } from "@/services/beerService";
+import { useQuery } from "@tanstack/react-query";
+import { formatDate } from "@/utils/formatDate";
 
 export default function Profile() {
-  const sceneRef = useRef<HTMLDivElement>(null);
-  const engineRef = useRef<Matter.Engine>();
-  const renderRef = useRef<Matter.Render>();
+  const router = useRouter();
+  const { user, isAuthenticated, isLoading, checkAuth } = useAuthStore();
+  const [isMounted, setIsMounted] = useState(false);
 
+  // Fetch beers using react-query
+  const { data: beers, isLoading: loadingBeers } = useQuery({
+    queryKey: ["userBeers", user?._id],
+    queryFn: () => beerService.getUserBeers(),
+    enabled: !!user?._id,
+  });
+
+  // Check if we're running on client-side
   useEffect(() => {
-    if (!sceneRef.current) return;
+    setIsMounted(true);
+    checkAuth();
+  }, [checkAuth]);
 
-    // Get container dimensions
-    const width = sceneRef.current.clientWidth;
-    const height = window.innerHeight;
-
-    // Create engine and renderer
-    const { engine, render } = createMatterWorld(
-      sceneRef.current,
-      width,
-      height
-    );
-    engineRef.current = engine;
-    renderRef.current = render;
-
-    // Create walls
-    const walls = createWalls(width, height);
-    World.add(engine.world, walls);
-
-    // Start the engine and renderer
-    const runner = Runner.create();
-    Runner.run(runner, engine);
-    Render.run(render);
-
-    // Handle window resizing
-    const handleResize = () => {
-      if (sceneRef.current && renderRef.current) {
-        const newWidth = sceneRef.current.clientWidth;
-
-        // Update renderer
-        renderRef.current.options.width = newWidth;
-        Render.setPixelRatio(renderRef.current, window.devicePixelRatio);
-
-        // Update wall positions
-        World.remove(engine.world, walls);
-        const newWalls = createWalls(newWidth, height);
-        World.add(engine.world, newWalls);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      Render.stop(render);
-      World.clear(engine.world, false);
-      Engine.clear(engine);
-      render.canvas?.remove();
-      render.element && (render.element.innerHTML = "");
-    };
-  }, []);
-
-  // Function to spawn beer bottles
-  const handleClick = () => {
-    if (!engineRef.current || !sceneRef.current) return;
-
-    // Get container width for random x position
-    const width = sceneRef.current.clientWidth;
-
-    // Create beer object at random x position
-    const beer = createBeer(Math.random() * (width - 100) + 50, -40, width);
-
-    // Apply random force and spin
-    applyRandomForce(beer);
-
-    // Add to world
-    World.add(engineRef.current.world, beer);
-
-    console.log("Beer spawned!");
-  };
-
-  // New Effect: Auto-spawning beer bottles
+  // Handle redirect on client-side only
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-
-    if (true) {
-      // Spawn a beer every 1000ms (1 second)
-      intervalId = setInterval(() => {
-        handleClick();
-      }, 1000);
+    if (isMounted && !isLoading && !isAuthenticated) {
+      // Redirect to login page if not authenticated
+      // Redirects back to the current page after login
+      router.replace(`/login?redirect=${encodeURIComponent(router.asPath)}`);
     }
+  }, [isMounted, isLoading, isAuthenticated, router]);
 
-    // Clean up interval on unmount or when autoSpawn changes
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, []); // Dependency array includes autoSpawn to restart when toggled
+  // Show loading state during SSR or while checking auth
+  if (!isMounted || isLoading || loadingBeers) {
+    return <div>Loading...</div>;
+  }
 
+  // Don't render anything while redirecting
+  if (!isAuthenticated) {
+    return <div>Redirecting to login...</div>;
+  }
+
+  // User is authenticated, show profile
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-gray-500">
-      {/* Canvas container */}
-      <div ref={sceneRef} className="w-full h-full mb-4" />
+    <div className="relative w-screen h-screen overflow-hidden">
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 p-4 text-white z-10">
+        <h1 className="text-2xl font-bold text-center">{user?.username}</h1>
+        <p className="text-center font-bold">
+          Medlem siden {formatDate(user?.createdAt || "")}
+        </p>
+        <p className="text-center font-bold">
+          Har drukket {beers?.length} isbjørn
+        </p>
+      </div>
+      {beers && <FallingBeers beers={beers} />}
     </div>
   );
 }

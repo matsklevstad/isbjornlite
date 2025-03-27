@@ -21,6 +21,8 @@ export interface Beer {
   image?: string;
   createdBy: string; // User ID
   createdByUsername: string; // Username
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const beerSchema = new Schema<IBeer>(

@@ -1,11 +1,14 @@
 import React from "react";
 import { Card, Text, Center, Stack, Group } from "@mantine/core";
+import { useRouter } from "next/router";
 
 interface Props {
-  podium: { username: string; totalBeers: number }[];
+  podium: { username: string; totalBeers: number; userId: string }[];
 }
 
 const PodiumCards = (props: Props) => {
+  const router = useRouter();
+
   if (props.podium.length < 3) return null;
 
   // Correct order: 2nd place, 1st place, 3rd place
@@ -16,6 +19,10 @@ const PodiumCards = (props: Props) => {
     { color: "white", tilt: "0deg", top: -20 }, // 1st place
     { color: "#ff9800", tilt: "10deg", top: 20 }, // 3rd place
   ];
+
+  const handleUserClick = (userId: string) => {
+    router.push(`/user/${userId}`);
+  };
 
   return (
     <Center mb="lg">
@@ -33,7 +40,7 @@ const PodiumCards = (props: Props) => {
               position: "relative",
               top: cardConfig[index].top,
             }}
-          >
+            onClick={() => handleUserClick(user.userId)}>
             <Stack align="center" justify="space-between" h="100%">
               <Text fz={{ base: "1rem", sm: "2rem" }} fw={700}>
                 {user.username}
