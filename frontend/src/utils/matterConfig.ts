@@ -106,8 +106,7 @@ export const createBeer = (
   x: number,
   y: number,
   width: number,
-  label: string,
-  volume: string
+  label: string
 ) => {
   // const h = volume === "0.33" ? 50 : 80; // Height of the beer bottle
   const h = 80;
