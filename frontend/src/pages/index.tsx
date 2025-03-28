@@ -43,6 +43,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     queryFn: () => beerService.getToplist(),
   });
 
+  await queryClient.prefetchQuery({
+    queryKey: ["latestBeers"],
+    queryFn: () => beerService.getAllBeers(),
+  });
+
   try {
     // Create server API instance that can forward cookies
     const serverApi = axios.create({

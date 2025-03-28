@@ -6,6 +6,7 @@ export interface IBeer extends Document {
   brewery: string;
   volume: string;
   image?: string;
+  description?: string;
   createdBy: mongoose.Schema.Types.ObjectId; // Reference to User
   createdByUsername: string; // Store username directly
   createdAt: Date;
@@ -19,6 +20,7 @@ export interface Beer {
   brewery: string;
   volume: string;
   image?: string;
+  description?: string;
   createdBy: string; // User ID
   createdByUsername: string; // Username
   createdAt?: Date;
@@ -40,6 +42,11 @@ const beerSchema = new Schema<IBeer>(
     volume: {
       type: String,
       required: [true, "Please provide a volume"],
+      trim: true,
+    },
+    description: {
+      type: String,
+      required: false,
       trim: true,
     },
     image: {
