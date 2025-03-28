@@ -8,7 +8,7 @@ export const createMatterWorld = (
   element: HTMLElement,
   width: number,
   height: number,
-  showDebugOutlines = true
+  showDebugOutlines = false // Set to true to show debug outlines
 ) => {
   // Engine creation
   const engine = Engine.create({
@@ -57,7 +57,7 @@ function setupDebugOutlines(engine: Matter.Engine, render: Matter.Render) {
       }
     }
 
-    context.lineWidth = 0.5;
+    context.lineWidth = 0.3;
     context.strokeStyle = "#ff0000";
     context.stroke();
   });

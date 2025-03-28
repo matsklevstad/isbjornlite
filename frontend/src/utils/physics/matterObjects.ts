@@ -56,7 +56,7 @@ export const spawnBigBeer = (
         : undefined,
     },
     friction: 0.08,
-    chamfer: { radius: [7, 7, 5, 5] },
+    chamfer: { radius: [7 * scale, 7 * scale, 5 * scale, 5 * scale] },
     label: label,
   });
 };
@@ -68,7 +68,7 @@ export const spawnSmallBeer = (
   label: string
 ) => {
   const scale = getBeerScale(screenWidth);
-  const beerSize = { width: 30 * scale, height: 50 * scale };
+  const beerSize = { width: 30 * scale, height: 49 * scale };
   const spriteScale = 0.1 * scale;
 
   return Bodies.rectangle(x, y, beerSize.width, beerSize.height, {
@@ -80,13 +80,13 @@ export const spawnSmallBeer = (
             texture: smallBeerImage.src,
             xScale: spriteScale,
             yScale: spriteScale,
-            xOffset: 0.01,
-            yOffset: 0.01,
+            xOffset: 0,
+            yOffset: 0,
           } as any)
         : undefined,
     },
     friction: 0.08,
-    chamfer: { radius: [7, 7, 5, 5] },
+    chamfer: { radius: [7 * scale, 7 * scale, 5 * scale, 5 * scale] },
     label: label,
   });
 };
