@@ -16,6 +16,8 @@ import {
 import { getTimeSince } from "@/utils/formatTime";
 
 const LatestBeers = () => {
+  const [timeKey, setTimeKey] = useState(0);
+
   const {
     data: latestBeers,
     isLoading,
@@ -24,6 +26,14 @@ const LatestBeers = () => {
     queryKey: ["latestBeers"],
     queryFn: beerService.getAllBeers,
   });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeKey((prev) => prev + 1);
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   if (isLoading) {
     return <Loader size="md" type="dots" mx="auto" my="xl" />;
@@ -38,42 +48,37 @@ const LatestBeers = () => {
   }
 
   return (
-    <Container fluid>
+    <Container fluid mt="md">
       <Group>
         <Text size="lg" fw={500} c="white" mb="xs">
           Siste nytt
         </Text>
       </Group>
 
-      {latestBeers!.length === 0 ? (
+      {latestBeers?.length === 0 ? (
         <Text c="dimmed">No beers found</Text>
       ) : (
         <ScrollArea h={300}>
           <Group gap="xs" w="100%">
-            {latestBeers!.map((beer) => (
-              <Card key={beer.id} p="sm" withBorder w="100%">
-                <Group justify="space-between" align="center">
+            {latestBeers?.map((beer) => (
+              <Card key={beer.id} p="xs" bg="isbjorn.1" withBorder w="100%">
+                <Group justify="space-between" align="center" gap="xs">
                   <Group gap="xs">
-                    <Badge variant="filled" color="rgb(4,7,17)" w={50} h={50}>
-                      <Image
-                        src="/assets/beerImages/isbjorn_big.png"
-                        width="100%"
-                        height="100%"
-                        alt="Beer logo"
-                      />
-                    </Badge>
+                    <Image
+                      src={"/assets/beerImages/isbjorn_big.png"}
+                      w="100%"
+                      h="60"
+                    />
                     <Stack gap={0}>
                       <Title order={5} c="isbjorn.8">
                         {beer.createdByUsername}
                       </Title>
-                      <Text size="xs" c="dimmed">
-                        {beer.description
-                          ? beer.description
-                          : " hrgregjireogjregiojgre"}
+                      <Text size="sm" c="dimmed">
+                        {beer.description}
                       </Text>
                     </Stack>
                   </Group>
-                  <Text size="xs" c="grey" fw="bold">
+                  <Text size="xs" c="grey" key={`time-${beer.id}-${timeKey}`}>
                     {getTimeSince(new Date(beer.createdAt))}
                   </Text>
                 </Group>

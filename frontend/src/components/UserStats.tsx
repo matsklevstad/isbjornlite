@@ -2,8 +2,8 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { Alert, Text, Group, Badge, Center } from "@mantine/core";
-import { IconUserCircle } from "@tabler/icons-react";
 import { useRouter } from "next/router";
+import { getTimeSince } from "@/utils/formatTime";
 
 const UserStats = () => {
   const { data, isLoading, error } = useQuery({
@@ -17,33 +17,25 @@ const UserStats = () => {
     router.push("/profile");
   };
 
-  const getLatestBeer = () => {
-    if (!data?.length) return null;
-
-    const createdAt = data[0].createdAt;
-    if (!createdAt) return null;
-    const diffMs = Date.now() - new Date(createdAt).getTime();
-    const totalMinutes = Math.floor(diffMs / (1000 * 60));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-
-    return hours > 0 ? `${hours}t og ${minutes} min` : `${minutes} min`;
-  };
-
   if (isLoading) return;
   if (error) return <Alert color="red">{(error as Error).message}</Alert>;
 
+  // Function to format the time display
+  const formatTimeDisplay = (date: Date) => {
+    const timeString = getTimeSince(date);
+    return timeString === "NÅ" ? "0 min" : timeString;
+  };
+
   return (
     <Center bg="#071B2C" w="100%">
-      {data && data.length > 0 && (
+      {data && data.length > 0 && data[0].createdAt && (
         <Group gap="xs" align="center">
           <Badge color="#006AFF" styles={{ root: { textTransform: "none" } }}>
-            {getLatestBeer() ? getLatestBeer() : ""}
+            {formatTimeDisplay(new Date(data[0].createdAt))}
           </Badge>
           <Text c="white">siden din forrige isbjørn</Text>
         </Group>
       )}
-      <IconUserCircle size={40} color="#006AFF" onClick={handleProfileClick}/>
     </Center>
   );
 };

@@ -12,8 +12,8 @@ const TitleScene = dynamic(
 export default function Index() {
   return (
     <div className="overflow-x-hidden min-h-screen">
-      {/*<TitleScene />*/}
-      <Container bg="#071B2C" p='0'>
+      {/*      <TitleScene />*/}
+      <Container bg="#071B2C" p="0">
         <Overview />
       </Container>
     </div>
