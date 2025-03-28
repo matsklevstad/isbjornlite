@@ -6,6 +6,7 @@ import { beerService } from "@/services/beerService";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { formatDate } from "@/utils/formatDate";
 import { GetServerSideProps } from "next";
+import axios from "axios";
 import { userService } from "@/services/userService";
 
 export default function Profile({ userId: serverUserId }: { userId?: string }) {
@@ -16,7 +17,7 @@ export default function Profile({ userId: serverUserId }: { userId?: string }) {
   // Use server-provided userId if available, otherwise use from auth store
   const effectiveUserId = serverUserId || user?._id;
 
-  const queryUserId = effectiveUserId || 'me';
+  const queryUserId = effectiveUserId || "me";
 
   // Fetch user profile using react-query
   const { data: profileData } = useQuery({
@@ -73,39 +74,56 @@ export default function Profile({ userId: serverUserId }: { userId?: string }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  // Get user from cookies/session
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const userProfile = await userService.getProfile();
-    const userId = userProfile?._id;
+    // Create API instance for server-side
+    const serverApi = axios.create({
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    });
 
-    if (!userId) {
-      // User is not authenticated, will handle on client side
-      return { props: {} };
+    // Forward cookies from the request to our API calls
+    const cookies = context.req.headers.cookie;
+    if (cookies) {
+      serverApi.defaults.headers.Cookie = cookies;
     }
 
-    const queryClient = new QueryClient();
+    try {
+      // Try to fetch user profile with cookies
+      const userResponse = await serverApi.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`
+      );
+      const userId = userResponse.data.data._id;
 
-    await Promise.all([
-      // Prefetch user profile
-      queryClient.prefetchQuery({
-        queryKey: ["userProfile", userId || 'me'],
-        queryFn: () => userService.getUserById(userId),
-      }),
+      // If successful, prefetch data
+      const queryClient = new QueryClient();
 
-      // Prefetch user beers
-      queryClient.prefetchQuery({
-        queryKey: ["userBeers", userId || 'me'],
-        queryFn: () => beerService.getBeersByUserId(userId),
-      }),
-    ]);
+      await Promise.all([
+        queryClient.prefetchQuery({
+          queryKey: ["userProfile", userId],
+          queryFn: async () => userResponse.data.data,
+        }),
+        queryClient.prefetchQuery({
+          queryKey: ["userBeers", userId],
+          queryFn: async () => {
+            const beersResponse = await serverApi.get(
+              `${process.env.NEXT_PUBLIC_API_URL}/api/beer/user`
+            );
+            return beersResponse.data.data;
+          },
+        }),
+      ]);
 
-    return {
-      props: {
-        userId,
-        dehydratedState: dehydrate(queryClient),
-      },
-    };
+      return {
+        props: {
+          userId,
+          dehydratedState: dehydrate(queryClient),
+        },
+      };
+    } catch (error) {
+      // Not authenticated or error
+      return { props: {} };
+    }
   } catch (error) {
     console.error("Error in getServerSideProps:", error);
     return { props: {} };

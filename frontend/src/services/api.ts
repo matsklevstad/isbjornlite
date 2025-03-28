@@ -6,22 +6,8 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
-
-// Request interceptor for adding auth token
-api.interceptors.request.use(
-  (config) => {
-    // Get token from Zustand store instead of directly from localStorage
-    if (typeof window !== "undefined") {
-      const token = useAuthStore.getState().token;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 // Response interceptor for handling errors
 api.interceptors.response.use(
