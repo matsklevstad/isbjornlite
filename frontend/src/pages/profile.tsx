@@ -82,20 +82,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       withCredentials: true,
     });
 
-    // Forward cookies from the request to our API calls
+    // Forward cookies from the request
     const cookies = context.req.headers.cookie;
     if (cookies) {
       serverApi.defaults.headers.Cookie = cookies;
     }
 
     try {
-      // Try to fetch user profile with cookies
-      const userResponse = await serverApi.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`
-      );
+      // Use relative paths for API calls
+      const userResponse = await serverApi.get("/api/user/profile");
       const userId = userResponse.data.data._id;
 
-      // If successful, prefetch data
       const queryClient = new QueryClient();
 
       await Promise.all([
@@ -104,11 +101,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
           queryFn: async () => userResponse.data.data,
         }),
         queryClient.prefetchQuery({
-          queryKey: ["userBeers", userId],
+          queryKey: ["userBeers", userId], // Keep this specific to user ID
           queryFn: async () => {
-            const beersResponse = await serverApi.get(
-              `${process.env.NEXT_PUBLIC_API_URL}/api/beer/user`
-            );
+            const beersResponse = await serverApi.get("/api/beer/user");
             return beersResponse.data.data;
           },
         }),
@@ -121,11 +116,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
       };
     } catch (error) {
-      // Not authenticated or error
       return { props: {} };
     }
   } catch (error) {
-    console.error("Error in getServerSideProps:", error);
     return { props: {} };
   }
 };

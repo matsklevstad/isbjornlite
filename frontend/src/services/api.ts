@@ -1,8 +1,14 @@
 import axios from "axios";
 import { useAuthStore } from "@/stores/authStore"; // Import your auth store
 
-// Create an axios instance with default configs
+// Use absolute URL for server, relative for browser
+const baseURL =
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+    : "";
+
 const api = axios.create({
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },

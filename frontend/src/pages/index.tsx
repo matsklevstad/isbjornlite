@@ -3,7 +3,8 @@ import Overview from "@/components/overview/overview";
 import { Container } from "@mantine/core";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
-import { useAuthStore } from "@/stores/authStore";
+import { GetServerSideProps } from "next";
+import axios from "axios";
 
 const TitleScene = dynamic(
   () => import("../components/homepage/threejs/scenes/TitleScene"),
@@ -23,9 +24,8 @@ export default function Index() {
   );
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const queryClient = new QueryClient();
-  const { checkAuth } = useAuthStore.getState();
 
   // Always prefetch public data
   await queryClient.prefetchQuery({
@@ -34,17 +34,33 @@ export const getServerSideProps = async () => {
   });
 
   try {
-    // Check authentication
-    await checkAuth();
-
-    // Prefetch user-specific data if authenticated
-    await queryClient.prefetchQuery({
-      queryKey: ["userBeers"],
-      queryFn: () => beerService.getUserBeers(),
+    // Create server API instance that can forward cookies
+    const serverApi = axios.create({
+      headers: { "Content-Type": "application/json" },
     });
-  } catch {
-    // Handle unauthenticated state
-    console.error("User is not authenticated");
+
+    // Forward cookies from incoming request
+    const cookies = context.req.headers.cookie;
+    if (cookies) {
+      serverApi.defaults.headers.Cookie = cookies;
+    }
+
+    // Try to authenticate using cookies from request
+    const userResponse = await serverApi.get("/api/user/profile");
+
+    if (userResponse.data?.data?._id) {
+      // User is authenticated, prefetch user-specific data
+      await queryClient.prefetchQuery({
+        queryKey: ["userBeers"],
+        queryFn: async () => {
+          const beersResponse = await serverApi.get("/api/beer/user");
+          return beersResponse.data.data;
+        },
+      });
+    }
+  } catch (error) {
+    // User is not authenticated, continue with public data only
+    console.log("Not authenticated or error during SSR");
   }
 
   return {
