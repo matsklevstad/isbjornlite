@@ -2,11 +2,15 @@ import { Engine, Render, Bodies, Body, Events } from "matter-js";
 
 // Add this near the top of your file for image caching
 let beerImage: HTMLImageElement | null = null;
+let smallBeerImage: HTMLImageElement | null = null;
 
 // Preload the beer image
 if (typeof window !== "undefined") {
   beerImage = new Image();
-  beerImage.src = "/assets/drawing-1.png"; // Update this path to your image
+  beerImage.src = "/assets/beerImages/isbjorn_big.png"; // Update this path to your image
+
+  smallBeerImage = new Image();
+  smallBeerImage.src = "/assets/beerImages/isbjorn_small.png"; // Update this path to your image
 }
 
 /**
@@ -16,7 +20,7 @@ export const createMatterWorld = (
   element: HTMLElement,
   width: number,
   height: number,
-  showDebugOutlines = false  // Add debug parameter
+  showDebugOutlines = true // Add debug parameter
 ) => {
   // Create engine
   const engine = Engine.create({
@@ -37,35 +41,35 @@ export const createMatterWorld = (
       pixelRatio: window.devicePixelRatio,
     },
   });
-  
+
   // Add debug outlines if enabled
   if (showDebugOutlines) {
     // Import needed at the top: import { Events, Render } from "matter-js";
-    Events.on(render, 'afterRender', function() {
+    Events.on(render, "afterRender", function () {
       const context = render.context;
       const bodies = engine.world.bodies;
-      
+
       context.beginPath();
-      
+
       for (let i = 0; i < bodies.length; i++) {
         // Only draw outlines for beer bodies
-        if (bodies[i].label.includes('beer')) {
+        if (bodies[i].label.includes("beer")) {
           const vertices = bodies[i].vertices;
-          
+
           // Draw outline
           context.moveTo(vertices[0].x, vertices[0].y);
-          
+
           for (let j = 1; j < vertices.length; j++) {
-              context.lineTo(vertices[j].x, vertices[j].y);
+            context.lineTo(vertices[j].x, vertices[j].y);
           }
-          
+
           context.lineTo(vertices[0].x, vertices[0].y);
         }
       }
-      
+
       // Style for the outlines
-      context.lineWidth = 0.2;
-      context.strokeStyle = '#ff0000';
+      context.lineWidth = 0.5;
+      context.strokeStyle = "#ff0000";
       context.stroke();
     });
   }
@@ -106,10 +110,10 @@ export const createBeer = (
   x: number,
   y: number,
   width: number,
-  label: string
+  label: string,
+  volume: string = "0.5" // Default volume
 ) => {
-  // const h = volume === "0.33" ? 50 : 80; // Height of the beer bottle
-  const h = 80;
+  const h = volume === "0.33" ? 50 : 80; // Height of the beer bottle
   const scale = getBeerScale(width); // Scale factor for the beer bottle
   const beerSize = { width: 30 * scale, height: h * scale }; // Size of the beer bottle
 
@@ -122,15 +126,15 @@ export const createBeer = (
   return Bodies.rectangle(x, y, beerSize.width, beerSize.height, {
     restitution: 0.2, // Bounciness
     render: {
-      fillStyle: "#fff",
-      sprite: beerImage
-        ? {
-            texture: beerImage.src,
+      fillStyle: "#ff0000",
+      sprite: (volume === "0.33" ? smallBeerImage : beerImage)
+        ? ({
+            texture: volume === "0.33" ? smallBeerImage!.src : beerImage!.src,
             xScale: spriteScale,
             yScale: spriteScale,
             xOffset: 0.01,
             yOffset: 0.01,
-          } as any
+          } as any)
         : undefined,
     },
     friction: 0.08,
