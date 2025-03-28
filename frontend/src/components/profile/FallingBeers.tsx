@@ -1,4 +1,13 @@
-import { Engine, Render, Runner, World, Query, Body } from "matter-js";
+import {
+  Engine,
+  Render,
+  Runner,
+  World,
+  Body,
+  Mouse,
+  MouseConstraint,
+  Events,
+} from "matter-js";
 import {
   createMatterWorld,
   createWalls,
@@ -26,38 +35,6 @@ export default function FallingBeers({
   // Set to keep track of spawned beer IDs
   const spawnedBeerIdsRef = useRef<Set<string>>(new Set());
 
-  const handleCanvasClick = (event: MouseEvent) => {
-    if (!engineRef.current || !renderRef.current?.canvas) return;
-
-    // Get mouse position relative to canvas
-    const canvas = renderRef.current.canvas;
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    // Find bodies at click position
-    const bodies = Query.point(engineRef.current.world.bodies, { x, y });
-
-    // Check if any beer was clicked
-    bodies.forEach((body) => {
-      if (body.label.startsWith("beer-")) {
-        const beerId = body.label.replace("beer-", "");
-        const beerData = beerBodiesMap.current.get(beerId);
-
-        if (beerData) {
-          console.log("Clicked beer:", beerData);
-
-          Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.2);
-
-          Body.applyForce(body, body.position, {
-            x: (Math.random() - 0.5) * 0.05, // Small random horizontal force
-            y: -0.15, // Vertical lift force (negative is upward)
-          });
-        }
-      }
-    });
-  };
-
   useEffect(() => {
     if (!sceneRef.current) return;
 
@@ -77,6 +54,47 @@ export default function FallingBeers({
     // Create walls
     const walls = createWalls(width, height);
     World.add(engine.world, walls);
+
+    if (render.canvas) {
+      // Create mouse controller
+      const mouse = Mouse.create(render.canvas);
+
+      // Fix for high DPI displays
+      mouse.pixelRatio = window.devicePixelRatio;
+
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+          stiffness: 0.2,
+          length: 0.1,
+          render: {
+            visible: false, // Set to true if you want to see the constraint
+          },
+        },
+      });
+
+      // Add throwing behavior when drag ends
+      Events.on(mouseConstraint, "enddrag", (event: any) => {
+        const body = event.body;
+
+        if (body && body.label.startsWith("beer-")) {
+          const beerId = body.label.replace("beer-", "");
+          console.log(`Throwing beer: ${beerId}`);
+
+          // Apply additional velocity for throwing effect
+          Body.setVelocity(body, {
+            x: body.velocity.x * 1, // Amplify current velocity
+            y: body.velocity.y * 1,
+          });
+
+          // Add some spin
+          Body.setAngularVelocity(body, body.angularVelocity * 1.2);
+        }
+      });
+
+      // Add mouse constraint to world
+      World.add(engine.world, mouseConstraint);
+    }
 
     // Start the engine and renderer
     const runner = Runner.create();
@@ -101,11 +119,6 @@ export default function FallingBeers({
 
     window.addEventListener("resize", handleResize);
 
-    // Handle canvas click
-    if (render.canvas) {
-      render.canvas.addEventListener("click", handleCanvasClick);
-    }
-
     // Cleanup
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -114,7 +127,6 @@ export default function FallingBeers({
       Engine.clear(engine);
       render.canvas?.remove();
       render.element && (render.element.innerHTML = "");
-      render.canvas?.removeEventListener("click", handleCanvasClick);
     };
   }, []);
 

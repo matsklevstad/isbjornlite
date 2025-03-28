@@ -6,6 +6,7 @@ import { beerImage, smallBeerImage, getBeerScale } from "./matterAssets";
  * Creates walls for the physics world
  */
 export const createWalls = (width: number, height: number) => {
+  const wallWidth = 5000;
   return [
     // Ground
     Bodies.rectangle(width / 2, height + 25, width, 50, {
@@ -14,13 +15,13 @@ export const createWalls = (width: number, height: number) => {
       label: "ground",
     }),
     // Left wall
-    Bodies.rectangle(-25, height / 2, 50, height * 10, {
+    Bodies.rectangle(-wallWidth / 2, height / 2, wallWidth , height * 10, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "leftWall",
     }),
     // Right wall
-    Bodies.rectangle(width + 25, height / 2, 50, height * 10, {
+    Bodies.rectangle(width + wallWidth / 2, height / 2, wallWidth, height * 10, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "rightWall",
