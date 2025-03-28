@@ -2,9 +2,10 @@ import { Engine, Render, Runner, World, Query, Body } from "matter-js";
 import {
   createMatterWorld,
   createWalls,
-  createBeer,
+  spawnBigBeer,
+  spawnSmallBeer,
   applyRandomForce,
-} from "@/utils/matterConfig";
+} from "@/utils/physics";
 import { useEffect, useRef } from "react";
 import { Beer } from "@/models/beer";
 
@@ -129,11 +130,17 @@ export default function FallingBeers({
     // Get container width for random x position
     const width = sceneRef.current.clientWidth;
 
+    // Choose starting position
     const x = Math.random() * (width - 100) + 50;
     const y = -40;
 
-    // Create beer object at random x position
-    const beerBody = createBeer(x, y, width, `beer-${beer._id}`, beer.volume);
+    // Determine beer size
+    const isSmallBeer = beer.volume === "0.33";
+
+    // Spawn beer body
+    const beerBody = isSmallBeer
+      ? spawnSmallBeer(x, y, width, `beer-${beer._id}`)
+      : spawnBigBeer(x, y, width, `beer-${beer._id}`);
 
     // Apply random force and spin
     applyRandomForce(beerBody);
