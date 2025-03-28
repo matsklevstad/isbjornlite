@@ -50,7 +50,7 @@ export default function Profile() {
   // Loading state - temporary loading screen
   if (loading || loadingBeers) {
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-900">
+      <div className="flex justify-center items-center h-screen">
         <div className="text-white text-xl">Loading profile...</div>
       </div>
     );

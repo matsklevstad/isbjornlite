@@ -34,7 +34,7 @@ const UserStats = () => {
   if (error) return <Alert color="red">{(error as Error).message}</Alert>;
 
   return (
-    <Center bg="#071B2C" w="100%">
+    <Center bg="transparent" w="100%">
       {data && data.length > 0 && (
         <Group gap="xs" align="center">
           <Badge color="#006AFF" styles={{ root: { textTransform: "none" } }}>

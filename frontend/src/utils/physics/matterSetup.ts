@@ -25,7 +25,7 @@ export const createMatterWorld = (
       width,
       height,
       wireframes: false,
-      background: "#0a111c",
+      background: "transparent",
       pixelRatio: window.devicePixelRatio,
     },
   });
