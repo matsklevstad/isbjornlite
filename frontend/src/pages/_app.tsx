@@ -3,10 +3,13 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  HydrationBoundary,
+} from "@tanstack/react-query";
 import AuthInitializer from "@/components/AuthInitializer";
-
-const queryClient = new QueryClient();
+import { useState } from "react";
 
 const theme = createTheme({
   breakpoints: {
@@ -19,21 +22,33 @@ const theme = createTheme({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+          },
+        },
+      })
+  );
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <MantineProvider theme={theme}>
-          <Head>
-            <title>Isbjørn Lites venner </title>
-            <meta
-              name="description"
-              content="Et samfunn for alle som elsker Isbjørn Lite i ulike fasonger"
-            />
-          </Head>
-          <AuthInitializer />
-          {/* MantineProvider can be customized here */}
-          <Component {...pageProps} />
-        </MantineProvider>
+        <HydrationBoundary state={pageProps.dehydratedState}>
+          <MantineProvider theme={theme}>
+            <Head>
+              <title>Isbjørn Lites venner </title>
+              <meta
+                name="description"
+                content="Et samfunn for alle som elsker Isbjørn Lite i ulike fasonger"
+              />
+            </Head>
+            <AuthInitializer />
+            {/* MantineProvider can be customized here */}
+            <Component {...pageProps} />
+          </MantineProvider>
+        </HydrationBoundary>
       </QueryClientProvider>
     </>
   );

@@ -24,7 +24,7 @@ const TopList = () => {
   const rest = toplist!.slice(3, 10); // Show top 4-10
 
   return (
-    <Card bg="#071B2C" w="100%">
+    <Card bg="transparent" w="100%">
       <Center>
         <Title order={1} c="white" mb="xl">
           Topplisten

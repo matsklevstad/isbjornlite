@@ -1,27 +1,19 @@
 import axios from "axios";
 import { useAuthStore } from "@/stores/authStore"; // Import your auth store
 
-// Create an axios instance with default configs
+// Use absolute URL for server, relative for browser
+const baseURL =
+  typeof window === "undefined"
+    ? process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+    : "";
+
 const api = axios.create({
+  baseURL,
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
-
-// Request interceptor for adding auth token
-api.interceptors.request.use(
-  (config) => {
-    // Get token from Zustand store instead of directly from localStorage
-    if (typeof window !== "undefined") {
-      const token = useAuthStore.getState().token;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 // Response interceptor for handling errors
 api.interceptors.response.use(

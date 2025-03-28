@@ -1,9 +1,10 @@
 "use client";
 
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { User } from "@/models/user";
 import api from "@/services/api";
+import Cookies from "js-cookie";
 
 interface RegisterData {
   username: string;
@@ -14,7 +15,6 @@ interface RegisterData {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
@@ -28,15 +28,29 @@ interface AuthState {
   ) => Promise<void>;
   logout: () => void;
   setUser: (user: User) => void;
-  checkAuth: () => Promise<void>;
+  checkAuth: () => Promise<boolean>;
   fetchProfile: (userId: string) => Promise<User | null>;
 }
+
+// Create an SSR-safe storage object
+const createNoopStorage = () => {
+  return {
+    getItem: () => null,
+    setItem: () => null,
+    removeItem: () => null,
+  };
+};
+
+// Create a storage that works in browser but does nothing on server
+const storage =
+  typeof window !== "undefined"
+    ? createJSONStorage(() => localStorage)
+    : createNoopStorage();
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      token: null,
       isLoading: false,
       error: null,
       isAuthenticated: false,
@@ -48,18 +62,14 @@ export const useAuthStore = create<AuthState>()(
 
           // Call register API
           const response = await api.post("/api/user/register", data);
-          const { token, ...userData } = response.data.data;
+          const { ...userData } = response.data.data;
 
           // Update state with user data and token
           set({
             user: userData,
-            token,
             isAuthenticated: true,
             isLoading: false,
           });
-
-          // Update axios headers for future requests
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           return response.data;
         } catch (error: any) {
@@ -87,16 +97,20 @@ export const useAuthStore = create<AuthState>()(
           });
           const { token, ...userData } = response.data.data;
 
+          // Store token in cookie instead of localStorage
+          Cookies.set("auth-token", token, {
+            expires: rememberMe ? 30 : 1, // 30 days if "remember me" is checked
+            path: "/",
+            sameSite: "strict",
+            // secure: true  // Uncomment in production with HTTPS
+          });
+
           // Update state with user data and token
           set({
             user: userData,
-            token,
             isAuthenticated: true,
             isLoading: false,
           });
-
-          // Update axios headers for future requests
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           return response.data;
         } catch (error: any) {
@@ -109,13 +123,10 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        // Clear auth data
-        set({ user: null, token: null, isAuthenticated: false });
+        // Remove the cookie
+        Cookies.remove("auth-token");
 
-        // Remove auth header
-        delete api.defaults.headers.common["Authorization"];
-
-        // Optionally redirect (needs to be done in component)
+        set({ user: null, isAuthenticated: false });
       },
 
       fetchProfile: async (userId: string) => {
@@ -148,26 +159,20 @@ export const useAuthStore = create<AuthState>()(
       },
 
       checkAuth: async () => {
-        const { token } = get();
-        if (!token) return;
-
         try {
           set({ isLoading: true });
 
-          // Set auth header
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-          // Verify token by fetching user profile
+          // Cookie is sent automatically with request due to withCredentials: true
           const response = await api.get("/api/user/profile");
+
           set({
             user: response.data.data,
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch (error: any) {
-          // Don't immediately logout - only if it's an auth error
-          console.error("Auth check error:", error?.response?.status || error);
 
+          return true;
+        } catch (error: any) {
           // Only logout on specific auth errors (401, 403)
           if (
             error?.response?.status === 401 ||
@@ -176,18 +181,23 @@ export const useAuthStore = create<AuthState>()(
             get().logout();
           }
 
-          set({ isLoading: false });
-          // Still mark as not authenticated on errors
-          set({ isAuthenticated: false });
+          set({ isAuthenticated: false, isLoading: false });
+          return false;
         }
       },
     }),
     {
       name: "auth-storage",
+      storage: storage,
+      // Add this to limit what's stored in localStorage
       partialize: (state) => ({
-        token: state.token,
-        user: state.user,
         isAuthenticated: state.isAuthenticated,
+        user: state.user
+          ? {
+              _id: state.user._id,
+              username: state.user.username,
+            }
+          : null,
       }),
     }
   )

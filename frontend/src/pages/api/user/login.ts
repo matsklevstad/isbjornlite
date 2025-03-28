@@ -49,6 +49,14 @@ export default async function handler(
     // Generate token
     const token = generateToken(String(user._id));
 
+    // Set HTTP cookie with the token
+    res.setHeader(
+      "Set-Cookie",
+      `auth-token=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${
+        60 * 60 * 24 * 30 // 30 days
+      }`
+    );
+
     // Return success response
     return res.status(200).json({
       success: true,
@@ -57,7 +65,6 @@ export default async function handler(
         username: user.username,
         email: user.email,
         image: user.image,
-        token,
       },
     });
   } catch (error) {
