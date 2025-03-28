@@ -15,7 +15,6 @@ interface RegisterData {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
@@ -52,7 +51,6 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      token: null,
       isLoading: false,
       error: null,
       isAuthenticated: false,
@@ -64,18 +62,14 @@ export const useAuthStore = create<AuthState>()(
 
           // Call register API
           const response = await api.post("/api/user/register", data);
-          const { token, ...userData } = response.data.data;
+          const { ...userData } = response.data.data;
 
           // Update state with user data and token
           set({
             user: userData,
-            token,
             isAuthenticated: true,
             isLoading: false,
           });
-
-          // Update axios headers for future requests
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
           return response.data;
         } catch (error: any) {
@@ -114,7 +108,6 @@ export const useAuthStore = create<AuthState>()(
           // Update state with user data and token
           set({
             user: userData,
-            token,
             isAuthenticated: true,
             isLoading: false,
           });
@@ -133,7 +126,7 @@ export const useAuthStore = create<AuthState>()(
         // Remove the cookie
         Cookies.remove("auth-token");
 
-        set({ user: null, token: null, isAuthenticated: false });
+        set({ user: null, isAuthenticated: false });
       },
 
       fetchProfile: async (userId: string) => {
@@ -195,7 +188,17 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
-      storage: storage, // Use the SSR-safe storage
+      storage: storage,
+      // Add this to limit what's stored in localStorage
+      partialize: (state) => ({
+        isAuthenticated: state.isAuthenticated,
+        user: state.user
+          ? {
+              _id: state.user._id,
+              username: state.user.username,
+            }
+          : null,
+      }),
     }
   )
 );
