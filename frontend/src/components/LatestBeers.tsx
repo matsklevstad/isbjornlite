@@ -1,0 +1,89 @@
+import { beerService } from "@/services/beerService";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  Text,
+  Title,
+  Stack,
+  Loader,
+  Group,
+  Badge,
+  Container,
+  Image,
+  ScrollArea,
+} from "@mantine/core";
+import { getTimeSince } from "@/utils/formatTime";
+
+const LatestBeers = () => {
+  const {
+    data: latestBeers,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["latestBeers"],
+    queryFn: beerService.getAllBeers,
+  });
+
+  if (isLoading) {
+    return <Loader size="md" type="dots" mx="auto" my="xl" />;
+  }
+
+  if (error) {
+    return (
+      <Text c="red" ta="center">
+        <strong>Error fetching beers:</strong> {error.message}
+      </Text>
+    );
+  }
+
+  return (
+    <Container fluid>
+      <Group>
+        <Text size="lg" fw={500} c="white" mb="xs">
+          Siste nytt
+        </Text>
+      </Group>
+
+      {latestBeers!.length === 0 ? (
+        <Text c="dimmed">No beers found</Text>
+      ) : (
+        <ScrollArea h={300}>
+          <Group gap="xs" w="100%">
+            {latestBeers!.map((beer) => (
+              <Card key={beer.id} p="sm" withBorder w="100%">
+                <Group justify="space-between" align="center">
+                  <Group gap="xs">
+                    <Badge variant="filled" color="rgb(4,7,17)" w={50} h={50}>
+                      <Image
+                        src="/assets/beerImages/isbjorn_big.png"
+                        width="100%"
+                        height="100%"
+                        alt="Beer logo"
+                      />
+                    </Badge>
+                    <Stack gap={0}>
+                      <Title order={5} c="isbjorn.8">
+                        {beer.createdByUsername}
+                      </Title>
+                      <Text size="xs" c="dimmed">
+                        {beer.description
+                          ? beer.description
+                          : " hrgregjireogjregiojgre"}
+                      </Text>
+                    </Stack>
+                  </Group>
+                  <Text size="xs" c="grey" fw="bold">
+                    {getTimeSince(new Date(beer.createdAt))}
+                  </Text>
+                </Group>
+              </Card>
+            ))}
+          </Group>
+        </ScrollArea>
+      )}
+    </Container>
+  );
+};
+
+export default LatestBeers;

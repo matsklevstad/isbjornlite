@@ -16,6 +16,20 @@ const theme = createTheme({
     lg: "74em",
     xl: "90em",
   },
+  colors: {
+    isbjorn: [
+      "#e5f9ff",
+      "#d0eeff",
+      "#9fdbfd",
+      "#6dc7fb",
+      "#47b6fa",
+      "#34abfa",
+      "#27a6fb",
+      "#1991e0",
+      "#0081ca",
+      "#006fb2",
+    ],
+  },
 });
 
 export default function App({ Component, pageProps }: AppProps) {

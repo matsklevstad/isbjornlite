@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import TopList from "../TopList";
 import UserStats from "../UserStats";
 import { useIsFetching } from "@tanstack/react-query";
+import LatestBeers from "../LatestBeers";
 
 export default function Overview() {
   const { user } = useAuthStore();
@@ -14,7 +15,7 @@ export default function Overview() {
       const hour = new Date().getHours();
       if (hour < 12) return "God morgen, ";
       if (hour < 18) return "God ettermiddag, ";
-      return "God kveld, ";
+      return "Faen as, ";
     })() + ` ${user?.username}`;
 
   return (
@@ -30,6 +31,7 @@ export default function Overview() {
         </Center>
       )}
       <UserStats />
+      <LatestBeers />
       <TopList />
     </Container>
   );
