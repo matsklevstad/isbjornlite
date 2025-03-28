@@ -32,9 +32,9 @@ export function getGreeting(username: string, hour?: number): string {
 
   // Determine time of day
   let timeOfDay: TimeOfDay;
-  if (currentHour < 12) {
+  if (currentHour >= 5 && currentHour < 12) {
     timeOfDay = "morning";
-  } else if (currentHour < 18) {
+  } else if (currentHour >= 12 && currentHour < 17) {
     timeOfDay = "afternoon";
   } else {
     timeOfDay = "evening";
