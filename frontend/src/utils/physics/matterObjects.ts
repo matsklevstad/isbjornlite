@@ -14,13 +14,13 @@ export const createWalls = (width: number, height: number) => {
       label: "ground",
     }),
     // Left wall
-    Bodies.rectangle(-25, height / 2, 50, height * 2, {
+    Bodies.rectangle(-25, height / 2, 50, height * 10, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "leftWall",
     }),
     // Right wall
-    Bodies.rectangle(width + 25, height / 2, 50, height * 2, {
+    Bodies.rectangle(width + 25, height / 2, 50, height * 10, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "rightWall",

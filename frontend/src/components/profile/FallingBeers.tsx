@@ -51,7 +51,7 @@ export default function FallingBeers({
 
           Body.applyForce(body, body.position, {
             x: (Math.random() - 0.5) * 0.05, // Small random horizontal force
-            y: -0.2, // Vertical lift force (negative is upward)
+            y: -0.15, // Vertical lift force (negative is upward)
           });
         }
       }
