@@ -5,7 +5,6 @@ import {
   Stack,
   SegmentedControl,
   Checkbox,
-  TextInput,
   Textarea,
 } from "@mantine/core";
 import { IconCirclePlusFilled } from "@tabler/icons-react";

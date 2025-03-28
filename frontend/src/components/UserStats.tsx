@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { Alert, Text, Group, Badge, Center } from "@mantine/core";
-import { useRouter } from "next/router";
 import { getTimeSince } from "@/utils/formatTime";
 
 const UserStats = () => {
@@ -10,12 +9,6 @@ const UserStats = () => {
     queryKey: ["userBeers"],
     queryFn: beerService.getUserBeers,
   });
-
-  const router = useRouter();
-
-  const handleProfileClick = () => {
-    router.push("/profile");
-  };
 
   if (isLoading) return;
   if (error) return <Alert color="red">{(error as Error).message}</Alert>;

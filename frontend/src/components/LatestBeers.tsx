@@ -8,7 +8,6 @@ import {
   Stack,
   Loader,
   Group,
-  Badge,
   Container,
   Image,
   ScrollArea,
@@ -68,6 +67,7 @@ const LatestBeers = () => {
                       src={"/assets/beerImages/isbjorn_big.png"}
                       w="100%"
                       h="60"
+                      alt="Beer"
                     />
                     <Stack gap={0}>
                       <Title order={5} c="isbjorn.8">
