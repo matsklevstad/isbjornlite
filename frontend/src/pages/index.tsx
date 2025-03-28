@@ -1,10 +1,12 @@
 import dynamic from "next/dynamic";
 import Overview from "@/components/overview/overview";
+import Loader from "@/components/Loader";
 import { Container } from "@mantine/core";
 import { dehydrate, QueryClient } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { GetServerSideProps } from "next";
 import axios from "axios";
+import { useState } from "react";
 
 const TitleScene = dynamic(
   () => import("../components/homepage/threejs/scenes/TitleScene"),
@@ -14,9 +16,17 @@ const TitleScene = dynamic(
 );
 
 export default function Index() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgass, setLoadingProgass] = useState(0);
+
   return (
     <div className="overflow-x-hidden min-h-screen">
-      <TitleScene />
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
+          <Loader loadingProgass={loadingProgass} />
+        </div>
+      )}
+      <TitleScene setIsLoading={setIsLoading} loadingProgass={loadingProgass} setLoadingProgass={setLoadingProgass} />
       <Container>
         <Overview />
       </Container>
