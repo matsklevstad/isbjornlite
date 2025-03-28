@@ -27,7 +27,7 @@ const UserStats = () => {
   };
 
   return (
-    <Center bg="#071B2C" w="100%">
+    <Center bg="transparent" w="100%">
       {data && data.length > 0 && data[0].createdAt && (
         <Group gap="xs" align="center">
           <Badge color="#006AFF" styles={{ root: { textTransform: "none" } }}>

@@ -1,12 +1,55 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken";
 import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
-import { verifyToken } from "@/utils/auth";
 
+interface DecodedToken {
+  userId: string;
+  iat: number;
+  exp: number;
+}
+
+export function verifyToken(req: NextApiRequest): string | null {
+  try {
+    // Check cookies first (for new cookie-based auth)
+    const authCookie = req.cookies["auth-token"];
+
+    // Then fall back to Authorization header (for backward compatibility)
+    const authHeader = req.headers.authorization;
+
+    // Get the token from either source
+    let token: string | undefined;
+
+    if (authCookie) {
+      token = authCookie;
+    } else if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+
+    // If no token found, return null
+    if (!token) {
+      return null;
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as DecodedToken;
+
+    return decoded.userId;
+  } catch (error) {
+    console.error("Token verification failed:", error);
+    return null;
+  }
+}
+
+// Complete API route handler
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Only allow GET request
   if (req.method !== "GET") {
     return res
       .status(405)
@@ -14,19 +57,15 @@ export default async function handler(
   }
 
   try {
-    await connectDB();
-
-    // Get the user ID from the auth token
+    // Verify the token and get userId
     const userId = verifyToken(req);
 
     if (!userId) {
-      return res.status(401).json({
-        success: false,
-        message: "Unauthorized",
-      });
+      return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
-    // Find the authenticated user
+    await connectDB();
+
     const user = await UserModel.findById(userId).select("-password");
 
     if (!user) {
@@ -35,24 +74,13 @@ export default async function handler(
         .json({ success: false, message: "User not found" });
     }
 
-    // Return user data
+    // Return the complete user object
     return res.status(200).json({
       success: true,
-      data: {
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        image: user.image,
-        createdAt: user.createdAt,
-        // Add other fields as needed
-      },
+      data: user,
     });
   } catch (error) {
-    console.error("GET error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Server error during fetching user profile",
-      error: (error as Error).message,
-    });
+    console.error("Profile API error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 }

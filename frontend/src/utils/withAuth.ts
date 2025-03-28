@@ -19,15 +19,25 @@ export function withAuth(
 ) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-      // Get token from header
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res
-          .status(401)
-          .json({ success: false, message: "Authentication invalid" });
+      // Get token from cookie first, fall back to Authorization header
+      const cookies = req.cookies || {};
+      let token = cookies["auth-token"];
+      
+      // Backward compatibility for Authorization header
+      if (!token) {
+        const authHeader = req.headers.authorization;
+        if (authHeader?.startsWith("Bearer ")) {
+          token = authHeader.split(" ")[1];
+        }
       }
 
-      const token = authHeader.split(" ")[1];
+      // If no token is found, return 401
+      if (!token) {
+        return res.status(401).json({ 
+          success: false, 
+          message: "Authentication required" 
+        });
+      }
 
       // Verify token
       try {
@@ -37,8 +47,6 @@ export function withAuth(
         }
 
         const decoded = jwt.verify(token, secret) as DecodedToken;
-
-        // Add user to request object and call handler
         (req as AuthenticatedRequest).user = decoded;
         return handler(req as AuthenticatedRequest, res);
       } catch {
