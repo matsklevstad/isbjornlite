@@ -41,7 +41,6 @@
     "Typisk {username}...",
     "Enda en, {username}?",
     "Der var du, {username}!",
-    "Ingen fest uten {username}!",
     "Er det fest, {username}?",
     "Skulle tro {username} var tørst...",
     "Alltid klar for en til, {username}?",
@@ -53,18 +52,16 @@
     "Lever fortsatt, {username}?",
     "Legenden {username} er tilbake!",
     "Isbjørn i årene til {username}?",
-    "Ingen brems på {username}!",
     "Sjekk ut tempoet, {username}!",
     "Drikker du alene igjen, {username}?",
+    "Peter < {username}.",
     "Hvem betaler regningen, {username}?",
     "Lønningsdag for {username}?",
     "Hvordan går det, {username}?",
     "Fri flyt for {username}!",
     "Er vel stemmene i hodet, {username}",
-    "Tappekranen er din venn, {username}!",
     "Du setter standarden, {username}!",
     "På'n igjen, {username}!",
-    "Er det fest, {username}?",
-    "Stamgjest {username} har ankommet!"
+    "Stamgjesten {username}, jo"
   ]
 }
