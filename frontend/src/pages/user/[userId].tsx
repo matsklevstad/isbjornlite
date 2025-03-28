@@ -1,57 +1,35 @@
-import FallingBeers from "@/components/profile/FallingBeers";
-import { User } from "@/models/user";
-import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import FallingBeers from "@/components/profile/FallingBeers";
+import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { beerService } from "@/services/beerService";
 import { formatDate } from "@/utils/formatDate";
+import { GetServerSideProps } from "next";
+import { userService } from "@/services/userService";
 
-export default function Profile() {
+export default function Profile({ userId: serverUserId }: { userId: string }) {
   const router = useRouter();
-  const { userId } = router.query;
+  const { userId = serverUserId } = router.query;
 
-  const [profileData, setProfileData] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const { fetchProfile, user } = useAuthStore();
-
-  // Fetch profile data using react-query
-  const { data: beers, isLoading: loadingBeers } = useQuery({
-    queryKey: ["userBeers", userId],
-    queryFn: () => beerService.getBeersByUserId(userId as string),
+  // Fetch user profile using react-query
+  const { data: profileData, isPending: isProfileLoading } = useQuery({
+    queryKey: ["userProfile", userId],
+    queryFn: () => userService.getUserById(userId as string),
     enabled: !!userId,
   });
 
-  // Fetch profile data when component mounts or userId changes
-  useEffect(() => {
-    const loadProfile = async () => {
-      try {
-        // Fetch profile data using the store function
-        const data = await fetchProfile(userId as string);
-        if (!data) {
-          console.error(`Profile with id: ${userId} not found`);
-          router.replace("/404");
-          return;
-        }
-        setProfileData(data);
-      } catch (error) {
-        console.error("Failed to load profile:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    // Only fetch when userId is available
-    if (userId) {
-      loadProfile();
-    }
-  }, [userId, fetchProfile, router, user]);
+  // Fetch beers using react-query
+  const { data: beers, isPending: isBeersLoading } = useQuery({
+    queryKey: ["userBeers", userId],
+    queryFn: () => beerService.getBeersByUserId(userId as string),
+    enabled: !!userId,
+    staleTime: 5000,
+  });
 
   // Loading state - temporary loading screen
-  if (loading || loadingBeers) {
+  if ((isProfileLoading || isBeersLoading) && !beers) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="text-white text-xl">Loading profile...</div>
+        <div className="text-white text-xl"></div>
       </div>
     );
   }
@@ -70,8 +48,34 @@ export default function Profile() {
           Har drukket {beers?.length} isbjørn
         </p>
       </div>
-      {/* Canvas container */}
-      {beers && <FallingBeers beers={beers} />}
+      <FallingBeers beers={beers || []} />
     </div>
   );
 }
+
+// In your [userId].tsx
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const userId = context.params?.userId as string;
+  const queryClient = new QueryClient();
+
+  await Promise.all([
+    // Prefetch beers
+    queryClient.prefetchQuery({
+      queryKey: ["userBeers", userId],
+      queryFn: () => beerService.getBeersByUserId(userId),
+    }),
+
+    // Prefetch user profile using the new function
+    queryClient.prefetchQuery({
+      queryKey: ["userProfile", userId],
+      queryFn: () => userService.getUserById(userId),
+    }),
+  ]);
+
+  return {
+    props: {
+      userId,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
+};

@@ -5,7 +5,7 @@ import { Container } from "@mantine/core";
 const TitleScene = dynamic(
   () => import("../components/homepage/threejs/scenes/TitleScene"),
   {
-    ssr: true
+    ssr: false,
   }
 );
 
