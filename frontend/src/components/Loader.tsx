@@ -23,7 +23,7 @@ export default function Loader({
   const width = useTransform(smoothProgress, (value) => `${value}%`);
 
   return (
-    <div className="flex w-screen flex-col justify-center items-center h-screen">
+    <div className="flex w-screen flex-col justify-center items-center h-screen bg-[#07090a]">
       <h1 className="text-white font-bold text-xl mb-10">Laster isbjørner...</h1>
 
       <motion.div
