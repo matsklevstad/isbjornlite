@@ -65,7 +65,12 @@ const LatestBeers = () => {
                 radius="md"
                 w="100%"
               >
-                <Group justify="space-between" align="center" gap="xs">
+                <Group
+                  justify="space-between"
+                  align="center"
+                  gap="xs"
+                  wrap="nowrap"
+                >
                   <Group gap="5">
                     <Image
                       src={"/assets/beerImages/isbjorn_big.png"}
@@ -82,7 +87,18 @@ const LatestBeers = () => {
                       </Text>
                     </Stack>
                   </Group>
-                  <Text size="xs" c="white" key={`time-${beer.id}-${timeKey}`}>
+
+                  <Text
+                    size="sm"
+                    c="white"
+                    key={`time-${beer.id}-${timeKey}`}
+                    style={{
+                      flexGrow: 1,
+
+                      wrap: "nowrap",
+                      textAlign: "right",
+                    }}
+                  >
                     {getTimeSince(new Date(beer.createdAt))}
                   </Text>
                 </Group>
