@@ -59,18 +59,20 @@ export default function Overview() {
       <LatestBeers />
       <TopList />
 
-      <Transition
-        mounted={isVisible}
-        transition="fade"
-        duration={400}
-        timingFunction="ease"
-      >
-        {(styles) => (
-          <Affix right={"50%"} style={styles}>
-            <AddBeerBtn />
-          </Affix>
-        )}
-      </Transition>
+      {isAuthenticated && (
+        <Transition
+          mounted={isVisible}
+          transition="fade"
+          duration={400}
+          timingFunction="ease"
+        >
+          {(styles) => (
+            <Affix right={"50%"} style={styles}>
+              <AddBeerBtn />
+            </Affix>
+          )}
+        </Transition>
+      )}
     </Container>
   );
 }
