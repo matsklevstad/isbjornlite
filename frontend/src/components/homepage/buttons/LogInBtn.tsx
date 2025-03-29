@@ -1,4 +1,7 @@
 import { useRouter } from "next/router";
+import { Title } from "@mantine/core";
+import { IconLogin2 } from "@tabler/icons-react";
+import styles from "./styles/LogInBtn.module.css";
 
 export default function LogInBtn() {
   const router = useRouter();
@@ -8,10 +11,14 @@ export default function LogInBtn() {
   };
 
   return (
-    <button
-      className="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-      onClick={handleLoginClick}>
-      Log In
-    </button>
+    <div className={styles.container}>
+      <Title size={26} c={"white"}>Har du drukket isbjørn?</Title>
+      <button onClick={handleLoginClick} className={styles.button}>
+        <span>
+          Logg Inn
+          <IconLogin2 className={styles.icon} />
+        </span>
+      </button>
+    </div>
   );
 }
