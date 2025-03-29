@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   await queryClient.prefetchQuery({
     queryKey: ["latestBeers"],
-    queryFn: () => beerService.getAllBeers(),
+    queryFn: () => beerService.getRecentBeers(),
   });
 
   try {
