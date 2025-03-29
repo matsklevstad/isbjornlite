@@ -14,27 +14,26 @@ export default function Overview() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only run on client-side
     if (typeof window === "undefined") return;
+    const currentRef = overviewRef.current;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Update state when the overview component enters or leaves the viewport
         setIsVisible(entry.isIntersecting);
       },
       {
-        root: null, // Use the viewport as the root
-        threshold: 0.3, // Trigger when at least 10% of the component is visible
+        root: null,
+        threshold: 0.3,
       }
     );
 
-    if (overviewRef.current) {
-      observer.observe(overviewRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (overviewRef.current) {
-        observer.unobserve(overviewRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -60,7 +59,6 @@ export default function Overview() {
       <LatestBeers />
       <TopList />
 
-      {/* Wrap Affix in Transition for smooth fade effect */}
       <Transition
         mounted={isVisible}
         transition="fade"

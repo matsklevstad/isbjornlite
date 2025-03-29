@@ -7,7 +7,6 @@ import {
   Checkbox,
   Textarea,
   Text,
-  Center,
 } from "@mantine/core";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

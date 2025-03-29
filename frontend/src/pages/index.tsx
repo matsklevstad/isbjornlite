@@ -21,7 +21,7 @@ export default function Index() {
 
   return (
     <div>
-      {/*{isLoading && (
+      {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
           <Loader loadingProgass={loadingProgass} />
         </div>
@@ -30,7 +30,7 @@ export default function Index() {
         setIsLoading={setIsLoading}
         loadingProgass={loadingProgass}
         setLoadingProgass={setLoadingProgass}
-      />*/}
+      />
       <Container>
         <Overview />
       </Container>

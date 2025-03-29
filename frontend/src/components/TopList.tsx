@@ -33,7 +33,7 @@ const TopList = () => {
         <PodiumCards podium={podium} />
 
         {/* Render the rest of the list */}
-        {/*<Stack mt="lg" gap="sm">
+        <Stack mt="lg" gap="sm">
           {rest.map((user, index) => (
             <Group
               key={index}
@@ -66,7 +66,7 @@ const TopList = () => {
               </Title>
             </Group>
           ))}
-        </Stack>*/}
+        </Stack>
       </Stack>
     </Card>
   );

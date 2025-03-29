@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Text, Center, Stack, Group, Badge } from "@mantine/core";
+import { Card, Text, Center, Stack, Group } from "@mantine/core";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -44,9 +44,9 @@ const PodiumCards = (props: Props) => {
           >
             <Stack align="center" justify="space-around" h="100%">
               <Text fz={{ base: "1rem", sm: "2rem" }}>{user.username}</Text>
-                <Text fz={{ base: "2rem", sm: "4rem" }} fw={600}>
-                  {user.totalBeers}
-                </Text>
+              <Text fz={{ base: "2rem", sm: "4rem" }} fw={600}>
+                {user.totalBeers}
+              </Text>
             </Stack>
           </Card>
         ))}
