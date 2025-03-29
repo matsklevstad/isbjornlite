@@ -3,13 +3,14 @@ import { connectDB } from "@/lib/db";
 import { BeerModel } from "@/models/beer";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await connectDB();
 
   if (req.method !== "GET") {
     return res
       .status(405)
       .json({ success: false, message: "Method not allowed" });
   }
+
+  await connectDB();
 
   try {
     const beers = await BeerModel.aggregate([
