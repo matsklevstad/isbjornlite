@@ -70,6 +70,7 @@ const LatestBeers = () => {
                   align="center"
                   gap="xs"
                   wrap="nowrap"
+                  w="100%"
                 >
                   <Group gap="5">
                     <Image
@@ -94,6 +95,7 @@ const LatestBeers = () => {
                     key={`time-${beer.id}-${timeKey}`}
                     style={{
                       flexGrow: 1,
+
                       wrap: "nowrap",
                       textAlign: "right",
                     }}
