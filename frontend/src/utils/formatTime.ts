@@ -15,7 +15,7 @@ export function getTimeSince(date: Date): string {
   };
 
   if (diffMins === 0) {
-    return "NÅ";
+    return "Nå";
   } else if (diffMins < 60) {
     return `${diffMins} min siden`;
   } else if (diffHours >= 1 && diffHours <= 12) {

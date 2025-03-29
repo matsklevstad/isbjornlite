@@ -6,6 +6,8 @@ import {
   SegmentedControl,
   Checkbox,
   Textarea,
+  Text,
+  Center,
 } from "@mantine/core";
 import { IconCirclePlusFilled } from "@tabler/icons-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -80,12 +82,17 @@ const AddBeerBtn = () => {
       </button>
 
       <Modal
+        bg="dark"
+        withCloseButton={false}
         opened={opened}
         onClose={() => setOpened(false)}
-        title="Register en ny isbjørn"
       >
         <form onSubmit={handleSubmit}>
           <Stack>
+            <Text fw="bold" fz="xl" ta="center">
+              Registrer en ny isbjørn
+            </Text>
+
             <SegmentedControl
               color="isbjorn.8"
               data={[

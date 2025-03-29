@@ -48,11 +48,9 @@ const LatestBeers = () => {
 
   return (
     <Container fluid mt="md">
-      <Group>
-        <Text size="lg" fw={500} c="white" mb="xs">
-          Siste nytt
-        </Text>
-      </Group>
+      <Text size="md" fw="bold" c="white" mb="xs">
+        Siste nytt
+      </Text>
 
       {latestBeers?.length === 0 ? (
         <Text c="dimmed">No beers found</Text>
@@ -60,9 +58,15 @@ const LatestBeers = () => {
         <ScrollArea h={300}>
           <Group gap="xs" w="100%">
             {latestBeers?.map((beer) => (
-              <Card key={beer.id} p="xs" bg="isbjorn.1" withBorder w="100%">
+              <Card
+                key={beer.id}
+                p="xs"
+                bg="rgba(255, 255, 255, 0.1)"
+                radius="md"
+                w="100%"
+              >
                 <Group justify="space-between" align="center" gap="xs">
-                  <Group gap="xs">
+                  <Group gap="5">
                     <Image
                       src={"/assets/beerImages/isbjorn_big.png"}
                       w="100%"
@@ -70,7 +74,7 @@ const LatestBeers = () => {
                       alt="Beer"
                     />
                     <Stack gap={0}>
-                      <Title order={5} c="isbjorn.8">
+                      <Title order={5} c="white">
                         {beer.createdByUsername}
                       </Title>
                       <Text size="sm" c="dimmed">
@@ -78,7 +82,7 @@ const LatestBeers = () => {
                       </Text>
                     </Stack>
                   </Group>
-                  <Text size="xs" c="grey" key={`time-${beer.id}-${timeKey}`}>
+                  <Text size="xs" c="white" key={`time-${beer.id}-${timeKey}`}>
                     {getTimeSince(new Date(beer.createdAt))}
                   </Text>
                 </Group>
