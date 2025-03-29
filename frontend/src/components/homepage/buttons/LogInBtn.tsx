@@ -3,7 +3,6 @@ import { Title } from "@mantine/core";
 import { IconLogin2 } from "@tabler/icons-react";
 import styles from "./styles/LogInBtn.module.css";
 import { motion } from "framer-motion";
-
 export default function LogInBtn() {
   const router = useRouter();
 
@@ -12,7 +11,7 @@ export default function LogInBtn() {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} id="scrollTarget">
       <motion.div
         initial={{ opacity: 0, y: -50 }}
         whileInView={{ opacity: 1, y: 0 }}

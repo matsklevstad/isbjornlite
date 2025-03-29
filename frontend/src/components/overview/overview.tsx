@@ -21,7 +21,7 @@ export default function Overview() {
         </>
       ) : (
         // User is not authenticated - show login button
-        <div className="flex flex-col items-center mt-8 mb-6">
+        <div className="flex flex-col items-center mb-6">
           <LogInBtn />
         </div>
       )}

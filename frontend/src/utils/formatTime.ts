@@ -8,7 +8,10 @@ export function getTimeSince(date: Date): string {
 
   // Format exact time as HH:MM
   const formatTimeOnly = (date: Date): string => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    // This will consistently return "00:50" format on both server and client
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
   };
 
   if (diffMins === 0) {
