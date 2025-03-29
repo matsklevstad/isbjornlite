@@ -37,7 +37,7 @@ const TopList = () => {
           {rest.map((user, index) => (
             <Group
               key={index}
-              bg="#1a3751"
+              bg="rgba(255, 255, 255, 0.1)"
               justify="space-between"
               p="xs"
               w="100%"
