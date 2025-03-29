@@ -23,7 +23,7 @@ const LatestBeers = () => {
     error,
   } = useQuery({
     queryKey: ["latestBeers"],
-    queryFn: beerService.getAllBeers,
+    queryFn: beerService.getRecentBeers,
   });
 
   useEffect(() => {

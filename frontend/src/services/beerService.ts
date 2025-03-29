@@ -2,9 +2,9 @@ import api from "./api";
 import { IBeer, Beer } from "@/models/beer";
 
 export const beerService = {
-  getAllBeers: async (): Promise<IBeer[]> => {
+  getRecentBeers: async (): Promise<IBeer[]> => {
     try {
-      const res = await api.get("/api/beer/beer");
+      const res = await api.get("/api/beer/recent");
       return res.data.data.reverse();
     } catch (error: any) {
       throw new Error(error.response.data.message);
@@ -33,7 +33,7 @@ export const beerService = {
 
   createBeer: async (beerData: Beer): Promise<Beer> => {
     try {
-      const res = await api.post("api/beer/beer", beerData);
+      const res = await api.post("api/beer/register", beerData);
       return res.data.data;
     } catch (error: any) {
       throw new Error(error.response.data.message);
