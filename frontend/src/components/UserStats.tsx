@@ -16,7 +16,7 @@ const UserStats = () => {
   // Function to format the time display
   const formatTimeDisplay = (date: Date) => {
     const timeString = getTimeSince(date);
-    return timeString === "NÅ" ? "0 min" : timeString;
+    return timeString === "Nå" ? "0 min" : timeString;
   };
 
   return (
