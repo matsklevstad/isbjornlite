@@ -54,11 +54,11 @@ const TopList = () => {
                   borderRadius: "50%",
                 }}
               >
-                <Text c="white" size="lg">
+                <Text c="white" size="md">
                   {index + 4}
                 </Text>
               </Center>
-              <Title order={3} c="white" m="0">
+              <Title order={4} c="white" m="0">
                 {user.username}
               </Title>
               <Title order={3} c="white" m="0">

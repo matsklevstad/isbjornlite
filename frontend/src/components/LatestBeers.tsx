@@ -65,7 +65,12 @@ const LatestBeers = () => {
                 radius="md"
                 w="100%"
               >
-                <Group justify="space-between" align="center" gap="xs">
+                <Group
+                  justify="space-between"
+                  align="center"
+                  gap="xs"
+                  wrap="nowrap"
+                >
                   <Group gap="5">
                     <Image
                       src={"/assets/beerImages/isbjorn_big.png"}
