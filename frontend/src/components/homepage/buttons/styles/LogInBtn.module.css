@@ -4,6 +4,7 @@
   align-items: center;
   flex-direction: column;
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 /* From Uiverse.io by SelfMadeSystem */
@@ -22,7 +23,6 @@ so that it is smooth among other more minor things */
   overflow: hidden;
   padding: 3px;
   isolation: isolate;
-  font-family: "Montserrat", sans-serif;
   display: flex;
 }
 
