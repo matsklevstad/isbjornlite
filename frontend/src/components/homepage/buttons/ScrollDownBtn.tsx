@@ -31,7 +31,7 @@ const ScrollDownBtn = ({ targetId }: ScrollDownBtnProps) => {
         <button
           onClick={scrollToElement}
           className="text-white rounded-full shadow-lg transition duration-300 opacity-80 ">
-          <IconCircleArrowDownFilled size={34} />
+          <IconCircleArrowDownFilled size={38} />
         </button>
       </motion.div>
     </div>
