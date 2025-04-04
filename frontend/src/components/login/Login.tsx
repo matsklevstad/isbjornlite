@@ -5,7 +5,7 @@ import { useAuthStore } from "@/stores/authStore";
 import {
   IconChevronsRight,
   IconUserFilled,
-  IconLock,
+  IconLockFilled,
   IconBrandGithub,
   IconBrandGoogleFilled,
 } from "@tabler/icons-react";
@@ -97,10 +97,13 @@ const LoginPage = () => {
                 <label htmlFor="password" className={styles.label}>
                   Passord
                 </label>
+                <a href="#" className={styles.link}>
+                  Glemt passord?
+                </a>
               </div>
               <div className={styles.inputContainer}>
                 <div className={styles.iconContainer}>
-                  <IconLock size={18} className={styles.icon} />
+                  <IconLockFilled size={18} className={styles.icon} />
                 </div>
                 <input
                   id="password"
@@ -120,9 +123,6 @@ const LoginPage = () => {
               <span>Logg Inn</span>
               <IconChevronsRight size={20} style={{ marginLeft: "0.5rem" }} />
             </button>
-            <a href="#" className={styles.link}>
-              Har du glemt passordet?
-            </a>
           </form>
         </div>
 

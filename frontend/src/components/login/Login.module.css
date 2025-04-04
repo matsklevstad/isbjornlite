@@ -6,17 +6,17 @@
   width: 100%;
   min-height: 100vh;
   color: #f3f4f6;
+  background: linear-gradient(145deg, rgb(6, 8, 10) 0%, rgb(2, 27, 52) 100%);
 }
 
 .card {
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   height: 100%;
   min-height: 560px;
   max-height: 950px;
 
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 10px -5px rgba(0, 0, 0, 0.69);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -61,7 +61,11 @@
 .title {
   font-size: 1.875rem;
   font-weight: 700;
-  background-image: linear-gradient(to right,rgb(73, 131, 255),rgb(120, 230, 255));
+  background-image: linear-gradient(
+    to right,
+    rgb(73, 131, 255),
+    rgb(120, 230, 255)
+  );
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
@@ -92,7 +96,7 @@
 .label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgb(255, 255, 255);
   display: block;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
@@ -137,7 +141,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
   border: 2px solid transparent;
   font-weight: 500;
-  
+
   /* Add these properties */
   outline: none;
   -webkit-appearance: none;
@@ -146,15 +150,16 @@
 
 .input:focus-visible {
   outline: none;
-  border: 2px solid rgb(93, 117, 153);
+  border: 2px solid rgb(25, 33, 44);
 }
 
 /* Chrome, Safari, Edge autofill fix */
 .input:-webkit-autofill,
-.input:-webkit-autofill:hover, 
+.input:-webkit-autofill:hover,
 .input:-webkit-autofill:focus {
+  background-color: rgb(25, 33, 44);
   /* Override the autofill background color */
-  -webkit-box-shadow: 0 0 0 30px rgb(52, 70, 97) inset !important;
+  -webkit-box-shadow: 0 0 0 30px rgb(25, 33, 44) inset !important;
   /* Override the autofill text color */
   -webkit-text-fill-color: #f3f4f6 !important;
   /* Transition delay trick to make the override persistent */
@@ -165,7 +170,7 @@
 
 /* Firefox autofill fix */
 .input:autofill {
-  background-color: rgb(52, 70, 97) !important;
+  background-color: rgb(25, 33, 44) !important;
   color: #f3f4f6 !important;
   border: 2px solid rgb(76, 102, 142) !important;
   font-weight: 600 !important;
@@ -173,8 +178,8 @@
 
 .link {
   font-size: 0.875rem;
-  color:rgba(6, 181, 212, 0.88);
-  font-weight: 600;
+  color: rgb(73, 131, 255);
+  font-weight: 500;
   transition: color 0.2s;
 }
 
@@ -237,7 +242,7 @@
 }
 
 .socialButtonGoogle:hover {
-  background-color:rgb(225, 31, 17);
+  background-color: rgb(225, 31, 17);
 }
 
 .socialButtonGithub {
@@ -256,7 +261,7 @@
 }
 
 .socialButtonGithub:hover {
-  background-color:rgb(32, 88, 161);
+  background-color: rgb(32, 88, 161);
 }
 
 .registerText {
@@ -281,25 +286,32 @@
   text-align: center;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 500px) and (max-height: 950px) {
   .card {
     border-radius: 1rem;
-    border: 2px solid rgb(255, 255, 255) !important;
-    max-height: 90%;
+    border: 2px solid rgb(138, 161, 186) !important;
+    margin: 1rem 0;
     max-width: 400px;
+  }
+
+  .topSection {
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 500px) {
+  .card {
+    border-radius: 1rem;
+    border: 2px solid rgb(138, 161, 186) !important;
+    margin: 4rem 0;
   }
 }
 
 @media (min-height: 950px) {
   .card {
     border-radius: 1rem;
-    border: 2px solid rgb(255, 255, 255) !important;
-  }
-}
-
-@media (max-height: 800px) {
-  .topSection {
-    padding-top: 2rem;
+    border: 2px solid rgb(138, 161, 186) !important;
+    margin: 4rem 0;
   }
 }
 
@@ -313,7 +325,7 @@
   }
 
   .topSection {
-    padding-top: 1rem;
+    padding-top: 2rem;
   }
 
   .input {
