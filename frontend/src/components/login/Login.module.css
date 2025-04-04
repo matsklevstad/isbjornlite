@@ -178,13 +178,13 @@
 
 .link {
   font-size: 0.875rem;
-  color: rgb(73, 131, 255);
+  color: rgb(73, 182, 255);
   font-weight: 500;
   transition: color 0.2s;
 }
 
 .link:hover {
-  color: #67e8f9;
+  color: rgb(20, 159, 251);
 }
 
 .button {

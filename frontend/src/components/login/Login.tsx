@@ -69,7 +69,7 @@ const LoginPage = () => {
           {authError && <div className={styles.errorMessage}>{authError}</div>}
           <div className={styles.header}>
             <h2 className={styles.title}>Velkommen tilbake</h2>
-            <p className={styles.subtitle}>På tide å drikke isbjørn?</p>
+            <p className={styles.subtitle}>På tide med en isbjørn?</p>
           </div>
 
           <form className={styles.form}>
