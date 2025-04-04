@@ -5,23 +5,53 @@
   justify-content: center;
   width: 100%;
   min-height: 100vh;
-  padding: 1rem;
   color: #f3f4f6;
-  background-color: #111827;
 }
 
 .card {
   width: 100%;
   max-width: 450px;
-  background-color: #1f2937;
-  border-radius: 0.75rem;
+  height: 100%;
+  
+  /* Remove height: 100% which can cause gaps */
+  min-height: 560px; /* Use min-height instead */
+
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  
+  /* Add this to prevent overflow */
   overflow: hidden;
 }
 
-.cardInner {
+.topSection {
   padding: 2rem;
+  /* Use flex-grow instead of percentage height */
+  flex-grow: 1;
+  background-image: url("/assets/loginWaves8.svg");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  padding-top: 4rem;
+}
+
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.bottomSection {
+  padding: 2rem;
+  background-color: rgb(160, 219, 255);
+  /* Remove position: relative and top: -1px */
+  /* Instead, use a negative margin to pull up */
+  margin-top: -1px;
 }
 
 .header {
@@ -33,33 +63,39 @@
   font-size: 1.875rem;
   font-weight: 700;
   background-image: linear-gradient(to right, #22d3ee, #3b82f6);
-  color: transparent;
+  color: white;
   background-clip: text;
   -webkit-background-clip: text;
+
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .subtitle {
-  margin-top: 0.5rem;
-  color: #9ca3af;
+  margin-top: 0.3rem;
+  color: rgb(111, 137, 176);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .fieldGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .label {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #d1d5db;
+  font-weight: 600;
+  color:rgb(255, 255, 255);
   display: block;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .labelContainer {
@@ -83,30 +119,34 @@
 }
 
 .icon {
-  color: #6b7280;
+  color: rgb(111, 137, 176);
+}
+
+.input::placeholder {
+  color: rgb(111, 137, 176);
 }
 
 .input {
-  background-color: #374151;
-  border: 1px solid #4b5563;
+  background-color: rgb(52, 70, 97);
   color: #f3f4f6;
-  font-size: 0.875rem;
-  border-radius: 0.5rem;
+  font-size: 1rem;
+  border-radius: 50px;
   display: block;
   width: 100%;
-  padding: 0.625rem;
+  padding: 0.75rem;
   padding-left: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .input:focus {
-  border-color: #22d3ee;
+  border-color: rgb(77, 102, 139);
   box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.25);
   outline: none;
 }
 
 .link {
   font-size: 0.875rem;
-  color: #22d3ee;
+  color:rgba(34, 184, 238, 0.91);
 }
 
 .link:hover {
@@ -120,34 +160,17 @@
   justify-content: center;
   padding: 0.75rem 1rem;
   background-image: linear-gradient(to right, #06b6d4, #2563eb);
-  border-radius: 0.5rem;
+  border-radius: 50px;
   color: white;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
   transition: background-image 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .button:hover {
   background-image: linear-gradient(to right, #0891b2, #1d4ed8);
-}
-
-.divider {
-  margin-top: 2rem;
-  position: relative;
-}
-
-.dividerLine {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-}
-
-.dividerLineInner {
-  width: 100%;
-  border-top: 1px solid #4b5563;
 }
 
 .dividerTextContainer {
@@ -159,8 +182,7 @@
 
 .dividerText {
   padding: 0 0.5rem;
-  background-color: #1f2937;
-  color: #9ca3af;
+  color: rgb(87, 101, 119);
 }
 
 .socialContainer {
@@ -170,17 +192,32 @@
   gap: 0.75rem;
 }
 
-.socialButton {
+.socialButtonGoogle {
   width: 100%;
   display: inline-flex;
   justify-content: center;
-  padding: 0.5rem 1rem;
-  border: 1px solid #4b5563;
-  border-radius: 0.5rem;
-  background-color: #374151;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ff3e30;
+  border-radius: 50px;
+  background-color: #ff3e30;
   color: #d1d5db;
   font-size: 0.875rem;
   font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+
+.socialButtonGithub {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border: 1px solid #4078c0;
+  border-radius: 50px;
+  background-color: #4078c0;
+  color: #d1d5db;
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .socialButton:hover {
@@ -191,12 +228,12 @@
   margin-top: 2rem;
   text-align: center;
   font-size: 0.875rem;
-  color: #9ca3af;
+  color: rgb(87, 101, 119);
 }
 
 .registerLink {
   font-weight: 500;
-  color: #22d3ee;
+  color: #3b82f6;
 }
 
 .errorMessage {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { useAuthStore } from "@/stores/authStore";
@@ -7,8 +7,9 @@ import {
   IconUser,
   IconLock,
   IconBrandGithub,
+  IconBrandGoogleFilled,
 } from "@tabler/icons-react";
-import styles from "./Login2.module.css";
+import styles from "./Login.module.css";
 
 const LoginPage = () => {
   const { login } = useAuthStore();
@@ -18,14 +19,14 @@ const LoginPage = () => {
   const router = useRouter();
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const handleLogIn = async () => {
+  const handleLogIn = useCallback(async () => {
     try {
       await login(username, password);
       router.push("/");
     } catch (error) {
       setAuthError("Feil brukernavn eller passord.");
     }
-  };
+  }, [login, username, password, router]);
 
   // Extract error from URL on component mount
   useEffect(() => {
@@ -64,11 +65,11 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <div className={styles.cardInner}>
+        <div className={styles.topSection}>
           {authError && <div className={styles.errorMessage}>{authError}</div>}
           <div className={styles.header}>
             <h2 className={styles.title}>Velkommen tilbake</h2>
-            <p className={styles.subtitle}>Logg inn for å registrere isbjørn</p>
+            <p className={styles.subtitle}>På tide å drikke isbjørn?</p>
           </div>
 
           <form className={styles.form}>
@@ -96,9 +97,6 @@ const LoginPage = () => {
                 <label htmlFor="password" className={styles.label}>
                   Passord
                 </label>
-                <a href="#" className={styles.link}>
-                  Glemt passord?
-                </a>
               </div>
               <div className={styles.inputContainer}>
                 <div className={styles.iconContainer}>
@@ -120,16 +118,21 @@ const LoginPage = () => {
               onClick={handleLogIn}
               className={styles.button}>
               <span>Logg Inn</span>
-              <IconChevronsRight size={16} style={{ marginLeft: "0.5rem" }} />
+              <IconChevronsRight size={20} style={{ marginLeft: "0.5rem" }} />
             </button>
+            <a href="#" className={styles.link}>
+              Har du glemt passordet?
+            </a>
           </form>
+        </div>
 
+        <div className={styles.bottomSection}>
           <div className={styles.divider}>
             <div className={styles.dividerLine}>
               <div className={styles.dividerLineInner}></div>
             </div>
             <div className={styles.dividerTextContainer}>
-              <span className={styles.dividerText}>Eller logg inn med</span>
+              <span className={styles.dividerText}>eller logg inn med</span>
             </div>
           </div>
 
@@ -139,21 +142,16 @@ const LoginPage = () => {
               onClick={() =>
                 signIn("google", { callbackUrl: "/", redirect: true })
               }
-              className={styles.socialButton}>
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
-                />
-              </svg>
+              className={styles.socialButtonGoogle}>
+              <IconBrandGoogleFilled size={20} color="white" />
             </button>
             <button
               type="button"
               onClick={() =>
                 signIn("github", { callbackUrl: "/", redirect: true })
               }
-              className={styles.socialButton}>
-              <IconBrandGithub size={20} />
+              className={styles.socialButtonGithub}>
+              <IconBrandGithub size={20} color="white" />
             </button>
           </div>
 
