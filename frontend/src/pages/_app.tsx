@@ -10,6 +10,8 @@ import {
 } from "@tanstack/react-query";
 import AuthInitializer from "@/components/AuthInitializer";
 import { useState } from "react";
+import { SessionProvider } from "next-auth/react";
+import { AuthSync } from "@/components/AuthSync";
 
 const theme = createTheme({
   breakpoints: {
@@ -35,7 +37,10 @@ const theme = createTheme({
   },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -48,22 +53,24 @@ export default function App({ Component, pageProps }: AppProps) {
   );
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <HydrationBoundary state={pageProps.dehydratedState}>
-          <MantineProvider theme={theme}>
-            <Head>
-              <title>Isbjørn Lites venner </title>
-              <meta
-                name="description"
-                content="Et samfunn for alle som elsker Isbjørn Lite i ulike fasonger"
-              />
-            </Head>
-            <AuthInitializer />
-            {/* MantineProvider can be customized here */}
-            <Component {...pageProps} />
-          </MantineProvider>
-        </HydrationBoundary>
-      </QueryClientProvider>
+      <SessionProvider session={session}>
+        <AuthSync />
+        <QueryClientProvider client={queryClient}>
+          <HydrationBoundary state={pageProps.dehydratedState}>
+            <MantineProvider theme={theme}>
+              <Head>
+                <title>Isbjørn Lites venner </title>
+                <meta
+                  name="description"
+                  content="Et samfunn for alle som elsker Isbjørn Lite i ulike fasonger"
+                />
+              </Head>
+              <AuthInitializer />
+              <Component {...pageProps} />
+            </MantineProvider>
+          </HydrationBoundary>
+        </QueryClientProvider>
+      </SessionProvider>
     </>
   );
 }
