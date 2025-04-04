@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useAuthStore } from "@/stores/authStore";
 import {
   IconChevronsRight,
-  IconUser,
+  IconUserFilled,
   IconLock,
   IconBrandGithub,
   IconBrandGoogleFilled,
@@ -79,7 +79,7 @@ const LoginPage = () => {
               </label>
               <div className={styles.inputContainer}>
                 <div className={styles.iconContainer}>
-                  <IconUser size={18} className={styles.icon} />
+                  <IconUserFilled size={18} className={styles.icon} />
                 </div>
                 <input
                   id="username"

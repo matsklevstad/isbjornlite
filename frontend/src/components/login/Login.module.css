@@ -13,7 +13,7 @@
   max-width: 600px;
   height: 100%;
   min-height: 560px;
-  max-height: 1000px;
+  max-height: 950px;
 
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -29,7 +29,7 @@
   padding: 2rem;
   /* Use flex-grow instead of percentage height */
   flex-grow: 1;
-  background-image: url("/assets/loginWaves8.svg");
+  background-image: url("/assets/loginWaves10.svg");
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;
@@ -47,7 +47,7 @@
 
 .bottomSection {
   padding: 2rem;
-  background-color: rgb(160, 219, 255);
+  background-color: rgb(255, 255, 255);
   /* Remove position: relative and top: -1px */
   /* Instead, use a negative margin to pull up */
   margin-top: -1px;
@@ -61,17 +61,16 @@
 .title {
   font-size: 1.875rem;
   font-weight: 700;
-  background-image: linear-gradient(to right, #22d3ee, #3b82f6);
-  color: white;
+  background-image: linear-gradient(to right,rgb(73, 131, 255),rgb(120, 230, 255));
+  color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
-
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .subtitle {
   margin-top: 0.3rem;
-  color: rgb(111, 137, 176);
+  color: rgb(255, 255, 255);
   font-weight: 600;
 }
 
@@ -93,7 +92,7 @@
 .label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.78);
   display: block;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
@@ -119,25 +118,25 @@
 }
 
 .icon {
-  color: rgb(111, 137, 176);
+  color: rgb(58, 76, 102);
 }
 
 .input::placeholder {
-  color: rgb(111, 137, 176);
+  color: rgb(58, 76, 102);
 }
 
 .input {
-  background-color: rgb(52, 70, 97);
+  background-color: rgb(25, 33, 44);
   color: #f3f4f6;
-  font-size: 1rem;
-  border-radius: 50px;
+  font-size: 0.9rem;
+  border-radius: 0.8rem;
   display: block;
   width: 100%;
   padding: 0.75rem;
   padding-left: 2.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
   border: 2px solid transparent;
-  font-weight: 600;
+  font-weight: 500;
   
   /* Add these properties */
   outline: none;
@@ -147,7 +146,7 @@
 
 .input:focus-visible {
   outline: none;
-  border: 2px solid rgb(76, 102, 142);
+  border: 2px solid rgb(93, 117, 153);
 }
 
 /* Chrome, Safari, Edge autofill fix */
@@ -174,7 +173,7 @@
 
 .link {
   font-size: 0.875rem;
-  color: rgba(34, 184, 238, 0.91);
+  color:rgba(6, 181, 212, 0.88);
   font-weight: 600;
   transition: color 0.2s;
 }
@@ -190,9 +189,9 @@
   justify-content: center;
   padding: 0.75rem 1rem;
   background-image: linear-gradient(to right, #06b6d4, #2563eb);
-  border-radius: 50px;
+  border-radius: 0.8rem;
   color: white;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   margin-top: 2.5rem;
   transition: background-image 0.2s;
@@ -228,7 +227,7 @@
   justify-content: center;
   padding: 0.75rem 1rem;
   border: 1px solid #ff3e30;
-  border-radius: 50px;
+  border-radius: 0.8rem;
   background-color: #ff3e30;
   color: #d1d5db;
   font-size: 0.875rem;
@@ -247,7 +246,7 @@
   justify-content: center;
   padding: 0.75rem 1rem;
   border: 1px solid #4078c0;
-  border-radius: 50px;
+  border-radius: 0.8rem;
   background-color: #4078c0;
   color: #d1d5db;
   font-size: 0.875rem;
@@ -285,12 +284,16 @@
 @media (min-width: 600px) {
   .card {
     border-radius: 1rem;
+    border: 2px solid rgb(255, 255, 255) !important;
+    max-height: 90%;
+    max-width: 400px;
   }
 }
 
-@media (min-height: 1000px) {
+@media (min-height: 950px) {
   .card {
     border-radius: 1rem;
+    border: 2px solid rgb(255, 255, 255) !important;
   }
 }
 
