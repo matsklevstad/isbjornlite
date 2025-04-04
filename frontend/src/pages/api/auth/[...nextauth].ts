@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 import { connectDB } from "@/lib/db";
 import { UserModel } from "@/models/user";
 import { generateToken } from "@/utils/auth";
@@ -23,10 +24,15 @@ export default NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
   ],
   callbacks: {
     async signIn({ account, profile }) {
-      if (account?.provider === "google") {
+      // Handle both Google and GitHub authentication
+      if (account?.provider === "google" || account?.provider === "github") {
         try {
           await connectDB();
 
@@ -34,26 +40,32 @@ export default NextAuth({
             return false;
           }
 
-          // Check if user exists by googleId
-          let dbUser = await UserModel.findOne({ googleId: profile.sub });
+          // Determine which ID field to use based on provider
+          const providerId =
+            account.provider === "google" ? profile.sub : (profile as any).id;
+          const providerField =
+            account.provider === "google" ? "googleId" : "githubId";
 
-          // If not found by googleId, try email
+          // Check if user exists by provider ID
+          let dbUser = await UserModel.findOne({ [providerField]: providerId });
+
+          // If not found by provider ID, try email
           if (!dbUser && profile.email) {
             dbUser = await UserModel.findOne({ email: profile.email });
 
-            // If found by email, update with googleId
+            // If found by email, update with provider ID
             if (dbUser) {
-              dbUser.googleId = profile.sub;
+              dbUser[providerField] = providerId;
               await dbUser.save();
             } else {
               // Create new user if not found
               dbUser = await UserModel.create({
-                googleId: profile.sub,
+                [providerField]: providerId,
                 email: profile.email,
                 username:
                   (profile.name || "user").replace(/\s+/g, "").toLowerCase() +
                   Math.floor(Math.random() * 1000),
-                // No password needed for OAuth users
+                image: "",
               });
             }
           }
@@ -71,8 +83,15 @@ export default NextAuth({
       // Initial sign in
       if (account && profile) {
         await connectDB();
+
+        // Determine which provider ID to use
+        const providerId =
+          account.provider === "google" ? profile.sub : (profile as any).id;
+        const providerField =
+          account.provider === "google" ? "googleId" : "githubId";
+
         // Find the MongoDB user associated with this OAuth account
-        const dbUser = await UserModel.findOne({ googleId: profile.sub });
+        const dbUser = await UserModel.findOne({ [providerField]: providerId });
 
         if (dbUser) {
           // Add MongoDB data to the token
@@ -87,13 +106,11 @@ export default NextAuth({
       return token;
     },
 
+    // Your session callback can remain as is
     async session({ session, token }) {
       if (session.user && token.userId) {
-        // Add MongoDB user data to the session
         session.user.id = token.userId as string;
         session.user.username = token.username as string;
-
-        // If you need to maintain compatibility with your existing JWT system
         session.customJwt = token.customJwt as string;
       }
       return session;

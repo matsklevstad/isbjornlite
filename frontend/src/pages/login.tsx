@@ -1,5 +1,5 @@
 // import { Login } from "@/components/login/Login";
-import Login2 from "@/components/login/Login2";
+import Login2 from "@/components/login/Login";
 
 export default function LoginPage() {
   return (

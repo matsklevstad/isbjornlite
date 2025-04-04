@@ -10,6 +10,7 @@ export interface IUser extends Document {
   password: string;
   image: string;
   googleId?: string; // Optional field for Google OAuth
+  githubId?: string; // Optional field for GitHub OAuth
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -57,6 +58,11 @@ const userSchema = new Schema<IUser>(
       lowercase: true,
     },
     googleId: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    githubId: {
       type: String,
       required: false,
       unique: true,
