@@ -10,18 +10,17 @@
 
 .card {
   width: 100%;
-  max-width: 450px;
+  max-width: 600px;
   height: 100%;
-  
-  /* Remove height: 100% which can cause gaps */
-  min-height: 560px; /* Use min-height instead */
+  min-height: 560px;
+  max-height: 1000px;
 
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
+
   /* Add this to prevent overflow */
   overflow: hidden;
 }
@@ -93,7 +92,7 @@
 .label {
   font-size: 0.875rem;
   font-weight: 600;
-  color:rgb(255, 255, 255);
+  color: rgb(255, 255, 255);
   display: block;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
@@ -146,7 +145,7 @@
 
 .link {
   font-size: 0.875rem;
-  color:rgba(34, 184, 238, 0.91);
+  color: rgba(34, 184, 238, 0.91);
 }
 
 .link:hover {
@@ -244,4 +243,76 @@
   margin-bottom: 1rem;
   font-size: 0.875rem;
   text-align: center;
+}
+
+@media (min-width: 600px) {
+  .card {
+    border-radius: 1rem;
+  }
+}
+
+@media (min-height: 1000px) {
+  .card {
+    border-radius: 1rem;
+  }
+}
+
+@media (max-height: 800px) {
+  .topSection {
+    padding-top: 2rem;
+  }
+}
+
+@media (max-height: 770px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .topSection {
+    padding-top: 1rem;
+  }
+
+  .input {
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    padding-left: 2.5rem;
+  }
+
+  .label {
+    font-size: 0.8rem;
+  }
+
+  .button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .link {
+    font-size: 0.8rem;
+  }
+
+  .dividerText {
+    font-size: 0.8rem;
+  }
+
+  .registerText {
+    font-size: 0.8rem;
+  }
+
+  .errorMessage {
+    font-size: 0.8rem;
+  }
+
+  .socialButtonGoogle,
+  .socialButtonGithub {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+
+
 }
