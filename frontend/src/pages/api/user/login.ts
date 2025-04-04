@@ -27,7 +27,9 @@ export default async function handler(
     }
 
     // Find user - explicitly include password field which is excluded by default
-    const user = await UserModel.findOne({ username }).select("+password");
+    const user = await UserModel.findOne({ username: username })
+      .collation({ locale: "en", strength: 2 }) // Makes the query case-insensitive
+      .select("+password");
 
     if (!user) {
       return res.status(401).json({

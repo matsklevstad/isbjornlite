@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { useAuthStore } from "@/stores/authStore";
 import {
   IconChevronsRight,
   IconUser,
@@ -9,13 +11,61 @@ import {
 import styles from "./Login2.module.css";
 
 const LoginPage = () => {
+  const { login } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  const handleLogIn = async () => {
+    try {
+      await login(username, password);
+      router.push("/");
+    } catch (error) {
+      setAuthError("Feil brukernavn eller passord.");
+    }
+  };
+
+  // Extract error from URL on component mount
+  useEffect(() => {
+    const { error } = router.query;
+    if (error) {
+      // Map error codes to user-friendly messages
+      const errorMessages: Record<string, string> = {
+        OAuthSignin: "Feil ved pålogging.",
+        OAuthCallback: "Feil ved kommunikasjon med innloggingstjenesten.",
+        OAuthCreateAccount: "Kunne ikke opprette konto.",
+        EmailCreateAccount: "Kunne ikke opprette konto med epost.",
+        Callback: "Ugyldig tilbakekall fra innloggingstjenesten.",
+        OAuthAccountNotLinked:
+          "E-posten er allerede i bruk med en annen innloggingsmetode.",
+        default: "Det oppstod en feil under innlogging.",
+      };
+
+      setAuthError(errorMessages[error as string] || errorMessages.default);
+    }
+  }, [router.query]);
+
+  useEffect(() => {
+    const handleEnterKey = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        handleLogIn();
+      }
+    };
+
+    window.addEventListener("keydown", handleEnterKey);
+    return () => {
+      window.removeEventListener("keydown", handleEnterKey);
+    };
+  }, [handleLogIn]);
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.cardInner}>
+          {authError && <div className={styles.errorMessage}>{authError}</div>}
           <div className={styles.header}>
             <h2 className={styles.title}>Velkommen tilbake</h2>
             <p className={styles.subtitle}>Logg inn for å registrere isbjørn</p>
@@ -65,7 +115,10 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <button type="button" className={styles.button}>
+            <button
+              type="button"
+              onClick={handleLogIn}
+              className={styles.button}>
               <span>Logg Inn</span>
               <IconChevronsRight size={16} style={{ marginLeft: "0.5rem" }} />
             </button>
