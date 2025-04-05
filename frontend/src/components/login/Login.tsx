@@ -1,20 +1,23 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react";
 import { useAuthStore } from "@/stores/authStore";
 import {
   IconChevronsRight,
   IconUserFilled,
   IconLockFilled,
-  IconBrandGithub,
-  IconBrandGoogleFilled,
+  IconMailFilled,
 } from "@tabler/icons-react";
 import styles from "./Login.module.css";
+import SocialLogIn from "./SocialLogIn";
+import { errorMessages } from "@/utils/errorMessages";
 
 const LoginPage = () => {
-  const { login } = useAuthStore();
+  const { login, register } = useAuthStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const router = useRouter();
   const [authError, setAuthError] = useState<string | null>(null);
@@ -28,22 +31,41 @@ const LoginPage = () => {
     }
   }, [login, username, password, router]);
 
+  const handleRegister = useCallback(async () => {
+    if (username.length < 3) {
+      setAuthError("Brukernavnet må være minst 3 tegn langt.");
+      return;
+    }
+    if (password.length < 6) {
+      setAuthError("Passordet må være minst 6 tegn langt.");
+      return;
+    }
+    if (email.length < 5 || !email.includes("@")) {
+      setAuthError("Eposten er ikke gyldig.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setAuthError("Passordene stemmer ikke overens.");
+      return;
+    }
+    try {
+      const userData = {
+        username,
+        password,
+        email,
+      };
+      await register(userData);
+      router.push("/");
+    } catch (error) {
+      setAuthError("Feil brukernavn eller passord.");
+    }
+  }, [password, confirmPassword, username, email, register, router]);
+
   // Extract error from URL on component mount
   useEffect(() => {
     const { error } = router.query;
     if (error) {
-      // Map error codes to user-friendly messages
-      const errorMessages: Record<string, string> = {
-        OAuthSignin: "Feil ved pålogging.",
-        OAuthCallback: "Feil ved kommunikasjon med innloggingstjenesten.",
-        OAuthCreateAccount: "Kunne ikke opprette konto.",
-        EmailCreateAccount: "Kunne ikke opprette konto med epost.",
-        Callback: "Ugyldig tilbakekall fra innloggingstjenesten.",
-        OAuthAccountNotLinked:
-          "E-posten er allerede i bruk med en annen innloggingsmetode.",
-        default: "Det oppstod en feil under innlogging.",
-      };
-
       setAuthError(errorMessages[error as string] || errorMessages.default);
     }
   }, [router.query]);
@@ -52,7 +74,11 @@ const LoginPage = () => {
     const handleEnterKey = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        handleLogIn();
+        if (isRegistering) {
+          handleRegister();
+        } else {
+          handleLogIn();
+        }
       }
     };
 
@@ -60,16 +86,17 @@ const LoginPage = () => {
     return () => {
       window.removeEventListener("keydown", handleEnterKey);
     };
-  }, [handleLogIn]);
+  }, [handleLogIn, handleRegister, isRegistering]);
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.topSection}>
-          {authError && <div className={styles.errorMessage}>{authError}</div>}
           <div className={styles.header}>
-            <h2 className={styles.title}>Velkommen tilbake</h2>
-            <p className={styles.subtitle}>På tide med en isbjørn?</p>
+            <h2 className={styles.title}>
+              {isRegistering ? "Opprett konto" : "Velkommen tilbake"}
+            </h2>
+            <p className={styles.subtitle}>Bli med å drikk isbjørn!</p>
           </div>
 
           <form className={styles.form}>
@@ -92,14 +119,37 @@ const LoginPage = () => {
               </div>
             </div>
 
+            {isRegistering && (
+              <div className={styles.fieldGroup}>
+                <label htmlFor="username" className={styles.label}>
+                  Epost
+                </label>
+                <div className={styles.inputContainer}>
+                  <div className={styles.iconContainer}>
+                    <IconMailFilled size={18} className={styles.icon} />
+                  </div>
+                  <input
+                    id="username"
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className={styles.input}
+                    placeholder="brahabra@tourhjelper.no"
+                  />
+                </div>
+              </div>
+            )}
+
             <div className={styles.fieldGroup}>
               <div className={styles.labelContainer}>
                 <label htmlFor="password" className={styles.label}>
                   Passord
                 </label>
-                <a href="#" className={styles.link}>
-                  Glemt passord?
-                </a>
+                {!isRegistering && (
+                  <a href="#" className={styles.link}>
+                    Glemt passord?
+                  </a>
+                )}
               </div>
               <div className={styles.inputContainer}>
                 <div className={styles.iconContainer}>
@@ -116,52 +166,43 @@ const LoginPage = () => {
               </div>
             </div>
 
+            {isRegistering && (
+              <div className={styles.fieldGroup}>
+                <div className={styles.labelContainer}>
+                  <label htmlFor="password" className={styles.label}>
+                    Bekreft Passord
+                  </label>
+                </div>
+                <div className={styles.inputContainer}>
+                  <div className={styles.iconContainer}>
+                    <IconLockFilled size={18} className={styles.icon} />
+                  </div>
+                  <input
+                    id="password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className={styles.input}
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+            )}
+
             <button
               type="button"
-              onClick={handleLogIn}
+              onClick={isRegistering ? handleRegister : handleLogIn}
               className={styles.button}>
-              <span>Logg Inn</span>
+              <span>{isRegistering ? "Registrer bruker" : "Logg Inn"}</span>
               <IconChevronsRight size={20} style={{ marginLeft: "0.5rem" }} />
             </button>
+            {authError && (
+              <div className={styles.errorMessage}>{authError}</div>
+            )}
           </form>
         </div>
 
-        <div className={styles.bottomSection}>
-          <div className={styles.divider}>
-            <div className={styles.dividerLine}>
-              <div className={styles.dividerLineInner}></div>
-            </div>
-            <div className={styles.dividerTextContainer}>
-              <span className={styles.dividerText}>eller logg inn med</span>
-            </div>
-          </div>
-
-          <div className={styles.socialContainer}>
-            <button
-              type="button"
-              onClick={() =>
-                signIn("google", { callbackUrl: "/", redirect: true })
-              }
-              className={styles.socialButtonGoogle}>
-              <IconBrandGoogleFilled size={20} color="white" />
-            </button>
-            <button
-              type="button"
-              onClick={() =>
-                signIn("github", { callbackUrl: "/", redirect: true })
-              }
-              className={styles.socialButtonGithub}>
-              <IconBrandGithub size={20} color="white" />
-            </button>
-          </div>
-
-          <p className={styles.registerText}>
-            Har du ikke en bruker?{"  "}
-            <a href="#" className={styles.registerLink}>
-              Registrer deg her
-            </a>
-          </p>
-        </div>
+        {!isRegistering && <SocialLogIn setIsRegistering={setIsRegistering} />}
       </div>
     </div>
   );
