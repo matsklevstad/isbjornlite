@@ -15,7 +15,7 @@
   ],
   "afternoon": [
     "God formiddag, {username}!",
-    "Lunsj med Isbjørn, {username}?",
+    "Til lunsj, {username}?",
     "Allerede på'n igjen, {username}?",
     "Halvveis gjennom dagen, {username}!",
     "Velfortjent pause, {username}?",
@@ -44,7 +44,6 @@
     "Er det fest, {username}?",
     "Skulle tro {username} var tørst...",
     "Alltid klar for en til, {username}?",
-    "Fy faen, {username}!",
     "En til for {username}!",
     "Isbjørn-kongen {username} er her!",
     "Runde nummer...? {username}!",

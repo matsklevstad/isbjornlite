@@ -24,12 +24,10 @@ const TopList = () => {
   const rest = toplist!.slice(3, 10); // Show top 4-10
 
   return (
-    <Card bg="transparent" w="100%">
-      <Center>
-        <Title order={1} c="white" mb="xl">
-          Topplisten
-        </Title>
-      </Center>
+    <Card mt="lg" bg="transparent" w="100%">
+      <Text size="md" fw="bold" c="white" mb="lg">
+        Topplisten
+      </Text>
       <Stack w="100%" justify="center" m="auto">
         {/* Render the podium cards */}
         <PodiumCards podium={podium} />
@@ -39,26 +37,28 @@ const TopList = () => {
           {rest.map((user, index) => (
             <Group
               key={index}
-              bg="#1a3751"
+              bg="rgba(255, 255, 255, 0.1)"
               justify="space-between"
               p="xs"
               w="100%"
               style={{ borderRadius: "8px" }}
               onClick={() => {
                 router.push(`/user/${user.userId}`);
-              }}>
+              }}
+            >
               <Center
                 w={30}
                 h={30}
                 style={{
                   backgroundColor: "#1E1E1E",
                   borderRadius: "50%",
-                }}>
-                <Text c="white" size="lg">
+                }}
+              >
+                <Text c="white" size="md">
                   {index + 4}
                 </Text>
               </Center>
-              <Title order={3} c="white" m="0">
+              <Title order={4} c="white" m="0">
                 {user.username}
               </Title>
               <Title order={3} c="white" m="0">
@@ -67,9 +67,6 @@ const TopList = () => {
             </Group>
           ))}
         </Stack>
-        <Text ta="center" c="dimmed">
-          Finner du ikke navnet ditt på listen? Jobba på ...
-        </Text>
       </Stack>
     </Card>
   );

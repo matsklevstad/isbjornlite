@@ -57,7 +57,7 @@ export default function App({
         <AuthSync />
         <QueryClientProvider client={queryClient}>
           <HydrationBoundary state={pageProps.dehydratedState}>
-            <MantineProvider theme={theme}>
+            <MantineProvider theme={theme} defaultColorScheme="dark">
               <Head>
                 <title>Isbjørn Lites venner </title>
                 <meta

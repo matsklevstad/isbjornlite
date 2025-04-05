@@ -20,13 +20,17 @@ export default function Index() {
   const [loadingProgass, setLoadingProgass] = useState(0);
 
   return (
-    <div className="overflow-x-hidden min-h-screen">
+    <div>
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
           <Loader loadingProgass={loadingProgass} />
         </div>
       )}
-      <TitleScene setIsLoading={setIsLoading} loadingProgass={loadingProgass} setLoadingProgass={setLoadingProgass} />
+      <TitleScene
+        setIsLoading={setIsLoading}
+        loadingProgass={loadingProgass}
+        setLoadingProgass={setLoadingProgass}
+      />
       <Container>
         <Overview />
       </Container>

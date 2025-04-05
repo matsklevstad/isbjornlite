@@ -15,15 +15,15 @@ export function getTimeSince(date: Date): string {
   };
 
   if (diffMins === 0) {
-    return "NÅ";
+    return "Nå";
   } else if (diffMins < 60) {
-    return `${diffMins} min siden`;
+    return `${diffMins} min`;
   } else if (diffHours >= 1 && diffHours <= 12) {
     // For posts between 1 and 12 hours old, show the exact time
     return formatTimeOnly(date);
   } else if (diffHours < 24) {
-    return `${diffHours}t siden`;
+    return `${diffHours}t`;
   } else {
-    return `${diffDays} ${diffDays === 1 ? "dag" : "dager"} siden`;
+    return `${diffDays} ${diffDays === 1 ? "dag" : "dager"}`;
   }
 }

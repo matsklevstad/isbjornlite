@@ -5,7 +5,7 @@ export const beerService = {
   getRecentBeers: async (): Promise<IBeer[]> => {
     try {
       const res = await api.get("/api/beer/recent");
-      return res.data.data.reverse();
+      return res.data.data;
     } catch (error: any) {
       throw new Error(error.response.data.message);
     }
