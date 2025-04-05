@@ -129,7 +129,11 @@ const LoginPage = () => {
             <h2 className={styles.title}>
               {isRegistering ? "Opprett konto" : "Velkommen tilbake"}
             </h2>
-            <p className={styles.subtitle}>Bli med å drikk isbjørn!</p>
+            <p className={styles.subtitle}>
+              {isRegistering
+                ? "På tide med en isbjørn?"
+                : "Bli med å drikk isbjørn!"}
+            </p>
           </div>
 
           <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
