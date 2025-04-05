@@ -9,6 +9,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   image: string;
+  googleId?: string; // Optional field for Google OAuth
+  githubId?: string; // Optional field for GitHub OAuth
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -36,7 +38,10 @@ const userSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: [true, "Please provide a password"],
+      required: function () {
+        // Only require password if no OAuth provider
+        return !this.googleId;
+      },
       minlength: 8,
       select: false, // Don't include password in query results by default
     },
@@ -51,6 +56,16 @@ const userSchema = new Schema<IUser>(
       },
       unique: true,
       lowercase: true,
+    },
+    googleId: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+    githubId: {
+      type: String,
+      required: false,
+      unique: true,
     },
     image: {
       type: String,

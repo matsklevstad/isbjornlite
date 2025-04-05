@@ -24,7 +24,7 @@ interface AuthState {
   login: (
     username: string,
     password: string,
-    rememberMe: boolean
+    rememberMe?: boolean
   ) => Promise<void>;
   logout: () => void;
   setUser: (user: User) => void;
@@ -84,7 +84,7 @@ export const useAuthStore = create<AuthState>()(
       login: async (
         username: string,
         password: string,
-        rememberMe: boolean
+        rememberMe?: boolean
       ) => {
         try {
           set({ isLoading: true, error: null });
