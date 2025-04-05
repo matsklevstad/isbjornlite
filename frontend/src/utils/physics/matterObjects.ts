@@ -9,23 +9,29 @@ export const createWalls = (width: number, height: number) => {
   const wallWidth = 5000;
   return [
     // Ground
-    Bodies.rectangle(width / 2, height + 25, width, 50, {
+    Bodies.rectangle(width / 2, height + wallWidth / 2, width, wallWidth, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "ground",
     }),
     // Left wall
-    Bodies.rectangle(-wallWidth / 2, height / 2, wallWidth , height * 10, {
+    Bodies.rectangle(-wallWidth / 2, height / 2, wallWidth, height * 10, {
       isStatic: true,
       render: { fillStyle: "#2c2c2c" },
       label: "leftWall",
     }),
     // Right wall
-    Bodies.rectangle(width + wallWidth / 2, height / 2, wallWidth, height * 10, {
-      isStatic: true,
-      render: { fillStyle: "#2c2c2c" },
-      label: "rightWall",
-    }),
+    Bodies.rectangle(
+      width + wallWidth / 2,
+      height / 2,
+      wallWidth,
+      height * 10,
+      {
+        isStatic: true,
+        render: { fillStyle: "#2c2c2c" },
+        label: "rightWall",
+      }
+    ),
   ];
 };
 
