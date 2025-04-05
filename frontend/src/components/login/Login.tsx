@@ -10,45 +10,78 @@ import {
 import styles from "./Login.module.css";
 import SocialLogIn from "./SocialLogIn";
 import { errorMessages } from "@/utils/errorMessages";
+import { Loader } from "@mantine/core";
 
 const LoginPage = () => {
   const { login, register } = useAuthStore();
   const [username, setUsername] = useState("");
+  const [usernameError, setUsernameError] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
   const [authError, setAuthError] = useState<string | null>(null);
 
   const handleLogIn = useCallback(async () => {
+    if (username.length < 3) {
+      setUsernameError(true);
+      setAuthError("Brukernavnet må være minst 3 tegn langt.");
+      return;
+    }
+    if (password.length < 6) {
+      setPasswordError(true);
+      setAuthError("Passordet må være minst 6 tegn langt.");
+      return;
+    }
+
+    setIsLoading(true);
+    setAuthError(null);
+    setUsernameError(false);
+    setPasswordError(false);
     try {
       await login(username, password);
+      setIsLoading(false);
       router.push("/");
     } catch (error) {
       setAuthError("Feil brukernavn eller passord.");
+      setIsLoading(false);
     }
   }, [login, username, password, router]);
 
   const handleRegister = useCallback(async () => {
     if (username.length < 3) {
+      setUsernameError(true);
       setAuthError("Brukernavnet må være minst 3 tegn langt.");
       return;
     }
     if (password.length < 6) {
+      setPasswordError(true);
       setAuthError("Passordet må være minst 6 tegn langt.");
       return;
     }
     if (email.length < 5 || !email.includes("@")) {
+      setEmailError(true);
       setAuthError("Eposten er ikke gyldig.");
       return;
     }
 
     if (password !== confirmPassword) {
+      setConfirmPasswordError(true);
       setAuthError("Passordene stemmer ikke overens.");
       return;
     }
+    setAuthError(null);
+    setIsLoading(true);
+    setUsernameError(false);
+    setPasswordError(false);
+    setEmailError(false);
+    setConfirmPasswordError(false);
     try {
       const userData = {
         username,
@@ -58,7 +91,7 @@ const LoginPage = () => {
       await register(userData);
       router.push("/");
     } catch (error) {
-      setAuthError("Feil brukernavn eller passord.");
+      setAuthError("Noe gikk galt under registreringen.");
     }
   }, [password, confirmPassword, username, email, register, router]);
 
@@ -99,7 +132,7 @@ const LoginPage = () => {
             <p className={styles.subtitle}>Bli med å drikk isbjørn!</p>
           </div>
 
-          <form className={styles.form}>
+          <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
             <div className={styles.fieldGroup}>
               <label htmlFor="username" className={styles.label}>
                 Brukernavn
@@ -112,8 +145,10 @@ const LoginPage = () => {
                   id="username"
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className={styles.input}
+                  onChange={(e) => {
+                    setUsername(e.target.value), setUsernameError(false);
+                  }}
+                  className={usernameError ? styles.inputError : styles.input}
                   placeholder="brahabra"
                 />
               </div>
@@ -121,7 +156,7 @@ const LoginPage = () => {
 
             {isRegistering && (
               <div className={styles.fieldGroup}>
-                <label htmlFor="username" className={styles.label}>
+                <label htmlFor="email" className={styles.label}>
                   Epost
                 </label>
                 <div className={styles.inputContainer}>
@@ -129,11 +164,13 @@ const LoginPage = () => {
                     <IconMailFilled size={18} className={styles.icon} />
                   </div>
                   <input
-                    id="username"
+                    id="email"
                     type="text"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={styles.input}
+                    onChange={(e) => {
+                      setEmail(e.target.value), setEmailError(false);
+                    }}
+                    className={emailError ? styles.inputError : styles.input}
                     placeholder="brahabra@tourhjelper.no"
                   />
                 </div>
@@ -159,8 +196,10 @@ const LoginPage = () => {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={styles.input}
+                  onChange={(e) => {
+                    setPassword(e.target.value), setPasswordError(false);
+                  }}
+                  className={passwordError ? styles.inputError : styles.input}
                   placeholder="••••••••"
                 />
               </div>
@@ -169,7 +208,7 @@ const LoginPage = () => {
             {isRegistering && (
               <div className={styles.fieldGroup}>
                 <div className={styles.labelContainer}>
-                  <label htmlFor="password" className={styles.label}>
+                  <label htmlFor="confirmPassword" className={styles.label}>
                     Bekreft Passord
                   </label>
                 </div>
@@ -178,11 +217,16 @@ const LoginPage = () => {
                     <IconLockFilled size={18} className={styles.icon} />
                   </div>
                   <input
-                    id="password"
+                    id="confirmPassword"
                     type="password"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={styles.input}
+                    onChange={(e) => {
+                      setConfirmPassword(e.target.value),
+                        setConfirmPasswordError(false);
+                    }}
+                    className={
+                      confirmPasswordError ? styles.inputError : styles.input
+                    }
                     placeholder="••••••••"
                   />
                 </div>
@@ -193,8 +237,17 @@ const LoginPage = () => {
               type="button"
               onClick={isRegistering ? handleRegister : handleLogIn}
               className={styles.button}>
-              <span>{isRegistering ? "Registrer bruker" : "Logg Inn"}</span>
-              <IconChevronsRight size={20} style={{ marginLeft: "0.5rem" }} />
+              {isLoading ? (
+                <Loader color="white" size="sm" />
+              ) : (
+                <>
+                  <span>{isRegistering ? "Registrer bruker" : "Logg Inn"}</span>
+                  <IconChevronsRight
+                    size={20}
+                    style={{ marginLeft: "0.5rem" }}
+                  />
+                </>
+              )}
             </button>
             {authError && (
               <div className={styles.errorMessage}>{authError}</div>
