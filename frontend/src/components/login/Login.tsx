@@ -130,7 +130,7 @@ const LoginPage = () => {
               {isRegistering ? "Opprett konto" : "Velkommen tilbake"}
             </h2>
             <p className={styles.subtitle}>
-              {isRegistering
+              {!isRegistering
                 ? "På tide med en isbjørn?"
                 : "Bli med å drikk isbjørn!"}
             </p>
